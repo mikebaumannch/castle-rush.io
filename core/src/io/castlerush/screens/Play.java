@@ -8,6 +8,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
+import io.castlerush.Player;
+
 public class Play implements Screen {
 
     private TiledMap map;
@@ -21,6 +23,8 @@ public class Play implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
         
         camera = new OrthographicCamera();
+        camera.zoom = 1 / 5f;
+        
     }
 
     @Override

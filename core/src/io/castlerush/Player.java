@@ -1,5 +1,7 @@
 package io.castlerush;
 
+import com.badlogic.gdx.graphics.Texture;
+
 public class Player {
     
     public String name;
@@ -10,7 +12,7 @@ public class Player {
     
     private float speed = 1.0F;
     
-    public Player(String name, int coins, int health, boolean isCastleAlive, float position) {
+    public Player(String name, Texture skin, int coins, int health, boolean isCastleAlive, float position) {
         this.name=name;
         this.coins=coins;
         this.health=health;
