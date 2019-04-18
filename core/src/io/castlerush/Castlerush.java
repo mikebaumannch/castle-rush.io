@@ -10,10 +10,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.castlerush.screens.Play;
 
 public class Castlerush extends Game {
+    SpriteBatch batch;
+    Texture img;
 	
 	@Override
 	public void create () {
 	    setScreen(new Play());
+		batch = new SpriteBatch();
+		img = new Texture("badlogic.jpg");
 	}
 
 	@Override
