@@ -23,12 +23,12 @@ public class StructureLoader {
     public static void loadStructures() {
         
         // Castles
-        castleLvl1 = new StructureCastle("Rathaus", new Texture("badlogic.jpg"), 1000);
-        castleLvl2 = new StructureCastle("Ratsgebäude", new Texture("badlogic.jpg"), 2000);
+        castleLvl1 = new StructureCastle("Rathaus", new Texture("buildings/castle-lvl1.jpg"), 1000);
+        castleLvl2 = new StructureCastle("Ratsgebäude", new Texture("buildings/castle-lvl2.png"), 2000);
         
         // Towers
-        towerLvl1  = new StructureTower ("Bogenschützenturm", new Texture("badlogic.jpg"), 100);
-        towerLvl2  = new StructureTower ("Kanonenturm", new Texture("badlogic.jpg"), 200);
+        towerLvl1  = new StructureTower ("Bogenschützenturm", new Texture("buildings/archery-tower-lvl1.png"), 100);
+        towerLvl2  = new StructureTower ("Kanonenturm", new Texture("buildings/archery-tower-lvl2.png"), 200);
         
         // Walls
         woodWall = new StructureWall("Holzmauer", new Texture("badlogic.jpg"), 100);

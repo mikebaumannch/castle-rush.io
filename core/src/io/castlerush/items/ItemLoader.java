@@ -1,5 +1,7 @@
 package io.castlerush.items;
 
+import com.badlogic.gdx.graphics.Texture;
+
 public class ItemLoader {
     
     // Weapons
@@ -22,11 +24,11 @@ public class ItemLoader {
     public static void loadItems() {
         
         //Weapons
-        woodSword = new ItemWeapon("Holzschwert", 10, null, 100, "Level 1");
+        woodSword = new ItemWeapon("Holzschwert", 10, new Texture("/buildings/castle-lvl1.jpg"), 100, "Level 1");
         stoneSword = new ItemWeapon("Steinschwert", 15, null, 500, "Level 2");
         ironSword = new ItemWeapon("Eisenschwert", 20, null, 1000, "Level 3");
-        slingShot = new ItemWeapon("Steinschleuder", 5, null, 100, "Level 1");
-        bow = new ItemWeapon("Bogen", 15, null, 500, "Level 2");
+        slingShot = new ItemWeapon("Steinschleuder", 5, new Texture("weapons/slingshot.svg"), 100, "Level 1");
+        bow = new ItemWeapon("Bogen", 15, new Texture("weapons/bow.svg"), 500, "Level 2");
         
         //Structures
         castleLvl1 = new ItemStructure("Rathaus", null, 0, "Level 1");
