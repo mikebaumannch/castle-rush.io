@@ -15,6 +15,8 @@ public class Castlerush extends Game {
 	    setScreen(new Play());
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		
+		
 	}
 
 	@Override
