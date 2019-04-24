@@ -12,9 +12,7 @@ public class KeyListener implements InputProcessor {
     
     public KeyListener(OrthographicCamera camera){
         this.camera = camera;
-        Gdx.input.setInputProcessor(this);
-        
-        
+        Gdx.input.setInputProcessor(this);       
     }
     
     void handleInput() {
