@@ -28,8 +28,6 @@ public class Play implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
-    private KeyListener keyListener;
-
     @Override
     public void show() {
         map = new TmxMapLoader().load("maps/maps.tmx");
@@ -39,11 +37,8 @@ public class Play implements Screen {
         camera = new OrthographicCamera();
         camera.zoom = 1 / 3f;
 
-        player = new Player("Markus", (new Sprite(new Texture("img/player.png"))), 100, 100, true,
-                (TiledMapTileLayer) map.getLayers().get(0));
-        keyListener = new KeyListener(player, map);
+        player = new Player("Markus", (new Sprite(new Texture("img/player.png"))), 100, 100, true, map);
         
-
         int randomX = ThreadLocalRandom.current().nextInt(16, (map.getProperties().get("width", Integer.class) - 3) * 16);
         int randomY = ThreadLocalRandom.current().nextInt(16, (map.getProperties().get("height", Integer.class) - 3) * 16);
         
@@ -57,9 +52,6 @@ public class Play implements Screen {
         Gdx.gl.glClearColor(100 / 255f, 155 / 255f, 255 / 255f, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        keyListener.handleInput();
-
         
         camera.position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0);        
         camera.update();
