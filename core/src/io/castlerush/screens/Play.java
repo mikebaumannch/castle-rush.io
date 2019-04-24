@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import java.util.concurrent.ThreadLocalRandom;
+import io.castlerush.KeyListener;
 import io.castlerush.Player;
 
 public class Play implements Screen {
@@ -28,7 +29,7 @@ public class Play implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
     private KeyListener keyListener;
-    
+
     @Override
     public void show() {
         map = new TmxMapLoader().load("maps/maps.tmx");
@@ -42,11 +43,13 @@ public class Play implements Screen {
                 (TiledMapTileLayer) map.getLayers().get(0));
         keyListener = new KeyListener(player, map);
         
+
         int randomX = ThreadLocalRandom.current().nextInt(16, (map.getProperties().get("width", Integer.class) - 3) * 16);
         int randomY = ThreadLocalRandom.current().nextInt(16, (map.getProperties().get("height", Integer.class) - 3) * 16);
         
         player.setX(randomX);
         player.setY(randomY);
+
     }
 
     @Override
@@ -56,18 +59,15 @@ public class Play implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         keyListener.handleInput();
-        
-        camera.position.set(player.getX() + player.getWidth() / 2,
-                player.getY() + player.getHeight() / 2, 0);        
-        camera.update();
 
         
+        camera.position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0);        
+        camera.update();
+
         renderer.setView(camera);
         renderer.render();
 
-        player.setSize((map.getProperties().get("tilewidth", Integer.class)) * 2,
-                map.getProperties().get("tileheight", Integer.class) * 2);  
-        
+        player.setSize((map.getProperties().get("tilewidth", Integer.class)) * 2, map.getProperties().get("tileheight", Integer.class) * 2);  
         
         renderer.getBatch().begin();
         player.draw(renderer.getBatch());
