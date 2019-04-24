@@ -3,74 +3,80 @@ package io.castlerush;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
+
+import io.castlerush.Player;
 
 public class KeyListener implements InputProcessor {
-    
-    private OrthographicCamera camera;
-    public boolean walkUp = false;
-    public boolean walkDown = false;
-    public boolean walkRight = false;
-    public boolean walkLeft = false;
-    
-    public KeyListener(OrthographicCamera camera) {
-        this.camera = camera;
+
+    private Player player;
+    private TiledMap map;
+    public boolean keyPressed = false;
+
+    public KeyListener(Player player, TiledMap map) {
+        this.player = player;
+        this.map = map;
         Gdx.input.setInputProcessor(this);
     }
-    
-    public void handleInput() {
-        
-        if(walkLeft) {
-            camera.translate(-2,0);
+
+    public boolean checkCollision() {
+
+        TiledMapTileLayer collisionObjectLayer = (TiledMapTileLayer)map.getLayers().get("Water");
+        MapObjects objects = collisionObjectLayer.getObjects();
+
+        // there are several other types, Rectangle is probably the most common one
+        for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+            
+            System.out.println(rectangleObject.getName());
+
+            Rectangle rectangle = rectangleObject.getRectangle();
+            if (Intersector.overlaps(rectangle, player.getBoundingRectangle())) {
+                // collision happened
+                
+                return true;
+            }else {
+                return false;
+            }
         }
-        if(walkRight) {
-            camera.translate(2,0);
-        }
-        if(walkUp) {
-            camera.translate(0,2);
-        }
-        if(walkDown) {
-            camera.translate(0,-2);
-        }
-        
+        return false;
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
-        
-        switch(keycode) {
-        
-        case Input.Keys.UP:
-            walkUp = true;   
-            break;
-        
-        case Input.Keys.DOWN:
-            walkDown = true;   
-            break;
-        
-        case Input.Keys.RIGHT:
-            walkRight = true;   
-            break;
-        
-        case Input.Keys.LEFT:
-            walkLeft = true;   
-            break;
-            
+    public void handleInput() {
+        if (keyPressed) {
+            if (!checkCollision()) {
+                if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                    player.translate(-1, 0);
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                    player.translate(1, 0);
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                    player.translate(0, 1);
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                    player.translate(0, -1);
+                }
+            }
         }
-        
-        return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        
-        walkUp = false;
-        walkDown = false;
-        walkLeft = false;
-        walkRight = false;
-        
+        keyPressed = false;
         return false;
-        
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        keyPressed = true;
+        return false;
     }
 
     @Override
