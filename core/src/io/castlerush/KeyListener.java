@@ -48,7 +48,7 @@ public class KeyListener implements InputProcessor {
 
     }
 
-    public boolean checkCollision() {
+    public String checkCollision() {
 
         MapLayer collisionObjectLayer = map.getLayers().get("WaterCollider");
         MapObjects objects = collisionObjectLayer.getObjects();
@@ -61,7 +61,15 @@ public class KeyListener implements InputProcessor {
             Rectangle rectangle = rectangleObject.getRectangle();
             if (Intersector.overlaps(rectangle, player.getBoundingRectangle())) {
                 // collision happened
-                return true;
+                if(rectangleObject.getName().equals("Top")) {
+                    return "TOP";
+                }else if(rectangleObject.getName().equals("Bottom")) {
+                    return "BOTTOM";
+                }else if(rectangleObject.getName().equals("Left")) {
+                    return "LEFT";
+                }else {
+                    return "RIGHT";
+                }
             }
         }
 
@@ -71,7 +79,7 @@ public class KeyListener implements InputProcessor {
          * System.out.println(":)"); return false; } }
          */
 
-        return false;
+        return "NO";
     }
 
     //
@@ -108,12 +116,14 @@ public class KeyListener implements InputProcessor {
         if (keycode == Input.Keys.RIGHT) {
             if (direction == "LEFT") {
                 player.flip(true, false);
+                direction = "RIGHT";
             }
         }
 
         else if (keycode == Input.Keys.LEFT) {
             if (direction == "RIGHT") {
                 player.flip(true, false);
+                direction = "LEFT";
             }
         }
 
