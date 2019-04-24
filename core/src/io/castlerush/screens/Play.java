@@ -17,7 +17,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import java.util.concurrent.ThreadLocalRandom;
-
 import io.castlerush.Player;
 
 public class Play implements Screen {
@@ -29,6 +28,7 @@ public class Play implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
     private KeyListener keyListener;
+    
     @Override
     public void show() {
         map = new TmxMapLoader().load("maps/maps.tmx");

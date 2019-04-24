@@ -14,7 +14,7 @@ public class DesktopLauncher {
 		config.width = 1280;
 		config.height = 720;
 		config.resizable = false;
-		//config.fullscreen = true;
+		config.fullscreen = true;
 		new LwjglApplication(new Castlerush(), config);
 	}
 }
