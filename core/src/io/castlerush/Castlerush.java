@@ -6,26 +6,36 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
 import io.castlerush.screens.Menu;
 import io.castlerush.screens.Play;
 import io.castlerush.screens.SplashScreen;
 
 public class Castlerush extends Game {
-    SpriteBatch batch;
-
+    
+    private Game game;
+    public Viewport screenPort;
+    
+    public Castlerush() {
+        game = this;
+    }
 	
 	@Override
 	public void create () {
+	    
+	    screenPort = new ScreenViewport();
 	    
 	    float delay = 5; // seconds
 
 	    Timer.schedule(new Task(){
 	        @Override
 	        public void run() {
-	            setScreen(new Play());
+	            setScreen(new Menu(game));
 	        }
 	    }, delay);
-	    setScreen(new Menu());	
+	    setScreen(new SplashScreen());	
 	}
 
 	@Override

@@ -69,9 +69,8 @@ public class Player extends Sprite {
         }else if(velocity.x < speed) {
             velocity.x = -speed;
         }
-
+        
         keyListener.handleInput();
-
     }
 
     void walk(int key) {
@@ -119,4 +118,11 @@ public class Player extends Sprite {
         this.speed = speed;
     }
 
+    public int getHealth() {
+        return health;
+    }
+    
+    public int getCoins() {
+        return coins;
+    }
 }

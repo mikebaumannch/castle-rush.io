@@ -27,6 +27,7 @@ public class KeyListener implements InputProcessor {
     private List<Rectangle> tiles;
 
     public boolean keyPressed = false;
+    private String direction = "LEFT";
 
     public KeyListener(Player player, TiledMap map) {
         this.player = player;
@@ -48,10 +49,10 @@ public class KeyListener implements InputProcessor {
     }
 
     public boolean checkCollision() {
-        
+
         MapLayer collisionObjectLayer = map.getLayers().get("WaterCollider");
         MapObjects objects = collisionObjectLayer.getObjects();
-        
+
         objects.getCount();
 
         // there are several other types, Rectangle is probably the most common one
@@ -65,15 +66,10 @@ public class KeyListener implements InputProcessor {
         }
 
         /*
-        for (Rectangle tile : tiles) {
-            if (playerRect.overlaps(tile)) {
-                System.out.println("WTF >:(");
-                return true;
-            } else {
-                System.out.println(":)");
-                return false;
-            }
-        }*/
+         * for (Rectangle tile : tiles) { if (playerRect.overlaps(tile)) {
+         * System.out.println("WTF >:("); return true; } else {
+         * System.out.println(":)"); return false; } }
+         */
 
         return false;
     }
@@ -96,6 +92,7 @@ public class KeyListener implements InputProcessor {
             }
 
         }
+
     }
 
     @Override
@@ -107,6 +104,19 @@ public class KeyListener implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         keyPressed = true;
+
+        if (keycode == Input.Keys.RIGHT) {
+            if (direction == "LEFT") {
+                player.flip(true, false);
+            }
+        }
+
+        else if (keycode == Input.Keys.LEFT) {
+            if (direction == "RIGHT") {
+                player.flip(true, false);
+            }
+        }
+
         return false;
     }
 
