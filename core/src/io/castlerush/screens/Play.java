@@ -62,7 +62,7 @@ public class Play implements Screen {
         camera = new OrthographicCamera();
         camera.zoom = 1 / 3f;
 
-        player = new Player("Markus", (new Sprite(new Texture("img/player.png"))), 100, 100, true,
+        player = new Player("Markus", (new Sprite(new Texture("img/player_left.png"))), 100, 100, true,
                 (TiledMapTileLayer) map.getLayers().get(0));
         keyListener = new KeyListener(player, map);
         
@@ -79,9 +79,9 @@ public class Play implements Screen {
 
         //Label title
         mySkin = new Skin(Gdx.files.internal("skins/glassy-ui.json"));
-        Label gameTitle = new Label("Name: "+username, mySkin);
+        Label gameTitle = new Label("Name: "+username+"\nCoins: "+player.coins, mySkin);
         gameTitle.setSize(100, 100);
-        gameTitle.setPosition(20, Gdx.graphics.getHeight() - gameTitle.getHeight()/2 - 20);
+        gameTitle.setPosition(20, Gdx.graphics.getHeight() - gameTitle.getHeight()/2 - 30);
         gameTitle.setAlignment(Align.left);
         BitmapFont font = new BitmapFont();
         
@@ -90,6 +90,12 @@ public class Play implements Screen {
         textButtonStyle.font = font;
         TextButton buttonExit = new TextButton("Spiel beenden", mySkin, "small");
         buttonExit.setPosition(Gdx.graphics.getWidth() - 20 - buttonExit.getWidth(), Gdx.graphics.getHeight() - gameTitle.getHeight()/2 - 20);
+        
+        //Itembar anzeigen
+        Texture itembar = new Texture(Gdx.files.internal("img/itembar.png"));
+        Image item = new Image(itembar);
+        item.setSize(itembar.getWidth(),itembar.getHeight());
+        item.setPosition(Gdx.graphics.getWidth()/2-item.getWidth()/2, 0);
         
         //Herz für die Lebenspunkte hinzufügen
         Texture texture = new Texture(Gdx.files.internal("img/heart.png"));
@@ -109,6 +115,7 @@ public class Play implements Screen {
         stage.addActor(gameTitle);
         stage.addActor(heart);
         stage.addActor(heartTitle);
+        stage.addActor(item);
         
         //Listener
         buttonExit.addListener(new ChangeListener() {

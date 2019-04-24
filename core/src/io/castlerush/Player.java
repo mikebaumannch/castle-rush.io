@@ -16,7 +16,6 @@ public class Player extends Sprite {
     public String name;
     public int coins;
     public int health;
-    
     public boolean isCastleAlive = true;
     public TiledMapTileLayer layer;
     private Vector2 velocity = new Vector2();
@@ -46,7 +45,6 @@ public class Player extends Sprite {
         if (!checkCollision) {
             setY(getY() + velocity.y * delta);
         }*/
-
     }
 
     void walk() {
@@ -60,5 +58,9 @@ public class Player extends Sprite {
 
     public int getHealth() {
         return health;
+    }
+    
+    public int getCoins() {
+        return coins;
     }
 }

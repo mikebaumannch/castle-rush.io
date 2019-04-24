@@ -24,6 +24,7 @@ public class KeyListener implements InputProcessor {
     private Player player;
     private TiledMap map;
     public boolean keyPressed = false;
+    private String direction = "LEFT";
 
     public KeyListener(Player player, TiledMap map) {
         this.player = player;
@@ -78,9 +79,17 @@ public class KeyListener implements InputProcessor {
             if (!checkCollision()) {
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                     player.translate(-1, 0);
+                    if (direction.equals("RIGHT")) {
+                        direction = "LEFT";
+                        player.flip(true, false);
+                    }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                     player.translate(1, 0);
+                    if (direction.equals("LEFT")) {
+                        direction = "RIGHT";
+                        player.flip(true, false);
+                    }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                     player.translate(0, 1);
@@ -101,6 +110,19 @@ public class KeyListener implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         keyPressed = true;
+        
+        if(keycode == Input.Keys.RIGHT) {
+            if (direction == "LEFT") {
+                player.flip(true, false);
+            }
+        }
+        
+        else if(keycode == Input.Keys.LEFT) {
+            if (direction == "RIGHT") {
+                player.flip(true, false);
+            }
+        }
+        
         return false;
     }
 
