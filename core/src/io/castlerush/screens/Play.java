@@ -41,6 +41,9 @@ public class Play implements Screen {
         player = new Player("Markus", (new Sprite(new Texture("img/player.png"))), 100, 100, true,
                 (TiledMapTileLayer) map.getLayers().get(0));
         keyListener = new KeyListener(player, map);
+        
+        player.setX(100);
+        player.setY(0);
     }
 
     @Override
