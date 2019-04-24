@@ -42,7 +42,6 @@ public class KeyListener implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        
         keyPressed = true;
         return false;
     }
