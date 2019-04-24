@@ -16,6 +16,7 @@ public class Player extends Sprite {
     public String name;
     public int coins;
     public int health;
+    
     public boolean isCastleAlive = true;
     public TiledMapTileLayer layer;
     private Vector2 velocity = new Vector2();
@@ -57,4 +58,7 @@ public class Player extends Sprite {
     void buy() {
     }
 
+    public int getHealth() {
+        return health;
+    }
 }
