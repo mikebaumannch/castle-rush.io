@@ -12,24 +12,22 @@ public class KeyListener implements InputProcessor {
     
     public KeyListener(OrthographicCamera camera){
         this.camera = camera;
-        Gdx.input.setInputProcessor(this);
-        
-        
+        Gdx.input.setInputProcessor(this);       
     }
     
     void handleInput() {
         if(keyPressed) {
             if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                camera.translate(-2,0);
+                camera.translate(-1,0);
             }
             if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                camera.translate(2,0);
+                camera.translate(1,0);
             }
             if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                camera.translate(0,-2);
+                camera.translate(0,-1);
             }
             if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                camera.translate(0,2);
+                camera.translate(0,1);
             }
         }
     }
@@ -42,7 +40,6 @@ public class KeyListener implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        
         keyPressed = true;
         return false;
     }

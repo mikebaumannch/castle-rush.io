@@ -28,10 +28,11 @@ public class Play implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
         
         camera = new OrthographicCamera();
-        camera.zoom = 1 / 5f;
-        
+
         keyListener = new KeyListener(camera);
-        
+
+        camera.zoom = 1 / 3f;
+             
     }
 
     @Override
