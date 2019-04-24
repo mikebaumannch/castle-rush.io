@@ -25,10 +25,8 @@ public class Play implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
         
         camera = new OrthographicCamera();
-        camera.zoom = 1 / 5f;
-       
-        
-        
+        camera.zoom = 1 / 3f;
+             
         
     }
 
