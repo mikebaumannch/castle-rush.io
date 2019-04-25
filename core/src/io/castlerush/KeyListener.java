@@ -2,9 +2,10 @@ package io.castlerush;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -17,35 +18,34 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 import io.castlerush.Player;
+import io.castlerush.screens.Play;
 
-public class KeyListener implements InputProcessor {
-
+public class KeyListener extends ClickListener implements InputProcessor {
+    
+    private Play play;
     private Player player;
     private TiledMap map;
     private List<Rectangle> tiles;
+    private Skin mySkin;
 
     public boolean keyPressed = false;
+    private boolean isTouched = false;
     private String direction = "LEFT";
 
-    public KeyListener(Player player, TiledMap map) {
+    public KeyListener(Player player, TiledMap map, Play play) {
+        this.play=play;
         this.player = player;
         this.map = map;
-        Gdx.input.setInputProcessor(this);
-
-        TiledMapTileLayer collisionObjectLayer = (TiledMapTileLayer) map.getLayers().get("Water");
-        tiles = new ArrayList<Rectangle>();
-
-        for (int row = 0; row < collisionObjectLayer.getWidth(); row++) {
-            for (int col = 0; col < collisionObjectLayer.getHeight(); col++) {
-
-                tiles.add(new Rectangle(row * 16, col * 16, 16, 16));
-
-            }
-        }
-        System.out.println(tiles.size());
-
     }
 
     public boolean checkCollision() {
@@ -65,12 +65,6 @@ public class KeyListener implements InputProcessor {
             }
         }
 
-        /*
-         * for (Rectangle tile : tiles) { if (playerRect.overlaps(tile)) {
-         * System.out.println("WTF >:("); return true; } else {
-         * System.out.println(":)"); return false; } }
-         */
-
         return false;
     }
 
@@ -78,21 +72,27 @@ public class KeyListener implements InputProcessor {
     public void handleInput() {
         if (keyPressed) {
 
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
                 player.walk(0);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)|| Gdx.input.isKeyPressed(Input.Keys.D)) {
                 player.walk(1);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)|| Gdx.input.isKeyPressed(Input.Keys.W)) {
                 player.walk(2);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
                 player.walk(3);
             }
-
+            if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+                System.exit(0);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+                //Shop öffnen
+                play.showShop();
+            }
         }
-
+        
     }
 
     @Override
@@ -108,12 +108,14 @@ public class KeyListener implements InputProcessor {
         if (keycode == Input.Keys.RIGHT) {
             if (direction == "LEFT") {
                 player.flip(true, false);
+                direction = "RIGHT";
             }
         }
 
         else if (keycode == Input.Keys.LEFT) {
             if (direction == "RIGHT") {
                 player.flip(true, false);
+                direction = "LEFT";
             }
         }
 
@@ -128,13 +130,14 @@ public class KeyListener implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        // TODO Auto-generated method stub
+        isTouched = true;
+        
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        // TODO Auto-generated method stub
+        isTouched = false;
         return false;
     }
 
@@ -154,6 +157,13 @@ public class KeyListener implements InputProcessor {
     public boolean scrolled(int amount) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public void clicked(InputEvent event, float x, float y) {
+
+        System.out.println("hi");
+        
     }
 
 }

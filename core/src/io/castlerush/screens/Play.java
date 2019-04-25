@@ -3,6 +3,7 @@ package io.castlerush.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +22,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -37,7 +39,7 @@ import io.castlerush.Player;
 
 public class Play implements Screen {
 
-    // PLayer erstellen
+    // Player erstellen
     private Player player;
 
     private TiledMap map;
@@ -48,9 +50,16 @@ public class Play implements Screen {
     private TextButtonStyle textButtonStyle;
     private Stage stage;
     private Skin mySkin;
+    
+    // GUI
+    private Dialog dialog;
+    public TextButton buttonShop;
+    public TextButton buttonExit;
+    public InputMultiplexer inputMulti = new InputMultiplexer();
 
     public Play(String username) {
         this.username = username;
+        
     }
     
     @Override
@@ -62,7 +71,7 @@ public class Play implements Screen {
         camera = new OrthographicCamera();
         
         camera.zoom = 1 / 3f;
-        player = new Player("Markus", (new Sprite(new Texture("img/player.png"))), 100, 100, true, map);
+        player = new Player("Markus", (new Sprite(new Texture("img/player.png"))), 100, 100, true, map, this);
         
         int randomX = ThreadLocalRandom.current().nextInt(16, (map.getProperties().get("width", Integer.class) - 3) * 16);
         int randomY = ThreadLocalRandom.current().nextInt(16, (map.getProperties().get("height", Integer.class) - 3) * 16);
@@ -83,10 +92,15 @@ public class Play implements Screen {
         BitmapFont font = new BitmapFont();
         
         //Button Spiel beenden
-        textButtonStyle = new TextButtonStyle();
-        textButtonStyle.font = font;
-        TextButton buttonExit = new TextButton("Spiel beenden", mySkin, "small");
+        buttonExit = new TextButton("Spiel beenden (ESC)", mySkin, "small");
+        buttonExit.setName("buttonExit");
         buttonExit.setPosition(Gdx.graphics.getWidth() - 20 - buttonExit.getWidth(), Gdx.graphics.getHeight() - gameTitle.getHeight()/2 - 20);
+        
+        //Button Shop öffnen
+        buttonShop = new TextButton("Shop oeffnen (E)", mySkin, "small");
+        buttonShop.setName("buttonShop");
+        buttonShop.setPosition(Gdx.graphics.getWidth() - 45 - buttonShop.getWidth(), Gdx.graphics.getHeight() - buttonExit.getHeight() - 80);
+        buttonShop.setWidth(buttonExit.getWidth());
         
         //Itembar anzeigen
         Texture itembar = new Texture(Gdx.files.internal("img/itembar.png"));
@@ -101,20 +115,30 @@ public class Play implements Screen {
         heart.setPosition(Gdx.graphics.getWidth()-heart.getWidth()/2 - 20, 20);
         
         //Anzeige der Lebenspunkte hinzufügen
-        mySkin = new Skin(Gdx.files.internal("skins/glassy-ui.json"));
         Label heartTitle = new Label(""+player.getHealth(), mySkin);
         heartTitle.setSize(100, 100);
         heartTitle.setPosition(Gdx.graphics.getWidth()-heart.getWidth()/2 - heart.getWidth() - 20, 0);
         heartTitle.setAlignment(Align.left);
         BitmapFont font1 = new BitmapFont();
+        
+        // Dialog
+        dialog = new Dialog("Shop", mySkin, "default");
+        dialog.text("Shop");
+        dialog.button("Schliessen");
+        dialog.button("Kaufen");
        
         //Add Actor
         stage.addActor(gameTitle);
         stage.addActor(heart);
         stage.addActor(heartTitle);
         stage.addActor(item);
+        stage.addActor(buttonShop);
+        stage.addActor(buttonExit);
         
-        //Listener
+        inputMulti.addProcessor(stage);
+        inputMulti.addProcessor(player.keyListener);
+        Gdx.input.setInputProcessor(inputMulti);
+        
         buttonExit.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {     
@@ -122,7 +146,22 @@ public class Play implements Screen {
             }
         });
         
-        stage.addActor(buttonExit);
+        buttonShop.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {     
+                //Open Shop
+            }
+        });
+        
+    }
+    
+    public void showShop() {
+        dialog.show(stage);
+        stage.addActor(dialog);
+    }
+    
+    public void closeShop() {
+        dialog.hide();
     }
 
     @Override
@@ -142,7 +181,7 @@ public class Play implements Screen {
         renderer.getBatch().begin();
         player.draw(renderer.getBatch());
         renderer.getBatch().end();
-
+  
         stage.act();
         stage.draw();
     }
@@ -169,14 +208,11 @@ public class Play implements Screen {
     @Override
     public void hide() {
         dispose();
-
     }
 
     @Override
     public void dispose() {
         map.dispose();
         renderer.dispose();
-
     }
-
 }

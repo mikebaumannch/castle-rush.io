@@ -12,7 +12,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
+import io.castlerush.screens.Play;
+
 public class Player extends Sprite {
+    
+    private Play play;
 
     public String name;
     public int coins;
@@ -21,21 +25,22 @@ public class Player extends Sprite {
     
     public TiledMap map;
     
-    private KeyListener keyListener;
+    public KeyListener keyListener;
     
     private Vector2 velocity = new Vector2();
     private float speed = 200, delta;
     
 
-    public Player(String name, Sprite skin, int coins, int health, boolean isCastleAlive, TiledMap map) {
+    public Player(String name, Sprite skin, int coins, int health, boolean isCastleAlive, TiledMap map, Play play) {
 
         super(skin);
+        this.play = play;
         this.name = name;
         this.coins = coins;
         this.health = health;
         this.isCastleAlive = isCastleAlive;
         this.map = map; 
-        this.keyListener = new KeyListener(this, map);
+        this.keyListener = new KeyListener(this, map, play);
     }
 
     @Override

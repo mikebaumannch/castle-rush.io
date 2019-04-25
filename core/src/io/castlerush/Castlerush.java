@@ -18,6 +18,7 @@ public class Castlerush extends Game {
     private Game game;
     public Viewport screenPort;
     
+    //Konstruktor
     public Castlerush() {
         game = this;
     }
@@ -26,8 +27,7 @@ public class Castlerush extends Game {
 	public void create () {
 	    
 	    screenPort = new ScreenViewport();
-	    
-	    float delay = 5; // seconds
+	    float delay = 5;
 
 	    Timer.schedule(new Task(){
 	        @Override
@@ -59,6 +59,4 @@ public class Castlerush extends Game {
 	public void resume() {
 	    super.resume();
 	}
-	
-	
 }

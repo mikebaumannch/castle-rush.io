@@ -29,46 +29,31 @@ public class SplashScreen implements Screen{
         batch.begin();
         batch.draw(img, Gdx.graphics.getWidth()/2 - img.getWidth()/2, 
                 Gdx.graphics.getHeight()/2 - img.getHeight()/2);
-        batch.end();
-        
-        /*
-      //wartet 5 Sekunden
-        try {
-            TimeUnit.SECONDS.sleep(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-      //setScreen(new Play());*/
-        
+        batch.end();       
     }
 
     @Override
     public void resize(int width, int height) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void pause() {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
-        
+        // TODO Auto-generated method stub 
     }
 
     @Override
     public void hide() {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void dispose() {
         // TODO Auto-generated method stub
-        
     }
 }

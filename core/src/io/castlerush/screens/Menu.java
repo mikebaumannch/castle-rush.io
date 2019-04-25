@@ -54,7 +54,7 @@ public class Menu implements Screen{
         
         //User Input Field
         txtUsername = new TextField("", mySkin);
-        txtUsername.setMessageText("test");
+        txtUsername.setMessageText("Benutzername...");
         txtUsername.setWidth(400);
         txtUsername.setPosition(Gdx.graphics.getWidth()/2 - txtUsername.getWidth()/2, Gdx.graphics.getHeight()/2 - txtUsername.getHeight()/2 + 80);
         
@@ -67,7 +67,7 @@ public class Menu implements Screen{
         //Button Spiel beenden
         textButtonStyle = new TextButtonStyle();
         textButtonStyle.font = font;
-        buttonExit = new TextButton("Spiel beenden :(", mySkin, "small");
+        buttonExit = new TextButton("Spiel beenden", mySkin, "small");
         buttonExit.setPosition(Gdx.graphics.getWidth()/2 - buttonExit.getWidth()/2, Gdx.graphics.getHeight()/2 - buttonExit.getHeight()/2 - 80);
         
         //Actor hinzufügen
