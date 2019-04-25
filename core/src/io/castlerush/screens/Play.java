@@ -82,7 +82,7 @@ public class Play implements Screen {
         player.setX(randomX);
         player.setY(randomY);
 
-        //Informationen
+        //Informations
         
         stage = new Stage();
 
@@ -99,32 +99,32 @@ public class Play implements Screen {
         buttonExit.setName("buttonExit");
         buttonExit.setPosition(Gdx.graphics.getWidth() - 20 - buttonExit.getWidth(), Gdx.graphics.getHeight() - gameTitle.getHeight()/2 - 20);
         
-        //Button Shop öffnen
+        //Button Open shop
         buttonShop = new TextButton("Shop oeffnen (E)", mySkin, "small");
         buttonShop.setName("buttonShop");
         buttonShop.setPosition(Gdx.graphics.getWidth() - 45 - buttonShop.getWidth(), Gdx.graphics.getHeight() - buttonExit.getHeight() - 80);
         buttonShop.setWidth(buttonExit.getWidth());
         
-        //Itembar anzeigen
+        //Show itembar
         Texture itembar = new Texture(Gdx.files.internal("img/itembar.png"));
         Image item = new Image(itembar);
         item.setSize(itembar.getWidth(),itembar.getHeight());
         item.setPosition(Gdx.graphics.getWidth()/2-item.getWidth()/2, 0);
         
-        //Herz für die Lebenspunkte hinzufügen
+        //Heart
         Texture texture = new Texture(Gdx.files.internal("img/heart.png"));
         Image heart = new Image(texture);
         heart.setSize(texture.getWidth()/6,texture.getHeight()/6);
         heart.setPosition(Gdx.graphics.getWidth()-heart.getWidth()/2 - 20, 20);
         
-        //Anzeige der Lebenspunkte hinzufügen
+        //Label Lifepoints
         Label heartTitle = new Label(""+player.getHealth(), mySkin);
         heartTitle.setSize(100, 100);
         heartTitle.setPosition(Gdx.graphics.getWidth()-heart.getWidth()/2 - heart.getWidth() - 20, 0);
         heartTitle.setAlignment(Align.left);
         BitmapFont font1 = new BitmapFont();
         
-        // Dialog
+        //Dialog
         dialog = new Dialog("", mySkin, "default");
         
         //Create Components of table
