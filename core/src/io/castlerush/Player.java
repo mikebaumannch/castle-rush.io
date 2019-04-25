@@ -1,17 +1,14 @@
 package io.castlerush;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
-import io.castlerush.items.Item;
-import io.castlerush.screens.Play;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import io.castlerush.items.ItemStructure;
+import io.castlerush.items.Item;
 import io.castlerush.screens.Play;
 import io.castlerush.structures.Structure;
 
@@ -26,7 +23,6 @@ public class Player extends Sprite {
     public KeyListener keyListener;
     private Vector2 velocity = new Vector2();
     private float speed = 100, delta;
-    private List<Item> inventory = new ArrayList<Item>();
 
     public Player(String name, Sprite skin, int coins, int health, boolean isCastleAlive,
             TiledMap map, Play play) {
@@ -117,7 +113,20 @@ public class Player extends Sprite {
     }
 
     public void buy(Item item) {
-        inventory.add(item);
+        play.itemsInInventory.add(item);
+        if (item.getName().equals("Holzwert") || item.getName().equals("Steinwert") || item.getName().equals("Eisenschwert")){
+            play.weaponImageSlot0.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+        }
+        else if (item.getName().equals("Steinschleuder") || item.getName().equals("Bogen")) {
+            play.transparentImageSlot1.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+        }
+        else if (item.getName().equals("Bogenschützenturm") || item.getName().equals("Kanonenturm")) {
+            play.transparentImageSlot2.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+        }
+        else if (item.getName().equals("Holzmauer") || item.getName().equals("Steinmauer")) {
+            play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+        }
+        
     }
 
     public Vector2 getVelocity() {

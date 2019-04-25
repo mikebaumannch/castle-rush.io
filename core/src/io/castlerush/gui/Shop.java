@@ -141,7 +141,7 @@ public class Shop {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //Aktion für Schwert kaufen
-                player.buy(ItemLoader.woodSword);
+                player.buy(ItemLoader.trap);
             }
         });
         
@@ -149,7 +149,7 @@ public class Shop {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //Aktion für Slingshot kaufen
-                player.buy(ItemLoader.slingShot);
+                player.buy(ItemLoader.woodSword);
             }
         });
         
@@ -157,7 +157,7 @@ public class Shop {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //Aktion für Falle kaufen
-                player.buy(ItemLoader.trap);
+                player.buy(ItemLoader.slingShot);
             }
         });
         

@@ -45,6 +45,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import io.castlerush.KeyListener;
 import io.castlerush.Player;
 import io.castlerush.gui.Shop;
+import io.castlerush.items.Item;
 import io.castlerush.items.ItemLoader;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,20 +76,26 @@ public class Play implements Screen {
     // GUI
     private Dialog dialog;
     private Dialog inventory;
+    public Table tableInventory;
     public TextButton buttonShop;
     public TextButton buttonExit;
     public InputMultiplexer inputMulti = new InputMultiplexer();
     public TextButton buttonBuy;
+    public Image weaponImageSlot0;
+    public Image transparentImageSlot1;
+    public Image transparentImageSlot2;
+    public Image transparentImageSlot3;
     public boolean shopIsOpen = false;
 
-    // Structures on map
+    // Structures on map and items
     public List<Structure> structuresOnMap = new ArrayList<Structure>();
+    public List<Item> itemsInInventory = new ArrayList<Item>();
 
     public Play(String username) {
         this.username = username;
 
         // Load ressources
-        // ItemLoader.loadItems();
+        ItemLoader.loadItems();
         StructureLoader.loadStructures();
     }
 
@@ -148,7 +155,7 @@ public class Play implements Screen {
 
     private void createItembar(Stage stage) {
         // Create Table
-        Table tableInventory = new Table(mySkin);
+        tableInventory = new Table(mySkin);
         tableInventory.setWidth(241);
         tableInventory.setHeight(58);
         tableInventory.setBackground(new TextureRegionDrawable(
@@ -156,21 +163,21 @@ public class Play implements Screen {
         tableInventory.setPosition(Gdx.graphics.getWidth() / 2 - tableInventory.getWidth() / 2, 0);
 
         // transparent image
-        Image transparentImageSlot1 = new Image(
+        weaponImageSlot0 = new Image(
+                new Texture(Gdx.files.internal("weapons/fist.png")));
+        transparentImageSlot1 = new Image(
                 new Texture(Gdx.files.internal("img/transparent.png")));
-        Image transparentImageSlot2 = new Image(
+        transparentImageSlot2 = new Image(
                 new Texture(Gdx.files.internal("img/transparent.png")));
-        Image transparentImageSlot3 = new Image(
-                new Texture(Gdx.files.internal("img/transparent.png")));
-        Image transparentImageSlot4 = new Image(
+        transparentImageSlot3 = new Image(
                 new Texture(Gdx.files.internal("img/transparent.png")));
 
         // Add components to table
+        tableInventory.add(weaponImageSlot0).width(48).expandX();
         tableInventory.add(transparentImageSlot1).width(48).expandX();
         tableInventory.add(transparentImageSlot2).width(48).expandX();
         tableInventory.add(transparentImageSlot3).width(48).expandX();
-        tableInventory.add(transparentImageSlot4).width(48).expandX();
-
+        
         // Add table to dialog
         stage.addActor(tableInventory);
     }
@@ -318,7 +325,8 @@ public class Play implements Screen {
         batch.begin();
         shapeRenderer.begin(ShapeType.Filled);
 
-        drawStructures(structuresOnMap);
+        drawStructures();
+        drawItems();
         player.draw(batch);
 
         shapeRenderer.end();
@@ -328,11 +336,23 @@ public class Play implements Screen {
         stage.draw();
     }
 
-    public void drawStructures(List<Structure> structuresOnMap) {
+    public void drawStructures() {
 
         for (Structure structure : structuresOnMap) {
             structure.draw(batch);
         }
+    }
+    
+    public void drawItems() {
+        
+        int count = 0;
+        for(Item item : itemsInInventory) {
+            //tableInventory.add(new Image(new TextureRegionDrawable(new TextureRegion(item.getTexture())))).width(48).expandX();
+            //tableInventory.getCells().get(count).getActor().
+            //transparentImageSlot1.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            //count++;
+        }
+        
     }
 
     @Override

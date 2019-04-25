@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public abstract class Item extends Sprite {
     
     String name;
+   
     Sprite icon;
     int price;
     String desc;
@@ -22,5 +23,8 @@ public abstract class Item extends Sprite {
     void useItem() {
         
     }
-
+    
+    public String getName() {
+        return name;
+    }
 }
