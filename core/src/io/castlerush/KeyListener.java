@@ -159,11 +159,4 @@ public class KeyListener extends ClickListener implements InputProcessor {
         return false;
     }
 
-    @Override
-    public void clicked(InputEvent event, float x, float y) {
-
-        System.out.println("hi");
-        
-    }
-
 }
