@@ -45,6 +45,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import io.castlerush.KeyListener;
 import io.castlerush.Player;
 import io.castlerush.gui.Shop;
+import io.castlerush.items.Item;
 import io.castlerush.items.ItemLoader;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +84,7 @@ public class Play implements Screen {
 
     // Structures on map
     public List<Structure> structuresOnMap = new ArrayList<Structure>();
+    public Structure[] coins = new Structure[1000];
 
     public Play(String username) {
         this.username = username;
@@ -107,13 +109,31 @@ public class Play implements Screen {
         player = new Player("Markus", (new Sprite(new Texture("img/player.png"))), 100, 100, true,
                 map, this);
 
-        int randomX = ThreadLocalRandom.current().nextInt(16,
+        // Sets random spawn point for each coin
+        for (int i = 0; i < coins.length; i++) {
+            coins[i] = StructureLoader.coin;
+            coins[i].setSize(map.getProperties().get("tilewidth", Integer.class),
+                    map.getProperties().get("tileheight", Integer.class));
+
+            coins[i].setPosition(
+                    ThreadLocalRandom.current().nextInt(16,
+                            (map.getProperties().get("width", Integer.class) - 3) * 16),
+                    ThreadLocalRandom.current().nextInt(16,
+                            (map.getProperties().get("height", Integer.class) - 3) * 16));
+            System.out.println("X: " + coins[i].getX() + "Y: " + coins[i].getY());
+        }
+
+        int randomMapX = ThreadLocalRandom.current().nextInt(16,
                 (map.getProperties().get("width", Integer.class) - 3) * 16);
-        int randomY = ThreadLocalRandom.current().nextInt(16,
+        int randomMapY = ThreadLocalRandom.current().nextInt(16,
                 (map.getProperties().get("height", Integer.class) - 3) * 16);
 
-        player.setX(randomX);
-        player.setY(randomY);
+        player.setX(randomMapX);
+        player.setY(randomMapY);
+        System.out.println("Player X: " + player.getX() + "Player Y: " + player.getY());
+        
+        System.out.println("Coin 0 X: " + coins[0].getX() + "Coin 0 Y: " + coins[0].getY());
+        System.out.println("Coin 1 X: " + coins[1].getX() + "Coin 1 Y: " + coins[1].getY());
 
         // Informations
         stage = new Stage();
@@ -316,19 +336,22 @@ public class Play implements Screen {
                 map.getProperties().get("tileheight", Integer.class) * 2);
 
         batch.begin();
-        shapeRenderer.begin(ShapeType.Filled);
 
         drawStructures(structuresOnMap);
         player.draw(batch);
 
-        shapeRenderer.end();
         batch.end();
 
         stage.act();
         stage.draw();
     }
 
+    // Builds the placed structures
     public void drawStructures(List<Structure> structuresOnMap) {
+
+        for (int i = 0; i < coins.length; i++) {
+            coins[i].draw(batch);
+        }
 
         for (Structure structure : structuresOnMap) {
             structure.draw(batch);
