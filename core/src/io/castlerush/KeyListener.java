@@ -81,10 +81,7 @@ public class KeyListener extends ClickListener implements InputProcessor {
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
                 System.exit(0);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-                //Shop öffnen
-                play.showShop();
-            }
+            
         }
         
     }
@@ -99,17 +96,26 @@ public class KeyListener extends ClickListener implements InputProcessor {
     public boolean keyDown(int keycode) {
         keyPressed = true;
 
-        if (keycode == Input.Keys.RIGHT) {
+        if (keycode == Input.Keys.RIGHT || keycode == Input.Keys.D) {
             if (direction == "LEFT") {
                 player.flip(true, false);
                 direction = "RIGHT";
             }
         }
 
-        else if (keycode == Input.Keys.LEFT) {
+        else if (keycode == Input.Keys.LEFT || keycode == Input.Keys.A) {
             if (direction == "RIGHT") {
                 player.flip(true, false);
                 direction = "LEFT";
+            }
+        }
+        
+        if (keycode == Input.Keys.E) {
+
+            //Shop öffnen
+            if(!play.shopIsOpen) {
+                play.shopIsOpen = true;
+                play.showShop();
             }
         }
 

@@ -21,6 +21,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -59,6 +61,7 @@ public class Play implements Screen {
     public TextButton buttonExit;
     public InputMultiplexer inputMulti = new InputMultiplexer();
     public TextButton buttonBuy;
+    public boolean shopIsOpen = false;
 
     public Play(String username) {
         this.username = username;
@@ -207,8 +210,20 @@ public class Play implements Screen {
         inputMulti.addProcessor(player.keyListener);
         Gdx.input.setInputProcessor(inputMulti);
         
-        //Listener
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                
+                if(keycode == Input.Keys.E && shopIsOpen) {
+                    shopIsOpen = false;
+                    closeShop();
+                }
+                
+                return false;
+            }
+        });
         
+        //Listener
         buttonExit.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {     
