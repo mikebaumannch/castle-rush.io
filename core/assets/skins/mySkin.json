@@ -5,8 +5,7 @@ com.badlogic.gdx.graphics.g2d.BitmapFont: {
 	}
 	font-big: {
 		file: font-big-export.fnt
-	}
-}
+	}}
 com.badlogic.gdx.graphics.Color: {
 	black: {
 		r: 0

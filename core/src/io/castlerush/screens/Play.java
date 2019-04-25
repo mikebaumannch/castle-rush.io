@@ -22,10 +22,12 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -56,6 +58,7 @@ public class Play implements Screen {
     public TextButton buttonShop;
     public TextButton buttonExit;
     public InputMultiplexer inputMulti = new InputMultiplexer();
+    public TextButton buttonBuy;
 
     public Play(String username) {
         this.username = username;
@@ -122,11 +125,76 @@ public class Play implements Screen {
         BitmapFont font1 = new BitmapFont();
         
         // Dialog
-        dialog = new Dialog("Shop", mySkin, "default");
-        dialog.text("Shop");
-        dialog.button("Schliessen");
-        dialog.button("Kaufen");
+        dialog = new Dialog("", mySkin, "default");
+        
+        //Create Components of table
+        //Title
+        Label title = new Label("Shop", mySkin, "big");
+        //INformations
+        Label nameInformation = new Label("Name:", mySkin);
+        Label priceInformation = new Label("Preis:", mySkin);
+        //Wall
+        Label wallLabel = new Label("Holzmauer", mySkin);
+        Label wallPrice = new Label("50", mySkin);
+        TextButton wallButton = new TextButton("Kaufen",mySkin, "small");
+        //Archery
+        Label archeryLabel = new Label("Bogenschützenturm", mySkin);
+        Label archeryPrice = new Label("200", mySkin);
+        TextButton archeryButton = new TextButton("Kaufen",mySkin, "small");
+        //Trap
+        Label trapLabel = new Label("Falle", mySkin);
+        Label trapPrice = new Label("200", mySkin);
+        TextButton trapButton = new TextButton("Kaufen",mySkin, "small");
+        //Sword
+        Label swordLabel = new Label("Holzschwert", mySkin);
+        Label swordPrice = new Label("200", mySkin);
+        TextButton swordButton = new TextButton("Kaufen",mySkin, "small");
+        //Slingshot
+        Label slingshotLabel = new Label("Slingshot", mySkin);
+        Label slingshotdPrice = new Label("200", mySkin);
+        TextButton slingshotButton = new TextButton("Kaufen",mySkin, "small");
+        
+        //Create Table
+        Table table = new Table();
+        
+        //Add Components to table
+        table.add(nameInformation).width(200);
+        table.add(priceInformation).width(50);
+        table.row();
+        table.add(wallLabel).width(200);
+        table.add(wallPrice).width(50);
+        table.add(wallButton).width(100);
+        table.row();
+        table.add(archeryLabel).width(200);
+        table.add(archeryPrice).width(50);
+        table.add(archeryButton).width(100);
+        table.row();
+        table.add(trapLabel).width(200);
+        table.add(trapPrice).width(50);
+        table.add(trapButton).width(100);
+        table.row();
+        table.add(swordLabel).width(200);
+        table.add(swordPrice).width(50);
+        table.add(swordButton).width(100);
+        table.row();
+        table.add(slingshotLabel).width(200);
+        table.add(slingshotdPrice).width(50);
+        table.add(slingshotButton).width(100);
+        
+        dialog.hide();
+        dialog.setWidth(400);
+        dialog.setHeight(400);
+        dialog.setPosition(Gdx.graphics.getWidth()/2-dialog.getWidth()/2, Gdx.graphics.getHeight()/2-dialog.getHeight()/2);
+        
+        //Settings
+        title.setPosition(dialog.getWidth()/2 - title.getWidth()/2, dialog.getHeight());
        
+        //Add table to dialog
+        dialog.addActor(title);
+        dialog.addActor(table);
+        
+        table.setPosition(dialog.getWidth()/2 - table.getWidth()/2, 210);
+        
         //Add Actor
         stage.addActor(gameTitle);
         stage.addActor(heart);
@@ -139,6 +207,8 @@ public class Play implements Screen {
         inputMulti.addProcessor(player.keyListener);
         Gdx.input.setInputProcessor(inputMulti);
         
+        //Listener
+        
         buttonExit.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {     
@@ -149,14 +219,55 @@ public class Play implements Screen {
         buttonShop.addListener(new ChangeListener() {
             @Override
             public void changed (ChangeEvent event, Actor actor) {     
-                //Open Shop
+                showShop();
+            }
+        });
+        wallButton.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //Aktion für Wall kaufen
+                
             }
         });
         
+        archeryButton.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //Aktion für Bogenschützenturm kaufen
+                
+            }
+        });
+        
+        trapButton.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //Aktion für Schwert kaufen
+                
+            }
+        });
+        
+        swordButton.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //Aktion für Slingshot kaufen
+                
+            }
+        });
+        
+        slingshotButton.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                //Aktion für Falle kaufen
+                
+            }
+        });
     }
     
     public void showShop() {
         dialog.show(stage);
+        dialog.setWidth(400);
+        dialog.setHeight(500);
+        dialog.setPosition(Gdx.graphics.getWidth()/2-dialog.getWidth()/2, Gdx.graphics.getHeight()/2-dialog.getHeight()/2);
         stage.addActor(dialog);
     }
     
