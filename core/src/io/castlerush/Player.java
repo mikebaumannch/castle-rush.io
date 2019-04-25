@@ -22,15 +22,12 @@ public class Player extends Sprite {
     public int coins;
     public int health;
     public boolean isCastleAlive = true;
-    
+
     public TiledMap map;
     
     public KeyListener keyListener;
-    
     private Vector2 velocity = new Vector2();
     private float speed = 200, delta;
-    
-
     public Player(String name, Sprite skin, int coins, int health, boolean isCastleAlive, TiledMap map, Play play) {
 
         super(skin);
@@ -45,7 +42,7 @@ public class Player extends Sprite {
 
     @Override
     public void draw(Batch spriteBatch) {
-        
+
         // Zeitspanne zwischen aktuellem und vorherigem Frame
         delta = Gdx.graphics.getDeltaTime();
         update(delta);
@@ -53,51 +50,55 @@ public class Player extends Sprite {
     }
 
     private void update(float delta) {
-        
-        if(keyListener.checkCollision()) {
-            speed = 0;
-        }
-        
+
         // Apply speed
         velocity.y -= speed * delta;
         velocity.x -= speed * delta;
-        
+
         // Clamp velocity
-        if(velocity.y > speed) {
+        if (velocity.y > speed) {
             velocity.y = speed;
-        }else if(velocity.y < speed) {
+        } else if (velocity.y < speed) {
             velocity.y = -speed;
         }
-      
-        if(velocity.x > speed) {
+
+        if (velocity.x > speed) {
             velocity.x = speed;
-        }else if(velocity.x < speed) {
+        } else if (velocity.x < speed) {
             velocity.x = -speed;
         }
-        
+
         keyListener.handleInput();
     }
 
     void walk(int key) {
-        
-        switch(key) {
-        
+
+        switch (key) {
+
         case 0:
-            setX(getX() + velocity.x * delta);
+            if (!keyListener.checkCollision().equals("LEFT")) {
+                setX(getX() + velocity.x * delta);
+            }
             break;
-            
+
         case 1:
-            setX(getX() + -velocity.x * delta);
+            if (!keyListener.checkCollision().equals("RIGHT")) {
+                setX(getX() + -velocity.x * delta);
+            }
             break;
-            
+
         case 2:
-            setY(getY() + -velocity.y * delta);
+            if (!keyListener.checkCollision().equals("TOP")) {
+                setY(getY() + -velocity.y * delta);
+            }
             break;
-            
+
         case 3:
-            setY(getY() + velocity.y * delta);
+            if (!keyListener.checkCollision().equals("BOTTOM")) {
+                setY(getY() + velocity.y * delta);
+            }
             break;
-        
+
         }
     }
 
@@ -106,7 +107,7 @@ public class Player extends Sprite {
 
     void buy() {
     }
-    
+
     public Vector2 getVelocity() {
         return velocity;
     }
@@ -126,7 +127,7 @@ public class Player extends Sprite {
     public int getHealth() {
         return health;
     }
-    
+
     public int getCoins() {
         return coins;
     }

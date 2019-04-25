@@ -1,32 +1,18 @@
 package io.castlerush;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-
 import io.castlerush.Player;
 import io.castlerush.screens.Play;
 
@@ -48,7 +34,7 @@ public class KeyListener extends ClickListener implements InputProcessor {
         this.map = map;
     }
 
-    public boolean checkCollision() {
+    public String checkCollision() {
 
         MapLayer collisionObjectLayer = map.getLayers().get("WaterCollider");
         MapObjects objects = collisionObjectLayer.getObjects();
@@ -61,11 +47,19 @@ public class KeyListener extends ClickListener implements InputProcessor {
             Rectangle rectangle = rectangleObject.getRectangle();
             if (Intersector.overlaps(rectangle, player.getBoundingRectangle())) {
                 // collision happened
-                return true;
+                if(rectangleObject.getName().equals("Top")) {
+                    return "TOP";
+                }else if(rectangleObject.getName().equals("Bottom")) {
+                    return "BOTTOM";
+                }else if(rectangleObject.getName().equals("Left")) {
+                    return "LEFT";
+                }else {
+                    return "RIGHT";
+                }
             }
         }
 
-        return false;
+        return "NO";
     }
 
     //
