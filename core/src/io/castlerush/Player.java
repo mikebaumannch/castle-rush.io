@@ -1,5 +1,8 @@
 package io.castlerush;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,27 +14,22 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
-
+import io.castlerush.items.Item;
 import io.castlerush.screens.Play;
-
-
-//Jeff room is the best <3
-
 
 public class Player extends Sprite {
     
     private Play play;
-
     public String name;
     public int coins;
     public int health;
     public boolean isCastleAlive = true;
-
     public TiledMap map;
-    
     public KeyListener keyListener;
     private Vector2 velocity = new Vector2();
     private float speed = 100, delta;
+    private List<Item> inventory = new ArrayList<Item>();
+    
     public Player(String name, Sprite skin, int coins, int health, boolean isCastleAlive, TiledMap map, Play play) {
 
         super(skin);
@@ -102,14 +100,14 @@ public class Player extends Sprite {
                 setY(getY() + velocity.y * delta);
             }
             break;
-
         }
     }
 
     void attack() {
     }
 
-    void buy() {
+    public void buy(Item item) {
+        inventory.add(item);
     }
 
     public Vector2 getVelocity() {

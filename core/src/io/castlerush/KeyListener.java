@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.castlerush.Player;
+import io.castlerush.gui.Shop;
 import io.castlerush.screens.Play;
 
 public class KeyListener extends ClickListener implements InputProcessor {
@@ -81,9 +82,7 @@ public class KeyListener extends ClickListener implements InputProcessor {
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
                 System.exit(0);
             }
-            
         }
-        
     }
 
     @Override
@@ -114,8 +113,7 @@ public class KeyListener extends ClickListener implements InputProcessor {
 
             //Shop öffnen
             if(!play.shopIsOpen) {
-                play.shopIsOpen = true;
-                play.showShop();
+                Shop.showShop();
             }
         }
 
