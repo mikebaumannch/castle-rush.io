@@ -215,7 +215,7 @@
     }
     com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
         default: {
-            background: black
+            background: window
             titleFont: font
             titleFontColor: black
         }
