@@ -14,6 +14,10 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.castlerush.screens.Play;
 
+
+//Jeff room is the best <3
+
+
 public class Player extends Sprite {
     
     private Play play;
@@ -27,7 +31,7 @@ public class Player extends Sprite {
     
     public KeyListener keyListener;
     private Vector2 velocity = new Vector2();
-    private float speed = 200, delta;
+    private float speed = 100, delta;
     public Player(String name, Sprite skin, int coins, int health, boolean isCastleAlive, TiledMap map, Play play) {
 
         super(skin);
