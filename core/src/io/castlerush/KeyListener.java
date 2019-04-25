@@ -15,7 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.castlerush.Player;
 import io.castlerush.gui.Shop;
+import io.castlerush.items.ItemLoader;
 import io.castlerush.screens.Play;
+import io.castlerush.structures.Structure;
+import io.castlerush.structures.StructureLoader;
 
 public class KeyListener extends ClickListener implements InputProcessor {
     
@@ -57,6 +60,14 @@ public class KeyListener extends ClickListener implements InputProcessor {
                 }else {
                     return "RIGHT";
                 }
+            }
+        }
+        
+        for(Structure structure : play.structuresOnMap) {
+            
+            Rectangle rect = structure.getBoundingRectangle();
+            if(Intersector.overlaps(rect, player.getBoundingRectangle())) {
+                return "TOP";
             }
         }
 
@@ -115,6 +126,10 @@ public class KeyListener extends ClickListener implements InputProcessor {
             if(!play.shopIsOpen) {
                 Shop.showShop();
             }
+        }
+        
+        if(keycode == Input.Keys.Q) {
+            player.placeStructure(StructureLoader.castleLvl1);
         }
 
         return false;

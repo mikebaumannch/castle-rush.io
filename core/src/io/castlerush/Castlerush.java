@@ -1,15 +1,14 @@
 package io.castlerush;
 
-import java.util.concurrent.TimeUnit;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import io.castlerush.screens.Menu;
-import io.castlerush.screens.Play;
 import io.castlerush.screens.SplashScreen;
 
 public class Castlerush extends Game {
@@ -19,6 +18,11 @@ public class Castlerush extends Game {
 
     // Konstruktor
     public Castlerush() {
+
+        /*
+         * Pixmap pm = new Pixmap(Gdx.files.internal("img/cursor.jpg"));
+         * Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0)); pm.dispose();
+         */
 
         game = this;
     }
