@@ -109,8 +109,8 @@ public class Shop {
         
         dialog.hide();
         dialog.setWidth(400);
-        dialog.setHeight(400);
-        dialog.setPosition(Gdx.graphics.getWidth()/2-dialog.getWidth()/2, Gdx.graphics.getHeight()/2-dialog.getHeight()/2);
+        dialog.setHeight(500);
+        stage.addActor(dialog);
         
         //Settings
         title.setPosition(dialog.getWidth()/2 - title.getWidth()/2, dialog.getHeight());

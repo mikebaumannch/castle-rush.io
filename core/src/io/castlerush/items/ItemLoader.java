@@ -21,7 +21,7 @@ public class ItemLoader {
     public static ItemStructure stoneWall;
     public static ItemStructure trap;
     
- // Defines every item in the game
+    /*
     public static void loadItems() {
         
         //Weapons
@@ -40,6 +40,6 @@ public class ItemLoader {
         stoneWall = new ItemStructure("Steinmauer", null, 200, "Level 2");
         trap = new ItemStructure("Fallgrube", null, 300, "Level 1");
         
-    }
+    }*/
 
 }

@@ -7,8 +7,6 @@ public class GameManager {
     
     //Konstruktor
     public GameManager() {
-        ItemLoader.loadItems();
-        StructureLoader.loadStructures();
     }
 
 }

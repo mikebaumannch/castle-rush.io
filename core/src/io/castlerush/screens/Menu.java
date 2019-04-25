@@ -30,7 +30,6 @@ public class Menu implements Screen{
     private TextButtonStyle textButtonStyle;
     private BitmapFont font;
     private Skin mySkin;
-    private Texture buttonAtlas;
     private TextField txtUsername;
     private TextButton buttonExit;
     
