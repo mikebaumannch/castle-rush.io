@@ -114,7 +114,7 @@ public class Player extends Sprite {
 
     public void buy(Item item) {
         play.itemsInInventory.add(item);
-        if (item.getName().equals("Holzwert") || item.getName().equals("Steinwert") || item.getName().equals("Eisenschwert")){
+        if (item.getName().equals("Holzschwert") || item.getName().equals("Steinwert") || item.getName().equals("Eisenschwert")){
             play.weaponImageSlot0.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
         }
         else if (item.getName().equals("Steinschleuder") || item.getName().equals("Bogen")) {
@@ -126,7 +126,6 @@ public class Player extends Sprite {
         else if (item.getName().equals("Holzmauer") || item.getName().equals("Steinmauer")) {
             play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
         }
-        
     }
 
     public Vector2 getVelocity() {
