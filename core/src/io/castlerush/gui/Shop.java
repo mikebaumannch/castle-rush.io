@@ -109,8 +109,8 @@ public class Shop {
         
         dialog.hide();
         dialog.setWidth(400);
-        dialog.setHeight(400);
-        dialog.setPosition(Gdx.graphics.getWidth()/2-dialog.getWidth()/2, Gdx.graphics.getHeight()/2-dialog.getHeight()/2);
+        dialog.setHeight(500);
+        stage.addActor(dialog);
         
         //Settings
         title.setPosition(dialog.getWidth()/2 - title.getWidth()/2, dialog.getHeight());
@@ -125,7 +125,7 @@ public class Shop {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //Aktion für Wall kaufen
-                player.buy(ItemLoader.woodWall);
+                //player.buy(new ItemLoader().woodWall);
             }
         });
         
@@ -133,7 +133,7 @@ public class Shop {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //Aktion für Bogenschützenturm kaufen
-                player.buy(ItemLoader.towerLvl1);
+                player.buy(new ItemLoader().towerLvl1);
             }
         });
         
@@ -141,7 +141,7 @@ public class Shop {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //Aktion für Schwert kaufen
-                player.buy(ItemLoader.trap);
+                player.buy(new ItemLoader().trap);
             }
         });
         
@@ -149,7 +149,7 @@ public class Shop {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //Aktion für Slingshot kaufen
-                player.buy(ItemLoader.woodSword);
+                player.buy(new ItemLoader().woodSword);
             }
         });
         
@@ -157,7 +157,7 @@ public class Shop {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //Aktion für Falle kaufen
-                player.buy(ItemLoader.slingShot);
+                player.buy(new ItemLoader().slingShot);
             }
         });
         

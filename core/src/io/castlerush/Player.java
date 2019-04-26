@@ -15,8 +15,8 @@ import io.castlerush.structures.Structure;
 public class Player extends Sprite {
 
     private Play play;
-    public String name;
-    public int coins;
+    private String name;
+    private int coins;
     public int health;
     public boolean isCastleAlive = true;
     public TiledMap map;
@@ -52,6 +52,12 @@ public class Player extends Sprite {
                 (map.getProperties().get("tilewidth", Integer.class)) * 8);
         play.structuresOnMap.add(structure);
     }
+    
+    public void earnCoins() {
+        if(isCastleAlive) {
+            coins += 100;
+        }
+    }
 
     public void walk(int key) {
 
@@ -85,6 +91,11 @@ public class Player extends Sprite {
             }
             break;
         }
+        
+        if(keyListener.checkCollision().equals("COIN")) {
+            this.coins += 5;
+        }
+        
     }
 
     private void update(float delta) {
@@ -127,6 +138,22 @@ public class Player extends Sprite {
             play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
         }
     }
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public int getCoins() {
+        return coins;
+    }
+
+    public void setCoins(int coins) {
+        this.coins = coins;
+    }
 
     public Vector2 getVelocity() {
         return velocity;
@@ -146,9 +173,5 @@ public class Player extends Sprite {
 
     public int getHealth() {
         return health;
-    }
-
-    public int getCoins() {
-        return coins;
     }
 }

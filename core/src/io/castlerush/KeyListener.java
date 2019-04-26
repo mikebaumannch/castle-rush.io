@@ -21,7 +21,7 @@ import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureLoader;
 
 public class KeyListener extends ClickListener implements InputProcessor {
-    
+
     private Play play;
     private Player player;
     private TiledMap map;
@@ -33,7 +33,7 @@ public class KeyListener extends ClickListener implements InputProcessor {
     private String direction = "LEFT";
 
     public KeyListener(Player player, TiledMap map, Play play) {
-        this.play=play;
+        this.play = play;
         this.player = player;
         this.map = map;
     }
@@ -45,29 +45,38 @@ public class KeyListener extends ClickListener implements InputProcessor {
 
         objects.getCount();
 
-        // there are several other types, Rectangle is probably the most common one
+        // Finds every rectangle in the object layer (made in Tiled)
         for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
 
             Rectangle rectangle = rectangleObject.getRectangle();
             if (Intersector.overlaps(rectangle, player.getBoundingRectangle())) {
                 // collision happened
-                if(rectangleObject.getName().equals("Top")) {
+                if (rectangleObject.getName().equals("Top")) {
                     return "TOP";
-                }else if(rectangleObject.getName().equals("Bottom")) {
+                } else if (rectangleObject.getName().equals("Bottom")) {
                     return "BOTTOM";
-                }else if(rectangleObject.getName().equals("Left")) {
+                } else if (rectangleObject.getName().equals("Left")) {
                     return "LEFT";
-                }else {
+                } else {
                     return "RIGHT";
                 }
             }
         }
-        
-        for(Structure structure : play.structuresOnMap) {
-            
+
+        for (Structure structure : play.structuresOnMap) {
+
             Rectangle rect = structure.getBoundingRectangle();
-            if(Intersector.overlaps(rect, player.getBoundingRectangle())) {
+            if (Intersector.overlaps(rect, player.getBoundingRectangle())) {
                 return "TOP";
+            }
+        }
+
+        for (Structure coin : play.coins) {
+
+            Rectangle rect = coin.getBoundingRectangle();
+            if (Intersector.overlaps(rect, player.getBoundingRectangle())) {
+                play.coins.remove(coin);
+                return "COIN";
             }
         }
 
@@ -81,10 +90,10 @@ public class KeyListener extends ClickListener implements InputProcessor {
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
                 player.walk(0);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)|| Gdx.input.isKeyPressed(Input.Keys.D)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
                 player.walk(1);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)|| Gdx.input.isKeyPressed(Input.Keys.W)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
                 player.walk(2);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
@@ -119,17 +128,17 @@ public class KeyListener extends ClickListener implements InputProcessor {
                 direction = "LEFT";
             }
         }
-        
+
         if (keycode == Input.Keys.E) {
 
-            //Shop öffnen
-            if(!play.shopIsOpen) {
+            // Shop öffnen
+            if (!play.shopIsOpen) {
                 Shop.showShop();
             }
         }
-        
-        if(keycode == Input.Keys.Q) {
-            player.placeStructure(StructureLoader.castleLvl1);
+
+        if (keycode == Input.Keys.Q) {
+            player.placeStructure(new StructureLoader().castleLvl1);
         }
 
         return false;
@@ -144,7 +153,7 @@ public class KeyListener extends ClickListener implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         isTouched = true;
-        
+
         return false;
     }
 

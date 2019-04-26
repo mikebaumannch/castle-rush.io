@@ -1,10 +1,11 @@
 package io.castlerush.screens;
 
-import com.badlogic.gdx.Game;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,36 +13,24 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import java.util.concurrent.ThreadLocalRandom;
+
 import io.castlerush.KeyListener;
 import io.castlerush.Player;
 import io.castlerush.gui.Shop;
@@ -53,90 +42,116 @@ import java.util.concurrent.ThreadLocalRandom;
 import io.castlerush.KeyListener;
 import io.castlerush.Player;
 import io.castlerush.items.ItemLoader;
+
 import io.castlerush.structures.Structure;
-import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
 
 public class Play implements Screen {
 
-    // Player erstellen
+    // PLAYER
     private Player player;
 
+    // RENDERER
     public Batch batch;
-    private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
     private KeyListener keyListener;
+
+    // HUD & GUI
     private String username;
-    private TextButtonStyle textButtonStyle;
     private Stage stage;
     private Skin mySkin;
 
     // GUI
-    private Dialog dialog;
-    private Dialog inventory;
     public Table tableInventory;
-    public TextButton buttonShop;
-    public TextButton buttonExit;
-    public InputMultiplexer inputMulti = new InputMultiplexer();
+    private Label gameTitle, heartTitle, timeToCoinGenTitle;
+    private Dialog dialog, inventory;
+    public TextButton buttonShop, buttonExit;
+    private TextButtonStyle textButtonStyle;
+
     public TextButton buttonBuy;
     public Image weaponImageSlot0;
     public Image transparentImageSlot1;
     public Image transparentImageSlot2;
     public Image transparentImageSlot3;
     public boolean shopIsOpen = false;
+    public InputMultiplexer inputMulti = new InputMultiplexer();
 
-    // Structures on map and items
+    // MAP
+    private TiledMap map;
+    private int mapWidth;
+    private int mapHeight;
+    private int tileWidth;
+    private int tileHeight;
+
+    // STRUCTURES
     public List<Structure> structuresOnMap = new ArrayList<Structure>();
+    public List<Structure> coins = new ArrayList<Structure>();
     public List<Item> itemsInInventory = new ArrayList<Item>();
 
+    // UTILS
+    private float elapsedTime;
+    private int timeToCoinGen;
+
     public Play(String username) {
-        this.username = username;
 
-        // Load ressources
-        ItemLoader.loadItems();
-        StructureLoader.loadStructures();
-    }
 
-    @Override
-    public void show() {
-
+        // Initializing map, tiles etc.
         map = new TmxMapLoader().load("maps/maps.tmx");
+        mapWidth = map.getProperties().get("width", Integer.class);
+        mapHeight = map.getProperties().get("width", Integer.class);
+        tileWidth = map.getProperties().get("tilewidth", Integer.class);
+        tileHeight = map.getProperties().get("tileheight", Integer.class);
 
+        // Initializing renderers
         renderer = new OrthogonalTiledMapRenderer(map);
         shapeRenderer = new ShapeRenderer();
         batch = renderer.getBatch();
 
+        // Setting up camera
         camera = new OrthographicCamera();
-
         camera.zoom = 1 / 3f;
-        player = new Player("Markus", (new Sprite(new Texture("img/player.png"))), 100, 100, true,
-                map, this);
 
-        int randomX = ThreadLocalRandom.current().nextInt(16,
-                (map.getProperties().get("width", Integer.class) - 3) * 16);
-        int randomY = ThreadLocalRandom.current().nextInt(16,
-                (map.getProperties().get("height", Integer.class) - 3) * 16);
-
-        player.setX(randomX);
-        player.setY(randomY);
-
-        // Informations
+        // Initializing GUI
         stage = new Stage();
 
-        createHud();
-        createItembar(stage);
-        Shop.createShop(mySkin, stage, player, this);
-        createButtonListener();
+        // Loading ressources such as items, structures etc.
+        this.username = username;
+        player = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true,
+                map, this);
+        player.setSize(tileWidth * 2, tileHeight * 2);
+        generateCoins();
 
+        // Setting up input processors
         inputMulti.addProcessor(stage);
         inputMulti.addProcessor(player.keyListener);
         Gdx.input.setInputProcessor(inputMulti);
     }
 
+    @Override
+    public void show() {
+
+        // Set random spawn point for player
+        int randomMapX = ThreadLocalRandom.current().nextInt(16, (mapWidth - 3) * 16);
+        int randomMapY = ThreadLocalRandom.current().nextInt(16, (mapHeight - 3) * 16);
+
+        // Spawn the player and it's castle
+        player.setX(randomMapX);
+        player.setY(randomMapY);
+        player.placeStructure(new StructureLoader().castleLvl1);
+
+        // Show HUD & GUI elements
+        createHud();
+        createItembar(stage);
+        Shop.createShop(mySkin, stage, player, this);
+        createButtonListener();
+
+    }
+
     // Erstellt ein Listener für alle Buttons
     private void createButtonListener() {
+
         // Listener
         buttonExit.addListener(new ChangeListener() {
             @Override
@@ -154,6 +169,7 @@ public class Play implements Screen {
     }
 
     private void createItembar(Stage stage) {
+
         // Create Table
         tableInventory = new Table(mySkin);
         tableInventory.setWidth(241);
@@ -184,13 +200,20 @@ public class Play implements Screen {
 
     private void createHud() {
 
-        // Label title
         mySkin = new Skin(Gdx.files.internal("skins/glassy-ui.json"));
-        Label gameTitle = new Label("Name: " + username + "\nCoins: " + player.coins, mySkin);
+
+        // Label title
+        gameTitle = new Label("Name: " + player.getName() + "\nCoins: " + player.getCoins(),
+                mySkin);
         gameTitle.setSize(100, 100);
         gameTitle.setPosition(20, Gdx.graphics.getHeight() - gameTitle.getHeight() / 2 - 30);
         gameTitle.setAlignment(Align.left);
-        BitmapFont font = new BitmapFont();
+
+        timeToCoinGenTitle = new Label("Time To New Coins: " + timeToCoinGen, mySkin);
+        timeToCoinGenTitle.setSize(100, 100);
+        timeToCoinGenTitle.setPosition(20,
+                Gdx.graphics.getHeight() - gameTitle.getHeight() / 2 - 60);
+        timeToCoinGenTitle.setAlignment(Align.left);
 
         // Button Spiel beenden
         buttonExit = new TextButton("Spiel beenden (ESC)", mySkin, "small");
@@ -218,12 +241,11 @@ public class Play implements Screen {
         heart.setPosition(Gdx.graphics.getWidth() - heart.getWidth() / 2 - 20, 20);
 
         // Anzeige der Lebenspunkte hinzufügen
-        Label heartTitle = new Label("" + player.getHealth(), mySkin);
+        heartTitle = new Label("" + player.getHealth(), mySkin);
         heartTitle.setSize(100, 100);
         heartTitle.setPosition(
                 Gdx.graphics.getWidth() - heart.getWidth() / 2 - heart.getWidth() - 20, 0);
         heartTitle.setAlignment(Align.left);
-        BitmapFont font1 = new BitmapFont();
 
         // Dialog
         dialog = new Dialog("", mySkin, "default");
@@ -299,6 +321,7 @@ public class Play implements Screen {
 
         // Add Actor
         stage.addActor(gameTitle);
+        stage.addActor(timeToCoinGenTitle);
         stage.addActor(heart);
         stage.addActor(heartTitle);
         // stage.addActor(item);
@@ -308,9 +331,20 @@ public class Play implements Screen {
 
     @Override
     public void render(float delta) {
+
         Gdx.gl.glClearColor(100 / 255f, 155 / 255f, 255 / 255f, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        // Checks elapsed time (delta -> seconds passed since last render)
+        elapsedTime += delta;
+        timeToCoinGen = (int) (60 - elapsedTime + 1);
+
+        // Reset timer and spawn new coins
+        if (elapsedTime > 60.0) {
+            generateCoins();
+            elapsedTime = 0;
+        }
 
         camera.position.set(player.getX() + player.getWidth() / 2,
                 player.getY() + player.getHeight() / 2, 0);
@@ -319,24 +353,59 @@ public class Play implements Screen {
         renderer.setView(camera);
         renderer.render();
 
-        player.setSize((map.getProperties().get("tilewidth", Integer.class)) * 2,
-                map.getProperties().get("tileheight", Integer.class) * 2);
+        updateHUD();
 
         batch.begin();
-        shapeRenderer.begin(ShapeType.Filled);
 
-        drawStructures();
+        drawStructures(structuresOnMap);
         drawItems();
         player.draw(batch);
 
-        shapeRenderer.end();
         batch.end();
 
         stage.act();
         stage.draw();
     }
 
-    public void drawStructures() {
+    // Updates the HUD
+    private void updateHUD() {
+        gameTitle.setText("Name: " + player.getName() + "\nCoins: " + player.getCoins());
+        heartTitle.setText(player.getHealth());
+        timeToCoinGenTitle.setText("Time To New Coins: " + timeToCoinGen);
+    }
+
+    // Randomly generates coin
+    private void generateCoins() {
+
+        // Clears all coins from map
+        coins.clear();
+
+        // Initializing new coins
+        for (int i = 0; i < 100; i++) {
+            coins.add(new StructureLoader().coin);
+        }
+
+        // Sets random spawn point for each coin
+        for (Structure coin : coins) {
+
+            coin.setSize(8, 8);
+
+            int randomMapX = ThreadLocalRandom.current().nextInt(16, (mapWidth - 3) * 16);
+            int randomMapY = ThreadLocalRandom.current().nextInt(16, (mapHeight - 3) * 16);
+
+            coin.setPosition(randomMapX, randomMapY);
+        }
+
+        player.earnCoins();
+
+    }
+
+    // Builds the placed structures
+    private void drawStructures(List<Structure> structuresOnMap) {
+
+        for (Structure coin : coins) {
+            coin.draw(batch);
+        }
 
         for (Structure structure : structuresOnMap) {
             structure.draw(batch);
