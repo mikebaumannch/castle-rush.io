@@ -31,7 +31,6 @@ public class KeyListener extends ClickListener implements InputProcessor {
 
     public boolean keyPressed = false;
     private boolean isTouched = false;
-    private String direction = "LEFT";
 
     public KeyListener(Player player, TiledMap map, Play play) {
         this.play = play;
@@ -115,28 +114,11 @@ public class KeyListener extends ClickListener implements InputProcessor {
     public boolean keyDown(int keycode) {
         keyPressed = true;
 
-        if (keycode == Input.Keys.RIGHT || keycode == Input.Keys.D) {
-            if (direction == "LEFT") {
-                player.flip(true, false);
-                direction = "RIGHT";
-            }
+        if (keycode == Input.Keys.E && !play.shopIsOpen) {
+            play.shopIsOpen = false;
+            Shop.showShop();
         }
-
-        else if (keycode == Input.Keys.LEFT || keycode == Input.Keys.A) {
-            if (direction == "RIGHT") {
-                player.flip(true, false);
-                direction = "LEFT";
-            }
-        }
-
-        if (keycode == Input.Keys.E) {
-
-            // Shop öffnen
-            if (!play.shopIsOpen) {
-                Shop.showShop();
-            }
-        }
-
+        
         return false;
     }
 
@@ -201,13 +183,10 @@ public class KeyListener extends ClickListener implements InputProcessor {
         // TODO Auto-generated method stub
         return false;
     }
-    /*
-     * play.online.ch/start.html; let's go online.com!.ch;
-     */
 
     @Override
     public boolean scrolled(int amount) {
-        if (amount == 1) {
+        if (amount == -1) {
             // Verschiebe ItemSelector um 1 nach links
             if (play.selectField.getX() <= play.tableInventory.getX()) {
                 play.selectField.setPosition(play.selectField.getX() + 240, 0);

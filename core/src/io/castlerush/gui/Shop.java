@@ -18,38 +18,35 @@ import io.castlerush.Player;
 import io.castlerush.items.Item;
 import io.castlerush.items.ItemLoader;
 import io.castlerush.screens.Play;
+import io.castlerush.structures.StructureLoader;
 
 public class Shop {
 
+    // STAGE
     private static Stage stage;
     private static Play play;
-    private static Dialog dialog;
-    private static Label title;
-    private static Label nameInformation;
-    private static Label priceInformation;
-    private static Label wallLabel;
-    private static Label wallPrice;
+
+    // GUI ELEMENTS
+    private static Dialog upgradeDialog, dialog;
+    private static Label title, upgrageTitle, nameInformation, priceInformation, wallLabel,
+            wallPrice, archeryLabel, archeryPrice, trapLabel, trapPrice, swordLabel, swordPrice,
+            slingshotLabel, slingshotdPrice;
     private static TextButton wallButton;
-    private static Label archeryLabel;
-    private static Label archeryPrice;
     private static TextButton archeryButton;
-    private static Label trapLabel;
-    private static Label trapPrice;
     private static TextButton trapButton;
-    private static Label swordLabel;
-    private static Label swordPrice;
     private static TextButton swordButton;
-    private static Label slingshotLabel;
-    private static Label slingshotdPrice;
     private static TextButton slingshotButton;
+    
+    // UTIL
+    private static String direction = "LEFT";
 
     // Erstellt den Shop
     public static void createShop(Skin mySkin, Stage stage, final Player player, final Play play) {
 
         Shop.stage = stage;
         Shop.play = play;
-
-        // Dialog
+        
+        // Shop dialog
         dialog = new Dialog("", mySkin, "default");
 
         // Create Components of table
@@ -120,6 +117,21 @@ public class Shop {
         dialog.addActor(table);
 
         table.setPosition(dialog.getWidth() / 2 - table.getWidth() / 2, 210);
+        
+        // Listener
+        play.buttonExit.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.exit(0);
+            }
+        });
+
+        play.buttonShop.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Shop.showShop();
+            }
+        });
 
         wallButton.addListener(new ChangeListener() {
             @Override
@@ -187,16 +199,35 @@ public class Shop {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
 
-                if (keycode == Input.Keys.E && play.shopIsOpen) {
-                    play.shopIsOpen = false;
-                    closeShop();
+                if (keycode == Input.Keys.E) {
+                    if(play.shopIsOpen) {
+                        play.shopIsOpen = false;
+                        closeShop();
+                    }else {
+                        play.shopIsOpen = true;
+                        showShop();
+                    }
+                }
+                
+                if (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT) {
+                    if (direction == "LEFT") {
+                        player.flip(true, false);
+                        direction = "RIGHT";
+                    }
+                }
+                
+                if (keycode == Input.Keys.A || keycode == Input.Keys.LEFT) {
+                    if (direction == "RIGHT") {
+                        player.flip(true, false);
+                        direction = "LEFT";
+                    }
                 }
 
                 return false;
             }
         });
     }
-
+    
     public static void showShop() {
         dialog.show(stage);
         dialog.setWidth(400);
