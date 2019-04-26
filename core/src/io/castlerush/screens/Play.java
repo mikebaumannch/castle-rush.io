@@ -88,7 +88,6 @@ public class Play implements Screen {
     // STRUCTURES
     public List<Structure> structuresOnMap = new ArrayList<Structure>();
     public List<Structure> coins = new ArrayList<Structure>();
-    public List<Item> itemsInInventory = new ArrayList<Item>();
 
     // UTILS
     private float elapsedTime;
@@ -358,7 +357,6 @@ public class Play implements Screen {
         batch.begin();
 
         drawStructures(structuresOnMap);
-        drawItems();
         player.draw(batch);
 
         batch.end();
@@ -410,18 +408,6 @@ public class Play implements Screen {
         for (Structure structure : structuresOnMap) {
             structure.draw(batch);
         }
-    }
-    
-    public void drawItems() {
-        
-        int count = 0;
-        for(Item item : itemsInInventory) {
-            //tableInventory.add(new Image(new TextureRegionDrawable(new TextureRegion(item.getTexture())))).width(48).expandX();
-            //tableInventory.getCells().get(count).getActor().
-            //transparentImageSlot1.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
-            //count++;
-        }
-        
     }
 
     @Override

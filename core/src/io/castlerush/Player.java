@@ -1,5 +1,8 @@
 package io.castlerush;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,15 +17,19 @@ import io.castlerush.structures.Structure;
 
 public class Player extends Sprite {
 
-    private Play play;
+    // Player information
     private String name;
     private int coins;
     public int health;
     public boolean isCastleAlive = true;
-    public TiledMap map;
-    public KeyListener keyListener;
     private Vector2 velocity = new Vector2();
     private float speed = 100, delta;
+    private List<Item> inventory = new ArrayList<Item>();
+
+    // Util
+    private Play play;
+    public TiledMap map;
+    public KeyListener keyListener;
 
     public Player(String name, Sprite skin, int coins, int health, boolean isCastleAlive,
             TiledMap map, Play play) {
@@ -37,26 +44,48 @@ public class Player extends Sprite {
         this.keyListener = new KeyListener(this, map, play);
     }
 
-    @Override
-    public void draw(Batch spriteBatch) {
-
-        // Zeitspanne zwischen aktuellem und vorherigem Frame
-        delta = Gdx.graphics.getDeltaTime();
-        update(delta);
-        super.draw(spriteBatch);
-    }
-
     public void placeStructure(Structure structure) {
         structure.setBounds(this.getX(), this.getY(),
                 (map.getProperties().get("tilewidth", Integer.class)) * 8,
                 (map.getProperties().get("tilewidth", Integer.class)) * 8);
         play.structuresOnMap.add(structure);
     }
-    
+
     public void earnCoins() {
-        if(isCastleAlive) {
-            coins += 100;
+        if (isCastleAlive) {
+            coins += 10000;
         }
+    }
+    
+    private void loadItemsInInventory() {
+        
+        for (Item item : inventory) {
+            
+        }
+    }
+
+    public void buy(Item item) {
+        
+        coins -= item.getPrice();
+        
+        if (item.getName().equals("Holzschwert") || item.getName().equals("Steinwert")
+                || item.getName().equals("Eisenschwert")) {
+            play.weaponImageSlot0
+                    .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+        } else if (item.getName().equals("Steinschleuder") || item.getName().equals("Bogen")) {
+            play.transparentImageSlot1
+                    .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+        } else if (item.getName().equals("Bogenschützenturm")
+                || item.getName().equals("Kanonenturm")) {
+            play.transparentImageSlot2
+                    .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+        } else if (item.getName().equals("Holzmauer") || item.getName().equals("Steinmauer")) {
+            play.transparentImageSlot3
+                    .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+        }
+        
+        inventory.add(item);
+
     }
 
     public void walk(int key) {
@@ -91,11 +120,20 @@ public class Player extends Sprite {
             }
             break;
         }
-        
-        if(keyListener.checkCollision().equals("COIN")) {
+
+        if (keyListener.checkCollision().equals("COIN")) {
             this.coins += 5;
         }
-        
+
+    }
+
+    @Override
+    public void draw(Batch spriteBatch) {
+
+        // Zeitspanne zwischen aktuellem und vorherigem Frame
+        delta = Gdx.graphics.getDeltaTime();
+        update(delta);
+        super.draw(spriteBatch);
     }
 
     private void update(float delta) {
@@ -118,27 +156,14 @@ public class Player extends Sprite {
         }
 
         keyListener.handleInput();
+        
+        // Updates inventory
+        loadItemsInInventory();
     }
 
     void attack() {
     }
 
-    public void buy(Item item) {
-        play.itemsInInventory.add(item);
-        if (item.getName().equals("Holzschwert") || item.getName().equals("Steinwert") || item.getName().equals("Eisenschwert")){
-            play.weaponImageSlot0.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
-        }
-        else if (item.getName().equals("Steinschleuder") || item.getName().equals("Bogen")) {
-            play.transparentImageSlot1.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
-        }
-        else if (item.getName().equals("Bogenschützenturm") || item.getName().equals("Kanonenturm")) {
-            play.transparentImageSlot2.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
-        }
-        else if (item.getName().equals("Holzmauer") || item.getName().equals("Steinmauer")) {
-            play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
-        }
-    }
-    
     public String getName() {
         return name;
     }
@@ -146,7 +171,7 @@ public class Player extends Sprite {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public int getCoins() {
         return coins;
     }
@@ -173,5 +198,13 @@ public class Player extends Sprite {
 
     public int getHealth() {
         return health;
+    }
+    
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
     }
 }
