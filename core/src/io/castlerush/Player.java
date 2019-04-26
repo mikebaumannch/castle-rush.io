@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import io.castlerush.items.Item;
@@ -24,7 +26,8 @@ public class Player extends Sprite {
     public boolean isCastleAlive = true;
     private Vector2 velocity = new Vector2();
     private float speed = 100, delta;
-    private List<Item> inventory = new ArrayList<Item>();
+    private Item inventory[] = new Item[5];
+    private int numberOfItems[] = new int[5];
 
     // Util
     private Play play;
@@ -56,37 +59,49 @@ public class Player extends Sprite {
             coins += 10000;
         }
     }
-    
+
     private void loadItemsInInventory() {
-        
+
         for (Item item : inventory) {
-            
+
         }
     }
 
     public void buy(Item item) {
-        
+
         coins -= item.getPrice();
-        
+
         if (item.getName().equals("Holzschwert") || item.getName().equals("Steinwert")
                 || item.getName().equals("Eisenschwert")) {
             play.weaponImageSlot0
                     .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            inventory[0] = item;
+            numberOfItems[0] = numberOfItems[0]++;
+
         } else if (item.getName().equals("Steinschleuder") || item.getName().equals("Bogen")) {
             play.transparentImageSlot1
                     .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            inventory[1] = item;
+            numberOfItems[1] += 1;
         } else if (item.getName().equals("Bogenschützenturm")
                 || item.getName().equals("Kanonenturm")) {
             play.transparentImageSlot2
                     .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            inventory[2] = item;
+            numberOfItems[2] += 1;
+
         } else if (item.getName().equals("Holzmauer") || item.getName().equals("Steinmauer")) {
             play.transparentImageSlot3
                     .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            inventory[3] = item;
+            numberOfItems[3] += 1;
+
         } else if (item.getName().equals("Fallgrube")) {
-            play.transparentImageSlot4.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            play.transparentImageSlot4
+                    .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            inventory[4] = item;
+            numberOfItems[4] += 1;
         }
-        
-        inventory.add(item);
 
     }
 
@@ -158,7 +173,7 @@ public class Player extends Sprite {
         }
 
         keyListener.handleInput();
-        
+
         // Updates inventory
         loadItemsInInventory();
     }
@@ -201,12 +216,48 @@ public class Player extends Sprite {
     public int getHealth() {
         return health;
     }
-    
-    public List<Item> getInventory() {
+
+    public Item[] getInventory() {
         return inventory;
     }
 
-    public void setInventory(List<Item> inventory) {
+    public void setInventory(Item[] inventory) {
         this.inventory = inventory;
+    }
+
+    public void removeInventoryItem(int index) {
+
+        switch (index) {
+        
+        case 2:
+            play.transparentImageSlot2.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("img/transparent.png"))));
+            break;
+            
+        case 3:
+            play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("img/transparent.png"))));
+            break;
+            
+        case 4:
+            play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("img/transparent.png"))));
+            break;
+                 
+        }
+
+    }
+
+    public int[] getNumberOfItems() {
+        return numberOfItems;
+    }
+
+    public void setNumberOfItems(int[] numberOfItems) {
+        this.numberOfItems = numberOfItems;
+    }
+
+    public void increaseNumberOfItems(int index, int num) {
+        numberOfItems[index] += num;
+        
+        if(numberOfItems[index] <= 0) {
+            removeInventoryItem(index);
+        }
     }
 }

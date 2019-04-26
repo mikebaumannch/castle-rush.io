@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class ItemLoader {
     
     // Weapons
+    public ItemWeapon fist = new ItemWeapon("Faust", 5, new Sprite(new Texture("weapons/fist.png")), 0, "Level 0");
     public ItemWeapon woodSword = new ItemWeapon("Holzschwert", 10, new Sprite(new Texture("weapons/woodSword.png")), 100, "Level 1");
     public ItemWeapon stoneSword = new ItemWeapon("Steinschwert", 15, new Sprite(new Texture("weapons/stoneSword.png")), 500, "Level 2");
     public ItemWeapon ironSword = new ItemWeapon("Eisenschwert", 20, new Sprite(new Texture("weapons/ironSword.png")), 1000, "Level 3");
@@ -18,7 +19,7 @@ public class ItemLoader {
     public ItemStructure towerLvl1 = new ItemStructure("Bogenschützenturm", new Sprite(new Texture("buildings/towerlvl1.png")), 500, "Level 1");
     
     public ItemStructure towerLvl2 = new ItemStructure("Kanonenturm", new Sprite(new Texture("buildings/towerlvl2.png")), 1000, "Level 2");
-   // public ItemStructure woodWall = new ItemStructure("Holzmauer", new Sprite(new Texture("buildings/woodWall.png")), 100, "Level 1");
+    public ItemStructure woodWall = new ItemStructure("Holzmauer", new Sprite(new Texture("badlogic.png")), 100, "Level 1");
     public ItemStructure stoneWall = new ItemStructure("Steinmauer", new Sprite(new Texture("buildings/stoneWall.png")), 200, "Level 2");
     public ItemStructure trap = new ItemStructure("Fallgrube", new Sprite(new Texture("buildings/trap.png")), 300, "Level 1");
     

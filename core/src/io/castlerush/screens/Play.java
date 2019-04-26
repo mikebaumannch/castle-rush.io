@@ -69,14 +69,10 @@ public class Play implements Screen {
     private TextButtonStyle textButtonStyle;
 
     public TextButton buttonBuy;
-    public Image weaponImageSlot0;
-    public Image transparentImageSlot1;
-    public Image transparentImageSlot2;
-    public Image transparentImageSlot3;
-    public Image transparentImageSlot4;
+    public Image weaponImageSlot0, transparentImageSlot1, transparentImageSlot2, transparentImageSlot3, transparentImageSlot4, selectField;
+    private int selectedItem;
     public boolean shopIsOpen = false;
     public InputMultiplexer inputMulti = new InputMultiplexer();
-    public Image selectField;
 
     // MAP
     private TiledMap map;
@@ -178,6 +174,7 @@ public class Play implements Screen {
         // transparent image
         weaponImageSlot0 = new Image(
                 new Texture(Gdx.files.internal("weapons/fist.png")));
+        player.getInventory()[0] = new ItemLoader().fist;
         transparentImageSlot1 = new Image(
                 new Texture(Gdx.files.internal("img/transparent.png")));
         transparentImageSlot2 = new Image(
@@ -199,6 +196,7 @@ public class Play implements Screen {
         selectField = new Image(selectFieldImg);
         selectField.setSize(60, 60);
         selectField.setPosition(tableInventory.getX(), 0);
+        selectedItem = 0;
         
         // Add table to dialog
         stage.addActor(tableInventory);
@@ -378,6 +376,7 @@ public class Play implements Screen {
         gameTitle.setText("Name: " + player.getName() + "\nCoins: " + player.getCoins());
         heartTitle.setText(player.getHealth());
         timeToCoinGenTitle.setText("Time To New Coins: " + timeToCoinGen);
+        
     }
 
     // Randomly generates coin
@@ -446,5 +445,13 @@ public class Play implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
+    }
+
+    public int getSelectedItem() {
+        return selectedItem;
+    }
+
+    public void setSelectedItem(int selectedItem) {
+        this.selectedItem = selectedItem;
     }
 }

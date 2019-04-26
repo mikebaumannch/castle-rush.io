@@ -55,6 +55,7 @@ public class Shop {
         // Create Components of table
         // Title
         title = new Label("Shop", mySkin, "big");
+
         // Informations
         nameInformation = new Label("Name:", mySkin);
         priceInformation = new Label("Preis:", mySkin);
@@ -123,8 +124,12 @@ public class Shop {
         wallButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+
                 // Aktion für Wall kaufen
-                // player.buy(new ItemLoader().woodWall);
+                Item shopItem = new ItemLoader().woodWall;
+                if (player.getCoins() >= shopItem.getPrice()) {
+                    player.buy(shopItem);
+                }
             }
         });
 

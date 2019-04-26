@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.castlerush.Player;
 import io.castlerush.gui.Shop;
+import io.castlerush.items.Item;
 import io.castlerush.items.ItemLoader;
 import io.castlerush.screens.Play;
 import io.castlerush.structures.Structure;
@@ -137,10 +138,6 @@ public class KeyListener extends ClickListener implements InputProcessor {
             }
         }
 
-        if (keycode == Input.Keys.Q) {
-            player.placeStructure(new StructureLoader().castleLvl1);
-        }
-
         return false;
     }
 
@@ -152,9 +149,40 @@ public class KeyListener extends ClickListener implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        isTouched = true;
 
+        isTouched = true;
+        Item[] inv = player.getInventory();
+        Item selectedItem = inv[play.getSelectedItem()];
+
+        if (selectedItem != null) {
+            if (player.getNumberOfItems()[0] > 0) {
+                if (play.getSelectedItem() == 2) {
+                    selectedItem.useItem(player);
+                }
+            }else if (player.getNumberOfItems()[1] > 0) {
+                if (play.getSelectedItem() == 1) {
+                    selectedItem.useItem(player);
+                }
+            }else if (play.getSelectedItem() == 2){
+                if (player.getNumberOfItems()[2]  > 0)  {
+                    player.placeStructure(new StructureLoader().towerLvl1);
+                    player.increaseNumberOfItems(2, -1);
+                }
+            }else if (play.getSelectedItem() == 3){
+                if (player.getNumberOfItems()[3]  > 0)  {
+                    player.placeStructure(new StructureLoader().woodWall);
+                    player.increaseNumberOfItems(3, -1);
+                }
+                
+            }else if (play.getSelectedItem() == 4){
+                if (player.getNumberOfItems()[4]  > 0)  {
+                    player.placeStructure(new StructureLoader().trap);
+                    player.increaseNumberOfItems(4, -1);
+                }
+            }
+        }
         return false;
+
     }
 
     @Override
@@ -175,35 +203,35 @@ public class KeyListener extends ClickListener implements InputProcessor {
         return false;
     }
     /*
-    play.online.ch/start.html;
-    let's go online.com!.ch;
-    */
+     * play.online.ch/start.html; let's go online.com!.ch;
+     */
 
     @Override
     public boolean scrolled(int amount) {
         if (amount == 1) {
-            //Verschiebe ItemSelector um 1 nach links
+            // Verschiebe ItemSelector um 1 nach links
             if (play.selectField.getX() <= play.tableInventory.getX()) {
-                play.selectField.setPosition(play.selectField.getX()+240, 0);
+                play.selectField.setPosition(play.selectField.getX() + 240, 0);
+                play.setSelectedItem(4);
+                return true;
+            } else {
+                play.selectField.setPosition(play.selectField.getX() - 60, 0);
+                play.setSelectedItem(play.getSelectedItem() - 1);
                 return true;
             }
-            else {
-                play.selectField.setPosition(play.selectField.getX()-60, 0);
+        } else {
+            // Verschiebe ItemSelector um 1 nach rechts
+            if (play.selectField.getX() >= play.tableInventory.getX() + 240) {
+                play.selectField.setPosition(play.selectField.getX() - 240, 0);
+                play.setSelectedItem(0);
+                return true;
+            } else {
+                play.selectField.setPosition(play.selectField.getX() + 60, 0);
+                play.setSelectedItem(play.getSelectedItem() + 1);
                 return true;
             }
         }
-        else {
-            //Verschiebe ItemSelector um 1 nach rechts
-            if (play.selectField.getX() >= play.tableInventory.getX()+240) {
-                play.selectField.setPosition(play.selectField.getX()-240, 0);
-                return true;
-            }
-            else {
-                play.selectField.setPosition(play.selectField.getX()+60, 0);
-                return true;
-            }
-        }
-        
+
     }
 
 }

@@ -15,12 +15,12 @@ public class StructureLoader {
     public StructureCastle castleLvl2 = new StructureCastle("Ratsgebäude", new Sprite(new Texture("buildings/castle-lvl2.png")), 2000);
     
     // Towers
-    //public StructureTower towerLvl1 = new StructureTower ("Bogenschützenturm", new Sprite(new Texture("buildings/archery-tower-lvl1.png")), 100);
+    public StructureTower towerLvl1 = new StructureTower ("Bogenschützenturm", new Sprite(new Texture("buildings/towerlvl1.png")), 100);
     //public StructureTower towerLvl2 = new StructureTower ("Kanonenturm", new Sprite(new Texture("buildings/archery-tower-lvl2.png")), 200);
     
     // Walls
-    //public static StructureWall woodWall = new StructureWall("Holzmauer", new Sprite(new Texture("badlogic.jpg")), 100);
-    //public static StructureWall stoneWall = new StructureWall("Steinmauer", new Sprite(new Texture("badlogic.jpg")), 200);
+    public StructureWall woodWall = new StructureWall("Holzmauer", new Sprite(new Texture("badlogic.jpg")), 100);
+    //public StructureWall stoneWall = new StructureWall("Steinmauer", new Sprite(new Texture("badlogic.jpg")), 200);
     
     // Traps
     public StructureTrap trap;
