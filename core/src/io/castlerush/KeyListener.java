@@ -84,7 +84,6 @@ public class KeyListener extends ClickListener implements InputProcessor {
         return "NO";
     }
 
-    //
     public void handleInput() {
         if (keyPressed) {
 
@@ -231,9 +230,6 @@ public class KeyListener extends ClickListener implements InputProcessor {
                 return true;
             }
         }
-<<<<<<< HEAD
 
-=======
->>>>>>> mikebaumannch
     }
 }
