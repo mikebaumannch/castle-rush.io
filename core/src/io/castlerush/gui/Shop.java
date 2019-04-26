@@ -20,7 +20,7 @@ import io.castlerush.items.ItemLoader;
 import io.castlerush.screens.Play;
 
 public class Shop {
-    
+
     private static Stage stage;
     private static Play play;
     private static Dialog dialog;
@@ -42,48 +42,47 @@ public class Shop {
     private static Label slingshotLabel;
     private static Label slingshotdPrice;
     private static TextButton slingshotButton;
-    
-    
-  //Erstellt den Shop
+
+    // Erstellt den Shop
     public static void createShop(Skin mySkin, Stage stage, final Player player, final Play play) {
-        
+
         Shop.stage = stage;
         Shop.play = play;
-        
-        //Dialog
+
+        // Dialog
         dialog = new Dialog("", mySkin, "default");
-        
-        //Create Components of table
-        //Title
+
+        // Create Components of table
+        // Title
         title = new Label("Shop", mySkin, "big");
-        //Informations
+        // Informations
         nameInformation = new Label("Name:", mySkin);
         priceInformation = new Label("Preis:", mySkin);
-        //Wall
+        // Wall
         wallLabel = new Label("Holzmauer", mySkin);
-        wallPrice = new Label("50", mySkin);
-        wallButton = new TextButton("Kaufen",mySkin, "small");
-        //Archery
+        wallPrice = new Label("OUT OF SALE", mySkin);
+        wallButton = new TextButton("Kaufen", mySkin, "small");
+        // Archery
         archeryLabel = new Label("Bogenschützenturm", mySkin);
-        archeryPrice = new Label("200", mySkin);
-        archeryButton = new TextButton("Kaufen",mySkin, "small");
-        //Trap
+        archeryPrice = new Label("" + new ItemLoader().towerLvl1.getPrice(), mySkin);
+        archeryButton = new TextButton("Kaufen", mySkin, "small");
+        // Trap
         trapLabel = new Label("Falle", mySkin);
-        trapPrice = new Label("200", mySkin);
-        trapButton = new TextButton("Kaufen",mySkin, "small");
-        //Sword
+        trapPrice = new Label("" + new ItemLoader().trap.getPrice(), mySkin);
+        trapButton = new TextButton("Kaufen", mySkin, "small");
+        // Sword
         swordLabel = new Label("Holzschwert", mySkin);
-        swordPrice = new Label("200", mySkin);
-        swordButton = new TextButton("Kaufen",mySkin, "small");
-        //Slingshot
+        swordPrice = new Label("" + new ItemLoader().woodSword.getPrice(), mySkin);
+        swordButton = new TextButton("Kaufen", mySkin, "small");
+        // Slingshot
         slingshotLabel = new Label("Slingshot", mySkin);
-        slingshotdPrice = new Label("200", mySkin);
-        slingshotButton = new TextButton("Kaufen",mySkin, "small");
-        
-        //Create Table
+        slingshotdPrice = new Label("" + new ItemLoader().slingShot.getPrice(), mySkin);
+        slingshotButton = new TextButton("Kaufen", mySkin, "small");
+
+        // Create Table
         Table table = new Table();
-        
-        //Add Components to table
+
+        // Add Components to table
         table.add(nameInformation).width(200);
         table.add(priceInformation).width(50);
         table.row();
@@ -106,84 +105,103 @@ public class Shop {
         table.add(slingshotLabel).width(200);
         table.add(slingshotdPrice).width(50);
         table.add(slingshotButton).width(100);
-        
+
         dialog.hide();
         dialog.setWidth(400);
         dialog.setHeight(500);
         stage.addActor(dialog);
-        
-        //Settings
-        title.setPosition(dialog.getWidth()/2 - title.getWidth()/2, dialog.getHeight()-100);
-       
-        //Add table to dialog
+
+        // Settings
+        title.setPosition(dialog.getWidth() / 2 - title.getWidth() / 2, dialog.getHeight() - 100);
+
+        // Add table to dialog
         dialog.addActor(title);
         dialog.addActor(table);
-        
-        table.setPosition(dialog.getWidth()/2 - table.getWidth()/2, 210);
-        
-        wallButton.addListener(new ChangeListener(){
+
+        table.setPosition(dialog.getWidth() / 2 - table.getWidth() / 2, 210);
+
+        wallButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //Aktion für Wall kaufen
-                //player.buy(new ItemLoader().woodWall);
+                // Aktion für Wall kaufen
+                // player.buy(new ItemLoader().woodWall);
             }
         });
-        
-        archeryButton.addListener(new ChangeListener(){
+
+        archeryButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //Aktion für Bogenschützenturm kaufen
-                player.buy(new ItemLoader().towerLvl1);
+
+                // Aktion für Bogenschützenturm kaufen
+                Item shopItem = new ItemLoader().towerLvl1;
+                if (player.getCoins() >= shopItem.getPrice()) {
+                    player.buy(shopItem);
+                }
             }
         });
-        
-        trapButton.addListener(new ChangeListener(){
+
+        trapButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //Aktion für Schwert kaufen
-                player.buy(new ItemLoader().trap);
+
+                // Aktion für Falle kaufen
+                Item shopItem = new ItemLoader().trap;
+                if (player.getCoins() >= shopItem.getPrice()) {
+                    player.buy(shopItem);
+                }
+
             }
         });
-        
-        swordButton.addListener(new ChangeListener(){
+
+        swordButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //Aktion für Slingshot kaufen
-                player.buy(new ItemLoader().woodSword);
+
+                // Aktion für Schwert kaufen
+                Item shopItem = new ItemLoader().woodSword;
+
+                if (player.getCoins() >= shopItem.getPrice()) {
+                    player.buy(shopItem);
+                }
             }
         });
-        
-        slingshotButton.addListener(new ChangeListener(){
+
+        slingshotButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //Aktion für Falle kaufen
-                player.buy(new ItemLoader().slingShot);
+
+                // Aktion für Slingshot kaufen
+                Item shopItem = new ItemLoader().slingShot;
+                if (player.getCoins() >= shopItem.getPrice()) {
+                    player.buy(shopItem);
+                }
             }
         });
-        
+
         stage.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                
-                if(keycode == Input.Keys.E && play.shopIsOpen) {
+
+                if (keycode == Input.Keys.E && play.shopIsOpen) {
                     play.shopIsOpen = false;
                     closeShop();
                 }
-                
+
                 return false;
             }
         });
     }
-    
+
     public static void showShop() {
         dialog.show(stage);
         dialog.setWidth(400);
         dialog.setHeight(500);
-        dialog.setPosition(Gdx.graphics.getWidth()/2-dialog.getWidth()/2, Gdx.graphics.getHeight()/2-dialog.getHeight()/2);
+        dialog.setPosition(Gdx.graphics.getWidth() / 2 - dialog.getWidth() / 2,
+                Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
         stage.addActor(dialog);
         play.shopIsOpen = true;
     }
-    
+
     public static void closeShop() {
         dialog.hide();
     }

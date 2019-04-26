@@ -45,7 +45,7 @@ public class Menu implements Screen{
         //Label title
         Gdx.input.setInputProcessor(stage);
         mySkin = new Skin(Gdx.files.internal("skins/glassy-ui.json"));
-        Label gameTitle = new Label("Castle-Rush.io", mySkin, "big");
+        Label gameTitle = new Label("CastleRush.io", mySkin, "big");
         gameTitle.setSize(100, 100);
         gameTitle.setPosition(Gdx.graphics.getWidth()/2 - gameTitle.getWidth()/2, Gdx.graphics.getWidth()/2 - gameTitle.getWidth()/2);
         gameTitle.setAlignment(Align.center);
