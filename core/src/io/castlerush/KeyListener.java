@@ -174,11 +174,36 @@ public class KeyListener extends ClickListener implements InputProcessor {
         // TODO Auto-generated method stub
         return false;
     }
+    /*
+    play.online.ch/start.html;
+    let's go online.com!.ch;
+    */
 
     @Override
     public boolean scrolled(int amount) {
-        // TODO Auto-generated method stub
-        return false;
+        if (amount == 1) {
+            //Verschiebe ItemSelector um 1 nach links
+            if (play.selectField.getX() <= play.tableInventory.getX()) {
+                play.selectField.setPosition(play.selectField.getX()+240, 0);
+                return true;
+            }
+            else {
+                play.selectField.setPosition(play.selectField.getX()-60, 0);
+                return true;
+            }
+        }
+        else {
+            //Verschiebe ItemSelector um 1 nach rechts
+            if (play.selectField.getX() >= play.tableInventory.getX()+240) {
+                play.selectField.setPosition(play.selectField.getX()-240, 0);
+                return true;
+            }
+            else {
+                play.selectField.setPosition(play.selectField.getX()+60, 0);
+                return true;
+            }
+        }
+        
     }
 
 }

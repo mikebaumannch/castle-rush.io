@@ -30,7 +30,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-
 import io.castlerush.KeyListener;
 import io.castlerush.Player;
 import io.castlerush.gui.Shop;
@@ -42,7 +41,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import io.castlerush.KeyListener;
 import io.castlerush.Player;
 import io.castlerush.items.ItemLoader;
-
 import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureLoader;
 
@@ -75,8 +73,10 @@ public class Play implements Screen {
     public Image transparentImageSlot1;
     public Image transparentImageSlot2;
     public Image transparentImageSlot3;
+    public Image transparentImageSlot4;
     public boolean shopIsOpen = false;
     public InputMultiplexer inputMulti = new InputMultiplexer();
+    public Image selectField;
 
     // MAP
     private TiledMap map;
@@ -95,7 +95,6 @@ public class Play implements Screen {
     private int timeToCoinGen;
 
     public Play(String username) {
-
 
         // Initializing map, tiles etc.
         map = new TmxMapLoader().load("maps/maps.tmx");
@@ -146,7 +145,6 @@ public class Play implements Screen {
         createItembar(stage);
         Shop.createShop(mySkin, stage, player, this);
         createButtonListener();
-
     }
 
     // Erstellt ein Listener für alle Buttons
@@ -172,8 +170,8 @@ public class Play implements Screen {
 
         // Create Table
         tableInventory = new Table(mySkin);
-        tableInventory.setWidth(241);
-        tableInventory.setHeight(58);
+        tableInventory.setWidth(303);
+        tableInventory.setHeight(60);
         tableInventory.setBackground(new TextureRegionDrawable(
                 new TextureRegion(new Texture(Gdx.files.internal("img/itembar.png")))));
         tableInventory.setPosition(Gdx.graphics.getWidth() / 2 - tableInventory.getWidth() / 2, 0);
@@ -187,15 +185,25 @@ public class Play implements Screen {
                 new Texture(Gdx.files.internal("img/transparent.png")));
         transparentImageSlot3 = new Image(
                 new Texture(Gdx.files.internal("img/transparent.png")));
+        transparentImageSlot4 = new Image(
+                new Texture(Gdx.files.internal("img/transparent.png")));
 
         // Add components to table
         tableInventory.add(weaponImageSlot0).width(48).expandX();
         tableInventory.add(transparentImageSlot1).width(48).expandX();
         tableInventory.add(transparentImageSlot2).width(48).expandX();
         tableInventory.add(transparentImageSlot3).width(48).expandX();
+        tableInventory.add(transparentImageSlot4).width(48).expandX();
+        
+        // Selectfield 
+        Texture selectFieldImg = new Texture(Gdx.files.internal("img/selectedItembar.png"));
+        selectField = new Image(selectFieldImg);
+        selectField.setSize(60, 60);
+        selectField.setPosition(tableInventory.getX(), 0);
         
         // Add table to dialog
         stage.addActor(tableInventory);
+        stage.addActor(selectField);
     }
 
     private void createHud() {

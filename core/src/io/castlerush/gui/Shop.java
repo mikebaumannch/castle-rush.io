@@ -113,7 +113,7 @@ public class Shop {
         stage.addActor(dialog);
         
         //Settings
-        title.setPosition(dialog.getWidth()/2 - title.getWidth()/2, dialog.getHeight());
+        title.setPosition(dialog.getWidth()/2 - title.getWidth()/2, dialog.getHeight()-100);
        
         //Add table to dialog
         dialog.addActor(title);

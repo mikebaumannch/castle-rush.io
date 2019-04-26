@@ -137,6 +137,9 @@ public class Player extends Sprite {
         else if (item.getName().equals("Holzmauer") || item.getName().equals("Steinmauer")) {
             play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
         }
+        else if (item.getName().equals("Fallgrube")) {
+            play.transparentImageSlot4.setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+        }
     }
     
     public String getName() {
