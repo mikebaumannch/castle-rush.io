@@ -203,7 +203,5 @@ public class KeyListener extends ClickListener implements InputProcessor {
                 return true;
             }
         }
-        
     }
-
 }
