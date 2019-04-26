@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,7 +19,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -48,6 +52,7 @@ public class Play implements Screen {
 
     // PLAYER
     private Player player;
+    private Structure castle;
 
     // RENDERER
     public Batch batch;
@@ -58,10 +63,11 @@ public class Play implements Screen {
     private String username;
     private Stage stage;
     private Skin mySkin;
+    private Dialog upgradeDialog;
 
     // GUI
-    public Table tableInventory;
-    private Label gameTitle, heartTitle, timeToCoinGenTitle;
+    public Table tableInventory, upgradeTable;
+    private Label gameTitle, heartTitle, timeToCoinGenTitle, upgradeTitle;
     private Dialog dialog, inventory;
     public TextButton buttonShop, buttonExit;
     private TextButtonStyle textButtonStyle;
@@ -87,6 +93,7 @@ public class Play implements Screen {
     // UTILS
     private float elapsedTime;
     private int timeToCoinGen;
+    private double distanceBetweenPlayerAndCastle;
 
     public Play(String username) {
 
@@ -99,7 +106,6 @@ public class Play implements Screen {
 
         // Initializing renderers
         renderer = new OrthogonalTiledMapRenderer(map);
-        shapeRenderer = new ShapeRenderer();
         batch = renderer.getBatch();
 
         // Setting up camera
@@ -115,6 +121,7 @@ public class Play implements Screen {
                 map, this);
         player.setSize(tileWidth * 2, tileHeight * 2);
         generateCoins();
+        castle = new StructureLoader().castleLvl1;
 
         // Setting up input processors
         inputMulti.addProcessor(stage);
@@ -132,12 +139,13 @@ public class Play implements Screen {
         // Spawn the player and it's castle
         player.setX(randomMapX);
         player.setY(randomMapY);
-        player.placeStructure(new StructureLoader().castleLvl1);
+        player.placeStructure(castle);
 
         // Show HUD & GUI elements
         createHud();
         createItembar(stage);
         Shop.createShop(mySkin, stage, player, this);
+        createTableUpgrade();
         createButtonListener();
     }
 
@@ -158,6 +166,38 @@ public class Play implements Screen {
                 Shop.showShop();
             }
         });
+    }
+
+    private void createTableUpgrade() {
+
+        // Upgrade Button
+        TextButton upgradeButton = new TextButton("Upgrade", mySkin, "small");
+        upgradeTable = new Table();
+
+        // Create components
+        // Title
+        Label upgradeLabel = new Label("" + new StructureLoader().castleLvl2.getName() + " Level 2",
+                mySkin, "default");
+        Label upgradePriceLabel = new Label("Coins: " + new ItemLoader().castleLvl2.getPrice(),
+                mySkin, "default");
+
+        // Add Components
+        upgradeLabel.setFontScale(0.9F);
+        upgradePriceLabel.setFontScale(0.9F);
+        upgradeButton.setTransform(true);
+        upgradeButton.setScale(0.9F);       
+       
+        upgradeTable.add(upgradeLabel).width(100);
+        upgradeTable.row();
+        upgradeTable.add(upgradePriceLabel).width(100);
+        upgradeTable.row();
+        upgradeTable.add(upgradeButton).width(100);
+        
+        upgradeTable.setPosition(100, 100);
+        upgradeTable.setVisible(false);
+        
+        stage.addActor(upgradeTable);
+        
     }
 
     private void createItembar(Stage stage) {
@@ -227,11 +267,12 @@ public class Play implements Screen {
                 Gdx.graphics.getHeight() - buttonExit.getHeight() - 80);
         buttonShop.setWidth(buttonExit.getWidth());
 
-        // Itembar anzeigen
-        Texture itembar = new Texture(Gdx.files.internal("img/itembar.png"));
-        Image item = new Image(itembar);
-        item.setSize(itembar.getWidth(), itembar.getHeight());
-        item.setPosition(Gdx.graphics.getWidth() / 2 - item.getWidth() / 2, 0);
+        /*
+         * Itembar anzeigen Texture itembar = new
+         * Texture(Gdx.files.internal("img/itembar.png")); Image item = new
+         * Image(itembar); item.setSize(itembar.getWidth(), itembar.getHeight());
+         * item.setPosition(Gdx.graphics.getWidth() / 2 - item.getWidth() / 2, 0);
+         */
 
         // Herz für die Lebenspunkte hinzufügen
         Texture texture = new Texture(Gdx.files.internal("img/heart.png"));
@@ -323,7 +364,6 @@ public class Play implements Screen {
         stage.addActor(timeToCoinGenTitle);
         stage.addActor(heart);
         stage.addActor(heartTitle);
-        // stage.addActor(item);
         stage.addActor(buttonShop);
         stage.addActor(buttonExit);
 
@@ -345,6 +385,11 @@ public class Play implements Screen {
             generateCoins();
             elapsedTime = 0;
         }
+        
+        updateHUD();
+
+        distanceBetweenPlayerAndCastle = Math.sqrt(Math.pow((castle.getX() - player.getX()), 2)
+                + Math.pow((castle.getY() - player.getY()), 2));
 
         camera.position.set(player.getX() + player.getWidth() / 2,
                 player.getY() + player.getHeight() / 2, 0);
@@ -352,8 +397,6 @@ public class Play implements Screen {
 
         renderer.setView(camera);
         renderer.render();
-
-        updateHUD();
 
         batch.begin();
 
@@ -372,6 +415,12 @@ public class Play implements Screen {
         heartTitle.setText(player.getHealth());
         timeToCoinGenTitle.setText("Time To New Coins: " + timeToCoinGen);
 
+        if (distanceBetweenPlayerAndCastle < 50) {
+            // Show upgrade
+            upgradeTable.setVisible(true);
+        }else {
+            upgradeTable.setVisible(false);
+        }
     }
 
     // Randomly generates coin

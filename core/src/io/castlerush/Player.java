@@ -60,13 +60,6 @@ public class Player extends Sprite {
         }
     }
 
-    private void loadItemsInInventory() {
-
-        for (Item item : inventory) {
-
-        }
-    }
-
     public void buy(Item item) {
 
         coins -= item.getPrice();
@@ -173,9 +166,6 @@ public class Player extends Sprite {
         }
 
         keyListener.handleInput();
-
-        // Updates inventory
-        loadItemsInInventory();
     }
 
     void attack() {

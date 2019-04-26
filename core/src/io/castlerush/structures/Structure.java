@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Structure extends Sprite {
     
-    String name;
+    private String name;
     Sprite tex;
     
     public Structure(String name, Sprite tex) {
         super(tex);
-        this.name = name;
+        this.setName(name);
         this.tex = tex;
     }
     
@@ -21,6 +21,14 @@ public class Structure extends Sprite {
     
     public void build(int tile[][]) {
         
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }
