@@ -52,9 +52,7 @@ public class Play implements Screen {
     // RENDERER
     public Batch batch;
     private OrthogonalTiledMapRenderer renderer;
-    private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
-    private KeyListener keyListener;
 
     // HUD & GUI
     private String username;
@@ -69,7 +67,8 @@ public class Play implements Screen {
     private TextButtonStyle textButtonStyle;
 
     public TextButton buttonBuy;
-    public Image weaponImageSlot0, transparentImageSlot1, transparentImageSlot2, transparentImageSlot3, transparentImageSlot4, selectField;
+    public Image weaponImageSlot0, transparentImageSlot1, transparentImageSlot2,
+            transparentImageSlot3, transparentImageSlot4, selectField;
     private int selectedItem;
     public boolean shopIsOpen = false;
     public InputMultiplexer inputMulti = new InputMultiplexer();
@@ -172,17 +171,12 @@ public class Play implements Screen {
         tableInventory.setPosition(Gdx.graphics.getWidth() / 2 - tableInventory.getWidth() / 2, 0);
 
         // transparent image
-        weaponImageSlot0 = new Image(
-                new Texture(Gdx.files.internal("weapons/fist.png")));
+        weaponImageSlot0 = new Image(new Texture(Gdx.files.internal("weapons/fist.png")));
         player.getInventory()[0] = new ItemLoader().fist;
-        transparentImageSlot1 = new Image(
-                new Texture(Gdx.files.internal("img/transparent.png")));
-        transparentImageSlot2 = new Image(
-                new Texture(Gdx.files.internal("img/transparent.png")));
-        transparentImageSlot3 = new Image(
-                new Texture(Gdx.files.internal("img/transparent.png")));
-        transparentImageSlot4 = new Image(
-                new Texture(Gdx.files.internal("img/transparent.png")));
+        transparentImageSlot1 = new Image(new Texture(Gdx.files.internal("img/transparent.png")));
+        transparentImageSlot2 = new Image(new Texture(Gdx.files.internal("img/transparent.png")));
+        transparentImageSlot3 = new Image(new Texture(Gdx.files.internal("img/transparent.png")));
+        transparentImageSlot4 = new Image(new Texture(Gdx.files.internal("img/transparent.png")));
 
         // Add components to table
         tableInventory.add(weaponImageSlot0).width(48).expandX();
@@ -190,14 +184,14 @@ public class Play implements Screen {
         tableInventory.add(transparentImageSlot2).width(48).expandX();
         tableInventory.add(transparentImageSlot3).width(48).expandX();
         tableInventory.add(transparentImageSlot4).width(48).expandX();
-        
-        // Selectfield 
+
+        // Selectfield
         Texture selectFieldImg = new Texture(Gdx.files.internal("img/selectedItembar.png"));
         selectField = new Image(selectFieldImg);
         selectField.setSize(60, 60);
         selectField.setPosition(tableInventory.getX(), 0);
         selectedItem = 0;
-        
+
         // Add table to dialog
         stage.addActor(tableInventory);
         stage.addActor(selectField);
@@ -332,6 +326,7 @@ public class Play implements Screen {
         // stage.addActor(item);
         stage.addActor(buttonShop);
         stage.addActor(buttonExit);
+
     }
 
     @Override
@@ -376,7 +371,7 @@ public class Play implements Screen {
         gameTitle.setText("Name: " + player.getName() + "\nCoins: " + player.getCoins());
         heartTitle.setText(player.getHealth());
         timeToCoinGenTitle.setText("Time To New Coins: " + timeToCoinGen);
-        
+
     }
 
     // Randomly generates coin

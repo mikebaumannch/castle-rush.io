@@ -208,7 +208,7 @@ public class KeyListener extends ClickListener implements InputProcessor {
 
     @Override
     public boolean scrolled(int amount) {
-        if (amount == 1) {
+        if (amount == -1) {
             // Verschiebe ItemSelector um 1 nach links
             if (play.selectField.getX() <= play.tableInventory.getX()) {
                 play.selectField.setPosition(play.selectField.getX() + 240, 0);
