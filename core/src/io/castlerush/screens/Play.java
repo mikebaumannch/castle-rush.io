@@ -5,24 +5,18 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -30,29 +24,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import io.castlerush.KeyListener;
+
 import io.castlerush.Player;
 import io.castlerush.gui.Shop;
-import io.castlerush.items.Item;
-import io.castlerush.items.ItemLoader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-import io.castlerush.KeyListener;
-import io.castlerush.Player;
 import io.castlerush.items.ItemLoader;
 import io.castlerush.structures.Structure;
+import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
 
 public class Play implements Screen {
 
     // PLAYER
     private Player player;
-    private Structure castle;
+    private StructureCastle castle;
 
     // RENDERER
     public Batch batch;
@@ -60,19 +47,15 @@ public class Play implements Screen {
     private OrthographicCamera camera;
 
     // HUD & GUI
-    private String username;
+    public String username;
     private Stage stage;
     private Skin mySkin;
-    private Dialog upgradeDialog;
 
     // GUI
-    public Table tableInventory, upgradeTable;
-    private Label gameTitle, heartTitle, timeToCoinGenTitle, upgradeTitle;
-    private Dialog dialog, inventory;
-    public TextButton buttonShop, buttonExit;
-    private TextButtonStyle textButtonStyle;
-
-    public TextButton buttonBuy;
+    public Table tableInventory, tableUpgrade;
+    private Label gameTitle, heartTitle, timeToCoinGenTitle;
+    private Dialog dialog;
+    public TextButton buttonShop, buttonExit, buttonBuy, buttonUpgrade;
     public Image weaponImageSlot0, transparentImageSlot1, transparentImageSlot2,
             transparentImageSlot3, transparentImageSlot4, selectField;
     private int selectedItem;
@@ -120,7 +103,6 @@ public class Play implements Screen {
         player = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true,
                 map, this);
         player.setSize(tileWidth * 2, tileHeight * 2);
-        generateCoins();
         castle = new StructureLoader().castleLvl1;
 
         // Setting up input processors
@@ -139,7 +121,12 @@ public class Play implements Screen {
         // Spawn the player and it's castle
         player.setX(randomMapX);
         player.setY(randomMapY);
-        player.placeStructure(castle);
+        castle.setBounds(player.getX(), player.getY(),
+                (map.getProperties().get("tilewidth", Integer.class)) * 8,
+                (map.getProperties().get("tilewidth", Integer.class)) * 8);
+
+        // Generates the coins on the map
+        generateCoins();
 
         // Show HUD & GUI elements
         createHud();
@@ -166,13 +153,35 @@ public class Play implements Screen {
                 Shop.showShop();
             }
         });
+
+        buttonUpgrade.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                
+                int price = new ItemLoader().castleLvl2.getPrice();
+
+                if (player.getCoins() >= price) {
+
+                    float posX = castle.getX();
+                    float posY = castle.getY();
+                    float width = castle.getWidth();
+                    float height = castle.getHeight();
+
+                    castle = player.upgrade(castle);
+                    castle.setBounds(posX, posY, width, height);
+                    
+                    player.setCoins(player.getCoins()-price);
+                    
+                }
+            }
+        });
     }
 
     private void createTableUpgrade() {
 
         // Upgrade Button
-        TextButton upgradeButton = new TextButton("Upgrade", mySkin, "small");
-        upgradeTable = new Table();
+        tableUpgrade = new Table();
+        buttonUpgrade = new TextButton("Upgrade", mySkin, "small");
 
         // Create components
         // Title
@@ -182,22 +191,20 @@ public class Play implements Screen {
                 mySkin, "default");
 
         // Add Components
-        upgradeLabel.setFontScale(0.9F);
-        upgradePriceLabel.setFontScale(0.9F);
-        upgradeButton.setTransform(true);
-        upgradeButton.setScale(0.9F);       
-       
-        upgradeTable.add(upgradeLabel).width(100);
-        upgradeTable.row();
-        upgradeTable.add(upgradePriceLabel).width(100);
-        upgradeTable.row();
-        upgradeTable.add(upgradeButton).width(100);
-        
-        upgradeTable.setPosition(100, 100);
-        upgradeTable.setVisible(false);
-        
-        stage.addActor(upgradeTable);
-        
+        buttonUpgrade.setTransform(true);
+        buttonUpgrade.setScale(0.9F);
+
+        tableUpgrade.add(upgradeLabel).width(100);
+        tableUpgrade.row();
+        tableUpgrade.add(upgradePriceLabel).width(100);
+        tableUpgrade.row();
+        tableUpgrade.add(buttonUpgrade).width(100);
+
+        tableUpgrade.setPosition(100, 100);
+        tableUpgrade.setVisible(false);
+
+        stage.addActor(tableUpgrade);
+
     }
 
     private void createItembar(Stage stage) {
@@ -385,14 +392,15 @@ public class Play implements Screen {
             generateCoins();
             elapsedTime = 0;
         }
-        
+
         updateHUD();
 
-        distanceBetweenPlayerAndCastle = Math.sqrt(Math.pow((castle.getX() - player.getX()), 2)
-                + Math.pow((castle.getY() - player.getY()), 2));
+        distanceBetweenPlayerAndCastle = Math.sqrt(Math.pow((player.getX() - castle.getX()), 2)
+                + Math.pow((player.getY() - castle.getY()), 2));
 
         camera.position.set(player.getX() + player.getWidth() / 2,
                 player.getY() + player.getHeight() / 2, 0);
+
         camera.update();
 
         renderer.setView(camera);
@@ -415,11 +423,11 @@ public class Play implements Screen {
         heartTitle.setText(player.getHealth());
         timeToCoinGenTitle.setText("Time To New Coins: " + timeToCoinGen);
 
-        if (distanceBetweenPlayerAndCastle < 50) {
+        if (distanceBetweenPlayerAndCastle < 200) {
             // Show upgrade
-            upgradeTable.setVisible(true);
-        }else {
-            upgradeTable.setVisible(false);
+            tableUpgrade.setVisible(true);
+        } else {
+            tableUpgrade.setVisible(false);
         }
     }
 
@@ -452,11 +460,14 @@ public class Play implements Screen {
     // Builds the placed structures
     private void drawStructures(List<Structure> structuresOnMap) {
 
+        castle.draw(batch);
+
         for (Structure coin : coins) {
             coin.draw(batch);
         }
 
         for (Structure structure : structuresOnMap) {
+
             structure.draw(batch);
         }
     }

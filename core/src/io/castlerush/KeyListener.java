@@ -1,6 +1,5 @@
 package io.castlerush;
 
-import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -10,13 +9,10 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import io.castlerush.Player;
+
 import io.castlerush.gui.Shop;
 import io.castlerush.items.Item;
-import io.castlerush.items.ItemLoader;
 import io.castlerush.screens.Play;
 import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureLoader;
@@ -26,11 +22,9 @@ public class KeyListener extends ClickListener implements InputProcessor {
     private Play play;
     private Player player;
     private TiledMap map;
-    private List<Rectangle> tiles;
-    private Skin mySkin;
 
     public boolean keyPressed = false;
-    private boolean isTouched = false;
+    public boolean isTouched = false;
 
     public KeyListener(Player player, TiledMap map, Play play) {
         this.play = play;

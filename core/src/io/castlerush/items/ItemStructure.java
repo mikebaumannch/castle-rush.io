@@ -1,11 +1,6 @@
 package io.castlerush.items;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-
-import io.castlerush.Player;
-import io.castlerush.structures.Structure;
-import io.castlerush.structures.StructureLoader;
 
 public class ItemStructure extends Item {
 

@@ -1,10 +1,8 @@
 package io.castlerush.items;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import io.castlerush.Player;
-import io.castlerush.structures.Structure;
 
 public abstract class Item extends Sprite {
     

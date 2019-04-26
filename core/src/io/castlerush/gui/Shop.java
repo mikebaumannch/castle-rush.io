@@ -1,6 +1,5 @@
 package io.castlerush.gui;
 
-import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,12 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
+
 import io.castlerush.Player;
 import io.castlerush.items.Item;
 import io.castlerush.items.ItemLoader;
 import io.castlerush.screens.Play;
-import io.castlerush.structures.StructureLoader;
 
 public class Shop {
 
@@ -27,16 +25,14 @@ public class Shop {
     private static Play play;
 
     // GUI ELEMENTS
-    private static Dialog upgradeDialog, dialog;
-    private static Label title, upgrageTitle, nameInformation, priceInformation, wallLabel,
-            wallPrice, archeryLabel, archeryPrice, trapLabel, trapPrice, swordLabel, swordPrice,
-            slingshotLabel, slingshotdPrice;
-    private static TextButton wallButton;
-    private static TextButton archeryButton;
-    private static TextButton trapButton;
-    private static TextButton swordButton;
-    private static TextButton slingshotButton;
+    private static Dialog dialog;
     
+    private static Label title, nameInformation, priceInformation, wallLabel, wallPrice,
+            archeryLabel, archeryPrice, trapLabel, trapPrice, swordLabel, swordPrice,
+            slingshotLabel, slingshotdPrice;
+    
+    private static TextButton wallButton, archeryButton, trapButton, swordButton, slingshotButton;
+
     // UTIL
     private static String direction = "LEFT";
 
@@ -45,7 +41,7 @@ public class Shop {
 
         Shop.stage = stage;
         Shop.play = play;
-        
+
         // Shop dialog
         dialog = new Dialog("", mySkin, "default");
 
@@ -117,7 +113,7 @@ public class Shop {
         dialog.addActor(table);
 
         table.setPosition(dialog.getWidth() / 2 - table.getWidth() / 2, 210);
-        
+
         // Listener
         play.buttonExit.addListener(new ChangeListener() {
             @Override
@@ -200,22 +196,22 @@ public class Shop {
             public boolean keyDown(InputEvent event, int keycode) {
 
                 if (keycode == Input.Keys.E) {
-                    if(play.shopIsOpen) {
+                    if (play.shopIsOpen) {
                         play.shopIsOpen = false;
                         closeShop();
-                    }else {
+                    } else {
                         play.shopIsOpen = true;
                         showShop();
                     }
                 }
-                
+
                 if (keycode == Input.Keys.D || keycode == Input.Keys.RIGHT) {
                     if (direction == "LEFT") {
                         player.flip(true, false);
                         direction = "RIGHT";
                     }
                 }
-                
+
                 if (keycode == Input.Keys.A || keycode == Input.Keys.LEFT) {
                     if (direction == "RIGHT") {
                         player.flip(true, false);
@@ -227,7 +223,7 @@ public class Shop {
             }
         });
     }
-    
+
     public static void showShop() {
         dialog.show(stage);
         dialog.setWidth(400);

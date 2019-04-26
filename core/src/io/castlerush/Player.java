@@ -1,8 +1,5 @@
 package io.castlerush;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,12 +7,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import io.castlerush.items.Item;
 import io.castlerush.screens.Play;
 import io.castlerush.structures.Structure;
+import io.castlerush.structures.StructureCastle;
+import io.castlerush.structures.StructureLoader;
 
 public class Player extends Sprite {
 
@@ -60,11 +58,23 @@ public class Player extends Sprite {
         }
     }
 
+    public StructureCastle upgrade(StructureCastle structure) {
+        
+        StructureCastle castleLvl2 = new StructureLoader().castleLvl2;
+        
+        if (structure.getLevel() == 1) {
+            return castleLvl2;
+        }
+
+        return null;
+
+    }
+
     public void buy(Item item) {
 
         coins -= item.getPrice();
 
-        if (item.getName().equals("Holzschwert") || item.getName().equals("Steinwert")
+        if (item.getName().equals("Holzschwert") || item.getName().equals("Steinschwert")
                 || item.getName().equals("Eisenschwert")) {
             play.weaponImageSlot0
                     .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
@@ -218,19 +228,22 @@ public class Player extends Sprite {
     public void removeInventoryItem(int index) {
 
         switch (index) {
-        
+
         case 2:
-            play.transparentImageSlot2.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("img/transparent.png"))));
+            play.transparentImageSlot2.setDrawable(new TextureRegionDrawable(
+                    new TextureRegion(new Texture("img/transparent.png"))));
             break;
-            
+
         case 3:
-            play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("img/transparent.png"))));
+            play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(
+                    new TextureRegion(new Texture("img/transparent.png"))));
             break;
-            
+
         case 4:
-            play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("img/transparent.png"))));
+            play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(
+                    new TextureRegion(new Texture("img/transparent.png"))));
             break;
-                 
+
         }
 
     }
@@ -245,9 +258,10 @@ public class Player extends Sprite {
 
     public void increaseNumberOfItems(int index, int num) {
         numberOfItems[index] += num;
-        
-        if(numberOfItems[index] <= 0) {
+
+        if (numberOfItems[index] <= 0) {
             removeInventoryItem(index);
         }
     }
+
 }
