@@ -21,6 +21,12 @@ public class Client {
     public static Socket socket;
     public static DataOutputStream dOut;
     
+    public Client(String hostIPAdresse, Play play, String username) {
+        this.hostIPAdresse = hostIPAdresse;
+        this.username = username;
+        this.play = play;
+    }
+    
     public void joinGame(final String ip) throws IOException {
         
         // Bekomme Informationen des Gegners

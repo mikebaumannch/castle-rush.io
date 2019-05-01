@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Align;
 
+import io.castlerush.Client;
 import io.castlerush.Server;
 import io.castlerush.items.Item;
 import io.castlerush.items.ItemLoader;
@@ -203,9 +204,9 @@ public class Menu implements Screen {
                 String username = txtUsername.getText();
 
                 // Starte Server
-                Server myServer = new Server(myIPAdress, play, username);
+                Client myClient = new Client(myIPAdress, play, username);
                 try {
-                    myServer.joinGame(targetIP);
+                    myClient.joinGame(targetIP);
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
