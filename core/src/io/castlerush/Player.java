@@ -16,12 +16,12 @@ import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
 
 public class Player extends Sprite implements Serializable {
-
+    
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-
+    
     // Player information
     private String name;
     private int coins, health, fallCounter = 0;

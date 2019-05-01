@@ -107,10 +107,8 @@ public class Play implements Screen, Serializable {
         }
     }
 
-    // Erstellt einen Spieler auf der Map
     public void createPlayer() {
-        Player opponent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
-                true, map, this);
+        Player opponent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true, map, this);
         opponent.setSize(tileWidth * 2, tileHeight * 2);
         // StructureCastle castleOpponent = new StructureLoader().castleLvl1;
         oppenents.add(opponent);

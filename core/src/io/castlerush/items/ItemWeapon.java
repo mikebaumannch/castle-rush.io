@@ -1,6 +1,5 @@
 package io.castlerush.items;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class ItemWeapon extends Item{
