@@ -18,11 +18,11 @@ import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
 
 public class Player extends Sprite implements Serializable {
-
+    
     /**
      * 
      */
-    private static final long serialVersionUID = -3078330767791915468L;
+    private static final long serialVersionUID = 1L;
     // Player information
     private String name;
     private int coins, health, fallCounter = 0;
@@ -39,10 +39,10 @@ public class Player extends Sprite implements Serializable {
     float fallX;
     float fallY;
 
-    public Player(String name, Sprite skin, int coins, int health, boolean isCastleAlive,
+    public Player(String name, int coins, int health, boolean isCastleAlive,
             TiledMap map, Play play) {
 
-        super(skin);
+        super((new Sprite(new Texture("img/player.png"))));
         this.play = play;
         this.name = name;
         this.coins = coins;

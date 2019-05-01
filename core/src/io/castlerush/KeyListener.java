@@ -1,5 +1,7 @@
 package io.castlerush;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -17,8 +19,13 @@ import io.castlerush.screens.Play;
 import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureLoader;
 
-public class KeyListener extends ClickListener implements InputProcessor {
+public class KeyListener extends ClickListener implements InputProcessor, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    
     private Play play;
     private Player player;
     private TiledMap map;

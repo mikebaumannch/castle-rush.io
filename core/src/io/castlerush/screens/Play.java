@@ -105,7 +105,7 @@ public class Play implements Screen, Serializable {
 
     // Erstellt einen Spieler auf der Map
     public void createPlayer(String username) {
-        Player oppenent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
+        Player oppenent = new Player(username, 0, 100,
                 true, map, this);
         oppenent.setSize(tileWidth * 2, tileHeight * 2);
         StructureCastle castleOpponent = new StructureLoader().castleLvl1;
@@ -137,7 +137,7 @@ public class Play implements Screen, Serializable {
         stage = new Stage();
 
         // Loading ressources such as items, structures etc.
-        player = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true,
+        player = new Player(username, 0, 100, true,
                 map, this);
         player.setSize(tileWidth * 2, tileHeight * 2);
         castle = new StructureLoader().castleLvl1;
