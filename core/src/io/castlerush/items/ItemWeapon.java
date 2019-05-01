@@ -3,8 +3,12 @@ package io.castlerush.items;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public class ItemWeapon extends Item {
+public class ItemWeapon extends Item{
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     int damage;
 
     public ItemWeapon(String name, int damage, Sprite icon, int price, String desc) {

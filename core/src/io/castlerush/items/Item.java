@@ -1,11 +1,17 @@
 package io.castlerush.items;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import io.castlerush.Player;
 
-public abstract class Item extends Sprite {
+public abstract class Item extends Sprite implements Serializable {
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private String name;
     private Sprite icon;
     private String desc;
