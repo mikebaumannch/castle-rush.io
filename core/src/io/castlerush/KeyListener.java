@@ -98,10 +98,9 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 player.walk(0);
                 if(Server.typeOfPlayer == 1) {
                     try {
-                        DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
-                        dOut.writeByte(0);
-                        dOut.flush();
-                        dOut.close();
+                        Server.dOut = new DataOutputStream(Server.socket.getOutputStream());
+                        Server.dOut.writeByte(0);
+                        Server.dOut.flush();
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -112,10 +111,9 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 player.walk(1);
                 if(Server.typeOfPlayer == 1) {
                     try {
-                        DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
-                        dOut.writeByte(1);
-                        dOut.flush();
-                        dOut.close();
+                        Server.dOut = new DataOutputStream(Server.socket.getOutputStream());
+                        Server.dOut.writeByte(1);
+                        Server.dOut.flush();
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -126,10 +124,9 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 player.walk(2);
                 if(Server.typeOfPlayer == 1) {
                     try {
-                        DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
-                        dOut.writeByte(2);
-                        dOut.flush();
-                        dOut.close();
+                        Server.dOut = new DataOutputStream(Server.socket.getOutputStream());
+                        Server.dOut.writeByte(2);
+                        Server.dOut.flush();
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -140,10 +137,9 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 player.walk(3);
                 if(Server.typeOfPlayer == 1) {
                     try {
-                        DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
-                        dOut.writeByte(3);
-                        dOut.flush();
-                        dOut.close();
+                        Server.dOut = new DataOutputStream(Server.socket.getOutputStream());
+                        Server.dOut.writeByte(3);
+                        Server.dOut.flush();
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();

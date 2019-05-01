@@ -38,10 +38,10 @@ public class Player extends Sprite implements Serializable {
     float fallX;
     float fallY;
 
-    public Player(String name, int coins, int health, boolean isCastleAlive,
+    public Player(String name, Sprite sprite, int coins, int health, boolean isCastleAlive,
             TiledMap map, Play play) {
 
-        super((new Sprite(new Texture("img/player.png"))));
+        super(sprite);
         this.play = play;
         this.name = name;
         this.coins = coins;
