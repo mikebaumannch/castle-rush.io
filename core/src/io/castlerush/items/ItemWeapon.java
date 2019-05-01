@@ -2,7 +2,7 @@ package io.castlerush.items;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-public class ItemWeapon extends Item {
+public class ItemWeapon extends Item{
     
     /**
      * 
