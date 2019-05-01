@@ -28,7 +28,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
      * 
      */
     private static final long serialVersionUID = 1L;
-    
+
     private Play play;
     private Player player;
     private TiledMap map;
@@ -70,16 +70,16 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
         for (Structure structure : play.structuresOnMap) {
 
             Rectangle rect = structure.getBoundingRectangle();
-            if(structure.getName().equals("Fallgrube")) {
+            if (structure.getName().equals("Fallgrube")) {
                 if (Intersector.overlaps(rect, player.getBoundingRectangle())) {
                     return "TRAP";
                 }
             }
-            
+
             /*
-            if (Intersector.overlaps(rect, player.getBoundingRectangle())) {
-                return "TOP";
-            }*/
+             * if (Intersector.overlaps(rect, player.getBoundingRectangle())) { return
+             * "TOP"; }
+             */
         }
 
         for (Structure coin : play.coins) {
@@ -95,60 +95,64 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
     }
 
     public void handleInput() {
-        if (keyPressed) {                       
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-                player.walk(0);
-                if(Server.typeOfPlayer == 1) {
-                    try {
+        if (keyPressed) {
+
+            try {
+
+                if (Gdx.input.isKeyPressed(Input.Keys.LEFT)
+                        || Gdx.input.isKeyPressed(Input.Keys.A)) {
+
+                    player.walk(0);
+                    if (Server.typeOfPlayer == 0) {
                         Server.dOut.writeByte(0);
                         Server.dOut.flush();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    } else {
+                        Client.dOut.writeByte(0);
+                        Client.dOut.flush();
                     }
                 }
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-                player.walk(1);
-                if(Server.typeOfPlayer == 1) {
-                    try {
+                if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)
+                        || Gdx.input.isKeyPressed(Input.Keys.D)) {
+                    player.walk(1);
+                    if (Server.typeOfPlayer == 0) {
                         Server.dOut.writeByte(1);
                         Server.dOut.flush();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    } else {
+                        Client.dOut.writeByte(1);
+                        Client.dOut.flush();
                     }
                 }
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-                player.walk(2);
-                if(Server.typeOfPlayer == 1) {
-                    try {
+                if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+                    player.walk(2);
+                    if (Server.typeOfPlayer == 0) {
                         Server.dOut.writeByte(2);
                         Server.dOut.flush();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    } else {
+                        Client.dOut.writeByte(2);
+                        Client.dOut.flush();
                     }
                 }
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-                player.walk(3);
-                if(Server.typeOfPlayer == 1) {
-                    try {
+                if (Gdx.input.isKeyPressed(Input.Keys.DOWN)
+                        || Gdx.input.isKeyPressed(Input.Keys.S)) {
+                    player.walk(3);
+                    if (Server.typeOfPlayer == 0) {
                         Server.dOut.writeByte(3);
                         Server.dOut.flush();
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    } else {
+                        Client.dOut.writeByte(3);
+                        Client.dOut.flush();
                     }
                 }
+                if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+                    System.exit(0);
+
+                }
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-                System.exit(0);
-                
-            }
-            
+
         }
     }
 
@@ -166,7 +170,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
             play.shopIsOpen = false;
             Shop.showShop();
         }
-        
+
         return false;
     }
 
@@ -178,7 +182,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        
+
         isTouched = true;
         Item[] inv = player.getInventory();
         Item selectedItem = inv[play.getSelectedItem()];
@@ -188,23 +192,23 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 if (play.getSelectedItem() == 0) {
                     selectedItem.useItem(player);
                 }
-            }else if (player.getNumberOfItems()[1] > 0) {
+            } else if (player.getNumberOfItems()[1] > 0) {
                 if (play.getSelectedItem() == 1) {
                     selectedItem.useItem(player);
                 }
-            }else if (play.getSelectedItem() == 2){
-                if (player.getNumberOfItems()[2]  > 0)  {
+            } else if (play.getSelectedItem() == 2) {
+                if (player.getNumberOfItems()[2] > 0) {
                     player.placeStructure(new StructureLoader().towerLvl1);
                     player.increaseNumberOfItems(2, -1);
                 }
-            }else if (play.getSelectedItem() == 3){
-                if (player.getNumberOfItems()[3]  > 0)  {
+            } else if (play.getSelectedItem() == 3) {
+                if (player.getNumberOfItems()[3] > 0) {
                     player.placeStructure(new StructureLoader().woodWall);
                     player.increaseNumberOfItems(3, -1);
                 }
-                
-            }else if (play.getSelectedItem() == 4){
-                if (player.getNumberOfItems()[4]  > 0)  {
+
+            } else if (play.getSelectedItem() == 4) {
+                if (player.getNumberOfItems()[4] > 0) {
                     player.placeStructure(new StructureLoader().trap);
                     player.increaseNumberOfItems(4, -1);
                 }
