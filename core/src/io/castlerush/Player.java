@@ -1,5 +1,6 @@
 package io.castlerush;
 
+import java.io.Serializable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -8,14 +9,18 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import io.castlerush.items.Item;
 import io.castlerush.screens.Play;
 import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
     // Player information
     private String name;
@@ -33,10 +38,10 @@ public class Player extends Sprite {
     float fallX;
     float fallY;
 
-    public Player(String name, Sprite skin, int coins, int health, boolean isCastleAlive,
+    public Player(String name, int coins, int health, boolean isCastleAlive,
             TiledMap map, Play play) {
 
-        super(skin);
+        super((new Sprite(new Texture("img/player.png"))));
         this.play = play;
         this.name = name;
         this.coins = coins;

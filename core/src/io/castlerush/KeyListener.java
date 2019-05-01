@@ -1,5 +1,10 @@
 package io.castlerush;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.Socket;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -10,15 +15,18 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-
 import io.castlerush.gui.Shop;
 import io.castlerush.items.Item;
 import io.castlerush.screens.Play;
 import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureLoader;
 
-public class KeyListener extends ClickListener implements InputProcessor {
+public class KeyListener extends ClickListener implements InputProcessor, Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
     private Play play;
     private Player player;
     private TiledMap map;
@@ -85,23 +93,68 @@ public class KeyListener extends ClickListener implements InputProcessor {
     }
 
     public void handleInput() {
-        if (keyPressed) {
-
+        if (keyPressed) {                       
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
                 player.walk(0);
+                if(Server.typeOfPlayer == 1) {
+                    try {
+                        DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
+                        dOut.writeByte(0);
+                        dOut.flush();
+                        dOut.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
             }
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
                 player.walk(1);
+                if(Server.typeOfPlayer == 1) {
+                    try {
+                        DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
+                        dOut.writeByte(1);
+                        dOut.flush();
+                        dOut.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
             }
             if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
                 player.walk(2);
+                if(Server.typeOfPlayer == 1) {
+                    try {
+                        DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
+                        dOut.writeByte(2);
+                        dOut.flush();
+                        dOut.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
             }
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
                 player.walk(3);
+                if(Server.typeOfPlayer == 1) {
+                    try {
+                        DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
+                        dOut.writeByte(3);
+                        dOut.flush();
+                        dOut.close();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
             }
             if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
                 System.exit(0);
+                
             }
+            
         }
     }
 

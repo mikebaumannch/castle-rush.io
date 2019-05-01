@@ -23,9 +23,13 @@ public class Server {
     private String hostIPAdresse;
     private Play play;
     private Player oppenent;
+    private float testX;
     private String username;
     private String remoteIP = "";
     private boolean isOpponentOnMap = false;
+    private boolean isConnected = false;
+    public static int typeOfPlayer;
+    public static Socket socket;
 
     public Server(String hostIPAdresse, Play play, String username) {
         this.hostIPAdresse = hostIPAdresse;
@@ -34,99 +38,79 @@ public class Server {
     }
 
     public void createGame() {
-        //Bekomme Informationen des Gegners
+        typeOfPlayer = 0;
+
+        // Bekomme Informationen des Gegners
         new Thread(new Runnable() {
             @Override
             public void run() {
 
                 ServerSocket ss;
                 Socket socket = null;
+
                 try {
                     ss = new ServerSocket(1337);
                     while (true) {
                         socket = ss.accept();
                         InputStream inputStream = socket.getInputStream();
-                        ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
-                        try {
-                            oppenent = (Player) objectInputStream.readObject();
-                        } catch (ClassNotFoundException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                        DataInputStream dIn = new DataInputStream(inputStream);
+
+                        byte messageType = dIn.readByte();
+
+                        switch (messageType) {
+                        case 0: // Type W
+                            play.oppenents.get(0).walk(0);
+                            
+                            break;
+                        case 1: // Type A
+                            play.oppenents.get(0).walk(1);
+                            break;
+                        case 2: // Type S
+                            play.oppenents.get(0).walk(2);
+                            break;
+                        case 3: // Type D
+                            play.oppenents.get(0).walk(3);
+                            break;
+                        case 100: //Create Opponent
+                            play.createPlayer();
+                            break;
+                        case 101: //Set Spawnpoint
+                            play.oppenents.get(0).setPosition(dIn.readFloat(), dIn.readFloat());
+                            break;
+                        default:
+
                         }
                     }
+
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                
-                //Wenn Gegner nicht erstellt wurde, dann Spieler erstellen
-                if(!isOpponentOnMap) {
-                    play.createPlayer(oppenent.getName());
-                         
-                    isOpponentOnMap = true;
-                }
-                else {
-                    //Gegner aktualisieren                    
-                    play.oppenents.get(0).setPosition(oppenent.getX(), oppenent.getY());
-                }               
-                                
-                //IP-Adresse des Gegners herausfinden
-                InetSocketAddress sockaddr = (InetSocketAddress)socket.getRemoteSocketAddress();
-                InetAddress inaddr = sockaddr.getAddress();
-                Inet4Address in4addr = (Inet4Address)inaddr;
-                remoteIP = in4addr.toString();
-                
-                if(remoteIP.length() > 0) {
-                    checkPosition(remoteIP);
-                }
+
             }
         }).start();
     }
 
     private void checkPosition(String ip) {
-      //Sende Informationen an Gegner
-        new Thread(new Runnable(){
-            @Override
-            public void run() {
-                
-                while(true) {
-                    
-                    try {
-                        Socket socket = new Socket(remoteIP, 1337);
-                        OutputStream outputStream = socket.getOutputStream();
-            
-                        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-                        objectOutputStream.writeObject(play);
-                        
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
+
+        try {
+            // Sende Informationen an Gegner
+            Socket socket = new Socket(remoteIP, 1337);
+            OutputStream outputStream = socket.getOutputStream();
+
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(play.player.getX());
+        } catch (IOException e) {
+
+        }
     }
-    
+
     public void joinGame(final String ip) throws IOException {
-        
-        new Thread(new Runnable(){
-            @Override
-            public void run() {
-                while(true) {
-                    
-                    try {
-                        Socket socket = new Socket(ip, 1337);
-                        OutputStream outputStream = socket.getOutputStream();
-            
-                        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-                        objectOutputStream.writeObject(play);
-                        
-                    } catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
+        typeOfPlayer = 1;
+        socket = new Socket(ip, 1337);
+        DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+        dOut.writeByte(100);
+        dOut.flush();
+        dOut.close();
     }
 }

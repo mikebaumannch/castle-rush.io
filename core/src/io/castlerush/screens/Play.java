@@ -1,5 +1,7 @@
 package io.castlerush.screens;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import io.castlerush.Player;
+import io.castlerush.Server;
 import io.castlerush.gui.Shop;
 import io.castlerush.items.ItemLoader;
 import io.castlerush.structures.Structure;
@@ -104,13 +107,12 @@ public class Play implements Screen, Serializable{
     }
 
     // Erstellt einen Spieler auf der Map
-    public void createPlayer(String username) {
-        Player oppenent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
-                true, map, this);
-        oppenent.setSize(tileWidth * 2, tileHeight * 2);
-        StructureCastle castleOpponent = new StructureLoader().castleLvl1;
-        oppenents.add(oppenent);
-        structuresOnMap.add(castleOpponent);
+    public void createPlayer() {
+        Player opponent = new Player(username, 0, 100, true,
+                map, this);
+        //StructureCastle castleOpponent = new StructureLoader().castleLvl1;
+        oppenents.add(opponent);
+        //structuresOnMap.add(castleOpponent);
     }
 
     @Override
@@ -137,7 +139,7 @@ public class Play implements Screen, Serializable{
         stage = new Stage();
 
         // Loading ressources such as items, structures etc.
-        player = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true,
+        player = new Player(username, 0, 100, true,
                 map, this);
         player.setSize(tileWidth * 2, tileHeight * 2);
         castle = new StructureLoader().castleLvl1;
@@ -164,6 +166,20 @@ public class Play implements Screen, Serializable{
         player.setX(randomMapX);
         player.setY(randomMapY);
         castle.setBounds(player.getX(), player.getY(), tileWidth * 8, tileHeight * 8);
+        
+        try {
+            DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
+            dOut.writeByte(101);
+            dOut.writeFloat(player.getX());
+            dOut.writeFloat(player.getY());
+            dOut.writeFloat(castle.getX());
+            dOut.writeFloat(castle.getY());
+            dOut.flush();
+            dOut.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         // Generates the coins on the map
         generateCoins();
