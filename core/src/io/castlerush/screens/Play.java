@@ -38,8 +38,9 @@ import io.castlerush.structures.StructureLoader;
 public class Play implements Screen {
 
     // PLAYER
-    private Player player;
-    private StructureCastle castle;
+    public Player player;
+    public List<Player> oppenents = new ArrayList<Player>();
+    public StructureCastle castle;
 
     // RENDERER
     public Batch batch;
@@ -63,7 +64,7 @@ public class Play implements Screen {
     public InputMultiplexer inputMulti = new InputMultiplexer();
 
     // MAP
-    private TiledMap map;
+    public TiledMap map;
     private int mapWidth;
     private int mapHeight;
     private int tileWidth;
@@ -78,7 +79,7 @@ public class Play implements Screen {
     private int timeToCoinGen;
     private double distanceBetweenPlayerAndCastle;
 
-    public Play(String username) {
+    public Play() {
 
         // Initializing map, tiles etc.
         map = new TmxMapLoader().load("maps/maps.tmx");
@@ -101,16 +102,25 @@ public class Play implements Screen {
         stage = new Stage();
 
         // Loading ressources such as items, structures etc.
-        this.username = username;
-        player = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true,
-                map, this);
-        player.setSize(tileWidth * 2, tileHeight * 2);
+        player = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
+                true, map, this);
+        player.setSize(tileWidth* 2, tileHeight*2);
         castle = new StructureLoader().castleLvl1;
 
         // Setting up input processors
         inputMulti.addProcessor(stage);
         inputMulti.addProcessor(player.keyListener);
         Gdx.input.setInputProcessor(inputMulti);
+    }
+
+    // Erstellt einen Spieler auf der Map
+    public void createPlayer(String username) {
+        Player oppenent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
+                true, map, this);
+        oppenent.setSize(tileWidth* 2, tileHeight*2);
+        StructureCastle castleOpponent = new StructureLoader().castleLvl1;
+        oppenents.add(oppenent);
+        structuresOnMap.add(castleOpponent);
     }
 
     @Override
@@ -178,14 +188,14 @@ public class Play implements Screen {
 
         // transparent image
         for (int i = 0; i < slots.length; i++) {
-            
+
             // Initialize the slots
             slots[i] = new Image(new Texture(Gdx.files.internal("img/transparent.png")));
 
             // Add components to table
             tableInventory.add(slots[i]).width(48).expandX();
         }
-        
+
         // Give player start item
         slots[0].setDrawable(new TextureRegionDrawable(new ItemLoader().fist.getTexture()));
         player.getInventory()[0] = new ItemLoader().fist;
@@ -336,7 +346,11 @@ public class Play implements Screen {
         batch.begin();
 
         drawStructures(structuresOnMap);
+        
         player.draw(batch);
+        for(Player o : oppenents) {
+            o.draw(batch);
+        }
 
         batch.end();
 
@@ -435,5 +449,21 @@ public class Play implements Screen {
 
     public void setSelectedItem(int selectedItem) {
         this.selectedItem = selectedItem;
+    }
+
+    public int getTileWidth() {
+        return tileWidth;
+    }
+
+    public void setTileWidth(int tileWidth) {
+        this.tileWidth = tileWidth;
+    }
+
+    public int getTileHeight() {
+        return tileHeight;
+    }
+
+    public void setTileHeight(int tileHeight) {
+        this.tileHeight = tileHeight;
     }
 }
