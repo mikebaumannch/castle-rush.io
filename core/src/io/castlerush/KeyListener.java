@@ -131,7 +131,7 @@ public class KeyListener extends ClickListener implements InputProcessor {
 
         if (selectedItem != null) {
             if (player.getNumberOfItems()[0] > 0) {
-                if (play.getSelectedItem() == 2) {
+                if (play.getSelectedItem() == 0) {
                     selectedItem.useItem(player);
                 }
             }else if (player.getNumberOfItems()[1] > 0) {

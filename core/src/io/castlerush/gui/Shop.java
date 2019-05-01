@@ -115,7 +115,7 @@ public class Shop {
         table.setPosition(dialog.getWidth() / 2 - table.getWidth() / 2, 210);
 
         // Listener
-        play.buttonExit.addListener(new ChangeListener() {
+        /*play.buttonExit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 System.exit(0);
@@ -127,7 +127,7 @@ public class Shop {
             public void changed(ChangeEvent event, Actor actor) {
                 Shop.showShop();
             }
-        });
+        });*/
 
         wallButton.addListener(new ChangeListener() {
             @Override

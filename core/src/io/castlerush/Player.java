@@ -45,6 +45,7 @@ public class Player extends Sprite {
         this.keyListener = new KeyListener(this, map, play);
     }
 
+    // Place structures
     public void placeStructure(Structure structure) {
         structure.setBounds(this.getX(), this.getY(),
                 (map.getProperties().get("tilewidth", Integer.class)) * 8,
@@ -52,16 +53,18 @@ public class Player extends Sprite {
         play.structuresOnMap.add(structure);
     }
 
+    // Earn coins
     public void earnCoins() {
         if (isCastleAlive) {
             coins += 10000;
         }
     }
 
+    // Upgrade player structures
     public StructureCastle upgrade(StructureCastle structure) {
-        
+
         StructureCastle castleLvl2 = new StructureLoader().castleLvl2;
-        
+
         if (structure.getLevel() == 1) {
             return castleLvl2;
         }
@@ -70,44 +73,41 @@ public class Player extends Sprite {
 
     }
 
+    // Buy an item
     public void buy(Item item) {
 
         coins -= item.getPrice();
 
         if (item.getName().equals("Holzschwert") || item.getName().equals("Steinschwert")
                 || item.getName().equals("Eisenschwert")) {
-            play.weaponImageSlot0
-                    .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            play.slots[0].setDrawable(new TextureRegionDrawable(item.getTexture()));
             inventory[0] = item;
-            numberOfItems[0] = numberOfItems[0]++;
+            numberOfItems[0]++;
 
         } else if (item.getName().equals("Steinschleuder") || item.getName().equals("Bogen")) {
-            play.transparentImageSlot1
-                    .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            play.slots[1].setDrawable(new TextureRegionDrawable(item.getTexture()));
             inventory[1] = item;
-            numberOfItems[1] += 1;
+            numberOfItems[1]++;
         } else if (item.getName().equals("Bogenschützenturm")
                 || item.getName().equals("Kanonenturm")) {
-            play.transparentImageSlot2
-                    .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            play.slots[2].setDrawable(new TextureRegionDrawable(item.getTexture()));
             inventory[2] = item;
-            numberOfItems[2] += 1;
+            numberOfItems[2]++;
 
         } else if (item.getName().equals("Holzmauer") || item.getName().equals("Steinmauer")) {
-            play.transparentImageSlot3
-                    .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            play.slots[3].setDrawable(new TextureRegionDrawable(item.getTexture()));
             inventory[3] = item;
-            numberOfItems[3] += 1;
+            numberOfItems[3]++;
 
         } else if (item.getName().equals("Fallgrube")) {
-            play.transparentImageSlot4
-                    .setDrawable(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+            play.slots[4].setDrawable(new TextureRegionDrawable(item.getTexture()));
             inventory[4] = item;
-            numberOfItems[4] += 1;
+            numberOfItems[4]++;
         }
 
     }
 
+    // Self explanatory
     public void walk(int key) {
 
         switch (key) {
@@ -230,18 +230,18 @@ public class Player extends Sprite {
         switch (index) {
 
         case 2:
-            play.transparentImageSlot2.setDrawable(new TextureRegionDrawable(
-                    new TextureRegion(new Texture("img/transparent.png"))));
+            play.slots[2]
+                    .setDrawable(new TextureRegionDrawable(new Texture("img/transparent.png")));
             break;
 
         case 3:
-            play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(
-                    new TextureRegion(new Texture("img/transparent.png"))));
+            play.slots[3]
+                    .setDrawable(new TextureRegionDrawable(new Texture("img/transparent.png")));
             break;
 
         case 4:
-            play.transparentImageSlot3.setDrawable(new TextureRegionDrawable(
-                    new TextureRegion(new Texture("img/transparent.png"))));
+            play.slots[4]
+                    .setDrawable(new TextureRegionDrawable(new Texture("img/transparent.png")));
             break;
 
         }

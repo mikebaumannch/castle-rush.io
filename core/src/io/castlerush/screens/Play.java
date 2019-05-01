@@ -45,19 +45,19 @@ public class Play implements Screen {
     public Batch batch;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
+    private float screenWidth;
+    private float screenHeight;
 
     // HUD & GUI
     public String username;
     private Stage stage;
     private Skin mySkin;
-
-    // GUI
     public Table tableInventory, tableUpgrade;
     private Label gameTitle, heartTitle, timeToCoinGenTitle;
-    private Dialog dialog;
+    private Label[] lblNumberOfItems = new Label[5];
     public TextButton buttonShop, buttonExit, buttonBuy, buttonUpgrade;
-    public Image weaponImageSlot0, transparentImageSlot1, transparentImageSlot2,
-            transparentImageSlot3, transparentImageSlot4, selectField;
+    public Image[] slots = new Image[5];
+    public Image selectField;
     private int selectedItem;
     public boolean shopIsOpen = false;
     public InputMultiplexer inputMulti = new InputMultiplexer();
@@ -88,6 +88,8 @@ public class Play implements Screen {
         tileHeight = map.getProperties().get("tileheight", Integer.class);
 
         // Initializing renderers
+        screenWidth = Gdx.graphics.getWidth();
+        screenHeight = Gdx.graphics.getHeight();
         renderer = new OrthogonalTiledMapRenderer(map);
         batch = renderer.getBatch();
 
@@ -121,9 +123,7 @@ public class Play implements Screen {
         // Spawn the player and it's castle
         player.setX(randomMapX);
         player.setY(randomMapY);
-        castle.setBounds(player.getX(), player.getY(),
-                (map.getProperties().get("tilewidth", Integer.class)) * 8,
-                (map.getProperties().get("tilewidth", Integer.class)) * 8);
+        castle.setBounds(player.getX(), player.getY(), tileWidth * 8, tileHeight * 8);
 
         // Generates the coins on the map
         generateCoins();
@@ -134,47 +134,6 @@ public class Play implements Screen {
         Shop.createShop(mySkin, stage, player, this);
         createTableUpgrade();
         createButtonListener();
-    }
-
-    // Erstellt ein Listener für alle Buttons
-    private void createButtonListener() {
-
-        // Listener
-        buttonExit.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                System.exit(0);
-            }
-        });
-
-        buttonShop.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Shop.showShop();
-            }
-        });
-
-        buttonUpgrade.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                
-                int price = new ItemLoader().castleLvl2.getPrice();
-
-                if (player.getCoins() >= price) {
-
-                    float posX = castle.getX();
-                    float posY = castle.getY();
-                    float width = castle.getWidth();
-                    float height = castle.getHeight();
-
-                    castle = player.upgrade(castle);
-                    castle.setBounds(posX, posY, width, height);
-                    
-                    player.setCoins(player.getCoins()-price);
-                    
-                }
-            }
-        });
     }
 
     private void createTableUpgrade() {
@@ -218,19 +177,18 @@ public class Play implements Screen {
         tableInventory.setPosition(Gdx.graphics.getWidth() / 2 - tableInventory.getWidth() / 2, 0);
 
         // transparent image
-        weaponImageSlot0 = new Image(new Texture(Gdx.files.internal("weapons/fist.png")));
-        player.getInventory()[0] = new ItemLoader().fist;
-        transparentImageSlot1 = new Image(new Texture(Gdx.files.internal("img/transparent.png")));
-        transparentImageSlot2 = new Image(new Texture(Gdx.files.internal("img/transparent.png")));
-        transparentImageSlot3 = new Image(new Texture(Gdx.files.internal("img/transparent.png")));
-        transparentImageSlot4 = new Image(new Texture(Gdx.files.internal("img/transparent.png")));
+        for (int i = 0; i < slots.length; i++) {
+            
+            // Initialize the slots
+            slots[i] = new Image(new Texture(Gdx.files.internal("img/transparent.png")));
 
-        // Add components to table
-        tableInventory.add(weaponImageSlot0).width(48).expandX();
-        tableInventory.add(transparentImageSlot1).width(48).expandX();
-        tableInventory.add(transparentImageSlot2).width(48).expandX();
-        tableInventory.add(transparentImageSlot3).width(48).expandX();
-        tableInventory.add(transparentImageSlot4).width(48).expandX();
+            // Add components to table
+            tableInventory.add(slots[i]).width(48).expandX();
+        }
+        
+        // Give player start item
+        slots[0].setDrawable(new TextureRegionDrawable(new ItemLoader().fist.getTexture()));
+        player.getInventory()[0] = new ItemLoader().fist;
 
         // Selectfield
         Texture selectFieldImg = new Texture(Gdx.files.internal("img/selectedItembar.png"));
@@ -239,6 +197,14 @@ public class Play implements Screen {
         selectField.setPosition(tableInventory.getX(), 0);
         selectedItem = 0;
 
+        // Itemanzahl
+        int count = 0;
+        for (Label lbl : lblNumberOfItems) {
+            lbl = new Label("" + player.getNumberOfItems()[count], mySkin);
+            stage.addActor(lbl);
+            count++;
+        }
+
         // Add table to dialog
         stage.addActor(tableInventory);
         stage.addActor(selectField);
@@ -246,125 +212,45 @@ public class Play implements Screen {
 
     private void createHud() {
 
+        // Texture
         mySkin = new Skin(Gdx.files.internal("skins/glassy-ui.json"));
 
         // Label title
         gameTitle = new Label("Name: " + player.getName() + "\nCoins: " + player.getCoins(),
                 mySkin);
         gameTitle.setSize(100, 100);
-        gameTitle.setPosition(20, Gdx.graphics.getHeight() - gameTitle.getHeight() / 2 - 30);
+        gameTitle.setPosition(20, screenHeight - gameTitle.getHeight() / 2 - 30);
         gameTitle.setAlignment(Align.left);
 
         timeToCoinGenTitle = new Label("Time To New Coins: " + timeToCoinGen, mySkin);
         timeToCoinGenTitle.setSize(100, 100);
-        timeToCoinGenTitle.setPosition(20,
-                Gdx.graphics.getHeight() - gameTitle.getHeight() / 2 - 60);
+        timeToCoinGenTitle.setPosition(20, screenHeight - gameTitle.getHeight() / 2 - 60);
         timeToCoinGenTitle.setAlignment(Align.left);
 
         // Button Spiel beenden
         buttonExit = new TextButton("Spiel beenden (ESC)", mySkin, "small");
         buttonExit.setName("buttonExit");
-        buttonExit.setPosition(Gdx.graphics.getWidth() - 20 - buttonExit.getWidth(),
-                Gdx.graphics.getHeight() - gameTitle.getHeight() / 2 - 20);
+        buttonExit.setPosition(screenWidth - 20 - buttonExit.getWidth(),
+                screenHeight - gameTitle.getHeight() / 2 - 20);
 
         // Button Shop öffnen
         buttonShop = new TextButton("Shop oeffnen (E)", mySkin, "small");
         buttonShop.setName("buttonShop");
-        buttonShop.setPosition(Gdx.graphics.getWidth() - 45 - buttonShop.getWidth(),
-                Gdx.graphics.getHeight() - buttonExit.getHeight() - 80);
+        buttonShop.setPosition(screenWidth - 45 - buttonShop.getWidth(),
+                screenHeight - buttonExit.getHeight() - 80);
         buttonShop.setWidth(buttonExit.getWidth());
-
-        /*
-         * Itembar anzeigen Texture itembar = new
-         * Texture(Gdx.files.internal("img/itembar.png")); Image item = new
-         * Image(itembar); item.setSize(itembar.getWidth(), itembar.getHeight());
-         * item.setPosition(Gdx.graphics.getWidth() / 2 - item.getWidth() / 2, 0);
-         */
 
         // Herz für die Lebenspunkte hinzufügen
         Texture texture = new Texture(Gdx.files.internal("img/heart.png"));
         Image heart = new Image(texture);
         heart.setSize(texture.getWidth() / 6, texture.getHeight() / 6);
-        heart.setPosition(Gdx.graphics.getWidth() - heart.getWidth() / 2 - 20, 20);
+        heart.setPosition(screenWidth - heart.getWidth() / 2 - 20, 20);
 
         // Anzeige der Lebenspunkte hinzufügen
         heartTitle = new Label("" + player.getHealth(), mySkin);
         heartTitle.setSize(100, 100);
-        heartTitle.setPosition(
-                Gdx.graphics.getWidth() - heart.getWidth() / 2 - heart.getWidth() - 20, 0);
+        heartTitle.setPosition(screenWidth - heart.getWidth() / 2 - heart.getWidth() - 20, 0);
         heartTitle.setAlignment(Align.left);
-
-        // Dialog
-        dialog = new Dialog("", mySkin, "default");
-
-        // Create Components of table
-        // Title
-        Label title = new Label("Shop", mySkin, "big");
-        // INformations
-        Label nameInformation = new Label("Name:", mySkin);
-        Label priceInformation = new Label("Preis:", mySkin);
-        // Wall
-        Label wallLabel = new Label("Holzmauer", mySkin);
-        Label wallPrice = new Label("50", mySkin);
-        TextButton wallButton = new TextButton("Kaufen", mySkin, "small");
-        // Archery
-        Label archeryLabel = new Label("Bogenschützenturm", mySkin);
-        Label archeryPrice = new Label("200", mySkin);
-        TextButton archeryButton = new TextButton("Kaufen", mySkin, "small");
-        // Trap
-        Label trapLabel = new Label("Falle", mySkin);
-        Label trapPrice = new Label("200", mySkin);
-        TextButton trapButton = new TextButton("Kaufen", mySkin, "small");
-        // Sword
-        Label swordLabel = new Label("Holzschwert", mySkin);
-        Label swordPrice = new Label("200", mySkin);
-        TextButton swordButton = new TextButton("Kaufen", mySkin, "small");
-        // Slingshot
-        Label slingshotLabel = new Label("Slingshot", mySkin);
-        Label slingshotdPrice = new Label("200", mySkin);
-        TextButton slingshotButton = new TextButton("Kaufen", mySkin, "small");
-
-        // Create Table
-        Table table = new Table();
-
-        // Add Components to table
-        table.add(nameInformation).width(200);
-        table.add(priceInformation).width(50);
-        table.row();
-        table.add(wallLabel).width(200);
-        table.add(wallPrice).width(50);
-        table.add(wallButton).width(100);
-        table.row();
-        table.add(archeryLabel).width(200);
-        table.add(archeryPrice).width(50);
-        table.add(archeryButton).width(100);
-        table.row();
-        table.add(trapLabel).width(200);
-        table.add(trapPrice).width(50);
-        table.add(trapButton).width(100);
-        table.row();
-        table.add(swordLabel).width(200);
-        table.add(swordPrice).width(50);
-        table.add(swordButton).width(100);
-        table.row();
-        table.add(slingshotLabel).width(200);
-        table.add(slingshotdPrice).width(50);
-        table.add(slingshotButton).width(100);
-
-        dialog.hide();
-        dialog.setWidth(400);
-        dialog.setHeight(400);
-        dialog.setPosition(Gdx.graphics.getWidth() / 2 - dialog.getWidth() / 2,
-                Gdx.graphics.getHeight() / 2 - dialog.getHeight() / 2);
-
-        // Settings
-        title.setPosition(dialog.getWidth() / 2 - title.getWidth() / 2, dialog.getHeight());
-
-        // Add table to dialog
-        dialog.addActor(title);
-        dialog.addActor(table);
-
-        table.setPosition(dialog.getWidth() / 2 - table.getWidth() / 2, 210);
 
         // Add Actor
         stage.addActor(gameTitle);
@@ -374,6 +260,47 @@ public class Play implements Screen {
         stage.addActor(buttonShop);
         stage.addActor(buttonExit);
 
+    }
+
+    // Erstellt ein Listener für alle Buttons
+    private void createButtonListener() {
+
+        // Listener
+        buttonExit.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.exit(0);
+            }
+        });
+
+        buttonShop.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Shop.showShop();
+            }
+        });
+
+        buttonUpgrade.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                int price = new ItemLoader().castleLvl2.getPrice();
+
+                if (player.getCoins() >= price) {
+
+                    float posX = castle.getX();
+                    float posY = castle.getY();
+                    float width = castle.getWidth();
+                    float height = castle.getHeight();
+
+                    castle = player.upgrade(castle);
+                    castle.setBounds(posX, posY, width, height);
+
+                    player.setCoins(player.getCoins() - price);
+
+                }
+            }
+        });
     }
 
     @Override
@@ -389,8 +316,8 @@ public class Play implements Screen {
 
         // Reset timer and spawn new coins
         if (elapsedTime > 60.0) {
-            generateCoins();
             elapsedTime = 0;
+            generateCoins();
         }
 
         updateHUD();
