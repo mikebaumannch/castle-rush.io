@@ -52,6 +52,7 @@ public class Play implements Screen, Serializable {
 
     // PLAYER
     public Player player;
+    public Player opponent;
     public List<Player> oppenents = new ArrayList<Player>();
     public StructureCastle castle;
     public Sound[] auDamage = new Sound[4];
@@ -108,6 +109,7 @@ public class Play implements Screen, Serializable {
 
     public void createPlayer() {
         Player opponent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true, map, this);
+        opponent.setSize(tileWidth * 2, tileHeight * 2);
         // StructureCastle castleOpponent = new StructureLoader().castleLvl1;
         oppenents.add(opponent);
         // structuresOnMap.add(castleOpponent);
@@ -137,9 +139,15 @@ public class Play implements Screen, Serializable {
         stage = new Stage();
 
         // Loading ressources such as items, structures etc.
-        player = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true, map, this);
+        player = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true,
+                map, this);
         player.setSize(tileWidth * 2, tileHeight * 2);
         castle = new StructureLoader().castleLvl1;
+
+        // TEST
+        opponent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true,
+                map, this);
+        opponent.setSize(tileWidth * 2, tileHeight * 2);
 
         for (Sound au : auDamage) {
             au = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
@@ -166,11 +174,13 @@ public class Play implements Screen, Serializable {
 
         if (Server.typeOfPlayer == 1) {
             try {
+                DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
                 Server.dOut.writeByte(101);
                 Server.dOut.writeFloat(player.getX());
                 Server.dOut.writeFloat(player.getY());
                 Server.dOut.writeFloat(castle.getX());
                 Server.dOut.writeFloat(castle.getY());
+                Server.dOut.flush();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
