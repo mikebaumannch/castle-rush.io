@@ -1,5 +1,6 @@
 package io.castlerush.screens;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,8 +38,13 @@ import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
 
-public class Play implements Screen {
-    
+public class Play implements Screen, Serializable{
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     private Game game;
 
     // PLAYER
@@ -87,6 +93,29 @@ public class Play implements Screen {
 
     public Play() {
 
+    }
+
+    public void respawnPlayer() {
+        if (!player.isCastleAlive) {
+            player = null;
+        } else {
+            player.setPosition(castle.getX(), castle.getY());
+        }
+    }
+
+    // Erstellt einen Spieler auf der Map
+    public void createPlayer(String username) {
+        Player oppenent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
+                true, map, this);
+        oppenent.setSize(tileWidth * 2, tileHeight * 2);
+        StructureCastle castleOpponent = new StructureLoader().castleLvl1;
+        oppenents.add(oppenent);
+        structuresOnMap.add(castleOpponent);
+    }
+
+    @Override
+    public void show() {
+
         // Initializing map, tiles etc.
         map = new TmxMapLoader().load("maps/maps.tmx");
         mapWidth = map.getProperties().get("width", Integer.class);
@@ -108,15 +137,15 @@ public class Play implements Screen {
         stage = new Stage();
 
         // Loading ressources such as items, structures etc.
-        player = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
-                true, map, this);
-        player.setSize(tileWidth* 2, tileHeight*2);
+        player = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true,
+                map, this);
+        player.setSize(tileWidth * 2, tileHeight * 2);
         castle = new StructureLoader().castleLvl1;
 
         for (Sound au : auDamage) {
             au = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
         }
-        
+
         auTrap = Gdx.audio.newSound(Gdx.files.internal("audio/trap.ogg"));
         auKill = Gdx.audio.newSound(Gdx.files.internal("audio/kill.ogg"));
         auDeath = Gdx.audio.newSound(Gdx.files.internal("audio/deth.ogg"));
@@ -126,28 +155,6 @@ public class Play implements Screen {
         inputMulti.addProcessor(stage);
         inputMulti.addProcessor(player.keyListener);
         Gdx.input.setInputProcessor(inputMulti);
-    }
-    
-    public void respawnPlayer() {
-        if(!player.isCastleAlive) {
-            player = null;
-        }else {
-        player.setPosition(castle.getX(), castle.getY());
-        }
-    }
-
-    // Erstellt einen Spieler auf der Map
-    public void createPlayer(String username) {
-        Player oppenent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
-                true, map, this);
-        oppenent.setSize(tileWidth* 2, tileHeight*2);
-        StructureCastle castleOpponent = new StructureLoader().castleLvl1;
-        oppenents.add(oppenent);
-        structuresOnMap.add(castleOpponent);
-    }
-
-    @Override
-    public void show() {
 
         // Set random spawn point for player
         int randomMapX = ThreadLocalRandom.current().nextInt(16, (mapWidth - 3) * 16);
@@ -369,9 +376,9 @@ public class Play implements Screen {
         batch.begin();
 
         drawStructures(structuresOnMap);
-        
+
         player.draw(batch);
-        for(Player o : oppenents) {
+        for (Player o : oppenents) {
             o.draw(batch);
         }
 
@@ -489,7 +496,7 @@ public class Play implements Screen {
     public void setTileHeight(int tileHeight) {
         this.tileHeight = tileHeight;
     }
-        
+
     public Game getGame() {
         return game;
     }
