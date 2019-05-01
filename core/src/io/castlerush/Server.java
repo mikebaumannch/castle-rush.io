@@ -14,7 +14,6 @@ import com.badlogic.gdx.Net.Protocol;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.net.SocketHints;
-
 import io.castlerush.screens.Play;
 import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
@@ -23,9 +22,9 @@ public class Server {
 
     private String hostIPAdresse;
     private Play play;
-    private Play playGegner;
+    private Player oppenent;
     private String username;
-    private String remoteIP;
+    private String remoteIP = "";
     private boolean isOpponentOnMap = false;
 
     public Server(String hostIPAdresse, Play play, String username) {
@@ -35,7 +34,6 @@ public class Server {
     }
 
     public void createGame() {
-        
         //Bekomme Informationen des Gegners
         new Thread(new Runnable() {
             @Override
@@ -50,7 +48,7 @@ public class Server {
                         InputStream inputStream = socket.getInputStream();
                         ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
                         try {
-                            playGegner = (Play) objectInputStream.readObject();
+                            oppenent = (Player) objectInputStream.readObject();
                         } catch (ClassNotFoundException e) {
                             // TODO Auto-generated catch block
                             e.printStackTrace();
@@ -63,13 +61,13 @@ public class Server {
                 
                 //Wenn Gegner nicht erstellt wurde, dann Spieler erstellen
                 if(!isOpponentOnMap) {
-                    play.createPlayer(playGegner.player.getName());
+                    play.createPlayer(oppenent.getName());
                          
                     isOpponentOnMap = true;
                 }
                 else {
                     //Gegner aktualisieren                    
-                    play.oppenents.get(0).setPosition(playGegner.player.getX(), playGegner.player.getY());
+                    play.oppenents.get(0).setPosition(oppenent.getX(), oppenent.getY());
                 }               
                                 
                 //IP-Adresse des Gegners herausfinden
@@ -77,10 +75,16 @@ public class Server {
                 InetAddress inaddr = sockaddr.getAddress();
                 Inet4Address in4addr = (Inet4Address)inaddr;
                 remoteIP = in4addr.toString();
+                
+                if(remoteIP.length() > 0) {
+                    checkPosition(remoteIP);
+                }
             }
         }).start();
-        
-        //Sende Informationen an Gegner
+    }
+
+    private void checkPosition(String ip) {
+      //Sende Informationen an Gegner
         new Thread(new Runnable(){
             @Override
             public void run() {
@@ -102,7 +106,7 @@ public class Server {
             }
         }).start();
     }
-
+    
     public void joinGame(final String ip) throws IOException {
         
         new Thread(new Runnable(){
