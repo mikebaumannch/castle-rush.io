@@ -1,5 +1,7 @@
 package io.castlerush;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -15,8 +17,12 @@ import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
 
-public class Player extends Sprite {
+public class Player extends Sprite implements Serializable {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3078330767791915468L;
     // Player information
     private String name;
     private int coins, health, fallCounter = 0;

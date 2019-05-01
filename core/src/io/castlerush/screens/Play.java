@@ -1,5 +1,6 @@
 package io.castlerush.screens;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,8 +38,13 @@ import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
 
-public class Play implements Screen {
+public class Play implements Screen, Serializable {
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     private Game game;
 
     // PLAYER
