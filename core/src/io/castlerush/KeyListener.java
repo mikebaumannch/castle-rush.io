@@ -60,9 +60,16 @@ public class KeyListener extends ClickListener implements InputProcessor {
         for (Structure structure : play.structuresOnMap) {
 
             Rectangle rect = structure.getBoundingRectangle();
+            if(structure.getName().equals("Fallgrube")) {
+                if (Intersector.overlaps(rect, player.getBoundingRectangle())) {
+                    return "TRAP";
+                }
+            }
+            
+            /*
             if (Intersector.overlaps(rect, player.getBoundingRectangle())) {
                 return "TOP";
-            }
+            }*/
         }
 
         for (Structure coin : play.coins) {
@@ -124,7 +131,7 @@ public class KeyListener extends ClickListener implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
+        
         isTouched = true;
         Item[] inv = player.getInventory();
         Item selectedItem = inv[play.getSelectedItem()];
@@ -174,7 +181,6 @@ public class KeyListener extends ClickListener implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        // TODO Auto-generated method stub
         return false;
     }
 

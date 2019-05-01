@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,11 +38,15 @@ import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
 
 public class Play implements Screen {
+    
+    private Game game;
 
     // PLAYER
     public Player player;
     public List<Player> oppenents = new ArrayList<Player>();
     public StructureCastle castle;
+    public Sound[] auDamage = new Sound[4];
+    public Sound auDeath, auKill, auLost, auTrap;
 
     // RENDERER
     public Batch batch;
@@ -107,10 +113,27 @@ public class Play implements Screen {
         player.setSize(tileWidth* 2, tileHeight*2);
         castle = new StructureLoader().castleLvl1;
 
+        for (Sound au : auDamage) {
+            au = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
+        }
+        
+        auTrap = Gdx.audio.newSound(Gdx.files.internal("audio/trap.ogg"));
+        auKill = Gdx.audio.newSound(Gdx.files.internal("audio/kill.ogg"));
+        auDeath = Gdx.audio.newSound(Gdx.files.internal("audio/deth.ogg"));
+        auLost = Gdx.audio.newSound(Gdx.files.internal("audio/lost.ogg"));
+
         // Setting up input processors
         inputMulti.addProcessor(stage);
         inputMulti.addProcessor(player.keyListener);
         Gdx.input.setInputProcessor(inputMulti);
+    }
+    
+    public void respawnPlayer() {
+        if(!player.isCastleAlive) {
+            player = null;
+        }else {
+        player.setPosition(castle.getX(), castle.getY());
+        }
     }
 
     // Erstellt einen Spieler auf der Map
@@ -465,5 +488,13 @@ public class Play implements Screen {
 
     public void setTileHeight(int tileHeight) {
         this.tileHeight = tileHeight;
+    }
+        
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }
