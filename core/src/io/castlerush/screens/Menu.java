@@ -75,7 +75,7 @@ public class Menu implements Screen{
                 String username = txtUsername.getText();
                 
                 //Starte Spiel
-                game.setScreen(new Play(username));
+                game.setScreen(new Play(game, username));
             }
         });
         

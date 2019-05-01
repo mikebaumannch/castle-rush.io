@@ -19,9 +19,8 @@ public class Player extends Sprite {
 
     // Player information
     private String name;
-    private int coins;
-    public int health;
-    public boolean isCastleAlive = true;
+    private int coins, health, fallCounter = 0;
+    public boolean isCastleAlive = true, isFalling = false;
     private Vector2 velocity = new Vector2();
     private float speed = 100, delta;
     private Item inventory[] = new Item[5];
@@ -31,6 +30,8 @@ public class Player extends Sprite {
     private Play play;
     public TiledMap map;
     public KeyListener keyListener;
+    float fallX;
+    float fallY;
 
     public Player(String name, Sprite skin, int coins, int health, boolean isCastleAlive,
             TiledMap map, Play play) {
@@ -47,10 +48,20 @@ public class Player extends Sprite {
 
     // Place structures
     public void placeStructure(Structure structure) {
-        structure.setBounds(this.getX(), this.getY(),
-                (map.getProperties().get("tilewidth", Integer.class)) * 8,
-                (map.getProperties().get("tilewidth", Integer.class)) * 8);
-        play.structuresOnMap.add(structure);
+        if (structure.getName().equals("Fallgrube")) {
+
+            structure.setBounds(this.getX(), this.getY() + 50,
+                    (map.getProperties().get("tilewidth", Integer.class)) * 2,
+                    (map.getProperties().get("tilewidth", Integer.class)) * 2);
+            play.structuresOnMap.add(structure);
+
+        } else {
+
+            structure.setBounds(this.getX(), this.getY(),
+                    (map.getProperties().get("tilewidth", Integer.class)) * 8,
+                    (map.getProperties().get("tilewidth", Integer.class)) * 8);
+            play.structuresOnMap.add(structure);
+        }
     }
 
     // Earn coins
@@ -103,6 +114,7 @@ public class Player extends Sprite {
             play.slots[4].setDrawable(new TextureRegionDrawable(item.getTexture()));
             inventory[4] = item;
             numberOfItems[4]++;
+
         }
 
     }
@@ -145,6 +157,13 @@ public class Player extends Sprite {
             this.coins += 5;
         }
 
+        if (keyListener.checkCollision().equals("TRAP")) {
+            fallX = this.getX();
+            fallY = this.getY();
+            isFalling = true;
+            play.auTrap.play();
+        }
+
     }
 
     @Override
@@ -152,27 +171,38 @@ public class Player extends Sprite {
 
         // Zeitspanne zwischen aktuellem und vorherigem Frame
         delta = Gdx.graphics.getDeltaTime();
-        update(delta);
+        update();
         super.draw(spriteBatch);
     }
 
-    private void update(float delta) {
+    private void update() {
 
         // Apply speed
         velocity.y -= speed * delta;
         velocity.x -= speed * delta;
 
         // Clamp velocity (Beschleunigung einschränken)
-        if (velocity.y > speed) {
-            velocity.y = speed;
-        } else if (velocity.y < speed) {
-            velocity.y = -speed;
-        }
+        if(!isFalling) {
+            if (velocity.y > speed) {
+                velocity.y = speed;
+            } else if (velocity.y < speed) {
+                velocity.y = -speed;
+            }
+    
+            if (velocity.x > speed) {
+                velocity.x = speed;
+            } else if (velocity.x < speed) {
+                velocity.x = -speed;
+            }
+        }else {
 
-        if (velocity.x > speed) {
-            velocity.x = speed;
-        } else if (velocity.x < speed) {
-            velocity.x = -speed;
+            if (getScaleX() == 0) {
+                fallCounter = 0;
+                isFalling = false;
+            }else {
+                setScale(getScaleX() - delta, getScaleY() - delta);
+                setPosition(fallX, fallY);
+            }
         }
 
         keyListener.handleInput();

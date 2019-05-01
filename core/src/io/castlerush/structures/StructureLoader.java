@@ -21,6 +21,6 @@ public class StructureLoader {
     //public StructureWall stoneWall = new StructureWall("Steinmauer", new Sprite(new Texture("badlogic.jpg")), 200);
     
     // Traps
-    public StructureTrap trap;
+    public StructureTrap trap = new StructureTrap("Fallgrube", new Sprite(new Texture("buildings/trap.png")), 100);
 
 }
