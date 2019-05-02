@@ -205,32 +205,11 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
 
                 ItemWeapon weapon = (ItemWeapon) selectedItem;
 
-                if (play.getDistanceBetweenPlayerAndOpponent() < 20) {
-                    play.opponent.setHealth(play.opponent.getHealth() - weapon.getDamage());
-                    play.auDamage[0].play();
-
-                    try {
-                        if (Server.typeOfPlayer == 0) {
-                            Server.dOut.writeByte(10);
-                            Server.dOut.writeInt(play.opponent.getHealth());
-                            Server.dOut.flush();
-
-                        } else if (Client.typeOfPlayer == 1) {
-                            Client.dOut.writeByte(10);
-                            Client.dOut.writeInt(play.opponent.getHealth());
-                            Client.dOut.flush();
-                        }
-                    } catch (IOException e) {
-
-                    }
-
-                }
+                
                 if (Math.sqrt(Math.pow((player.getX() - play.opponentCastle.getX()), 2)
                         + Math.pow((player.getY() - play.opponentCastle.getY()), 2)) < 80) {
 
-                    play.opponentCastle
-                            .setHealth(play.opponentCastle.getHealth() - weapon.getDamage());
-
+                    play.opponentCastle.setHealth(play.opponentCastle.getHealth() - weapon.getDamage());
                     try {
 
                         if (play.opponentCastle.getHealth() <= 0) {
