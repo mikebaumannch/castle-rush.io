@@ -231,7 +231,6 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 if(Math.sqrt(Math.pow((player.getX() - play.opponentCastle.getX()), 2)
                         + Math.pow((player.getY() - play.opponentCastle.getY()), 2)) < 80) {
                     play.opponentCastle.setHealth(play.opponentCastle.getHealth() - weapon.getDamage());
-                    
                     try {
                         if (Server.typeOfPlayer == 0) {
                             Server.dOut.writeByte(11);
