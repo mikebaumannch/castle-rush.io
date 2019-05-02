@@ -65,17 +65,31 @@ public class Server {
                         byte messageType = dIn.readByte();
 
                         switch (messageType) {
+                        
                         case 5:
                             System.out.println("Position");
                             play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
                             break;
+                            
                         case 10:
                             play.player.setHealth(dIn.readInt());
                             break;
+                            
                         case 11:
-                            System.out.println("Case 11");
-                            play.castle.setHealth(dIn.readInt());
+                            System.out.println("Hilfe meine Burg ist am sterben ):");
+                            if (play.castle != null) {
+                                play.castle.setHealth(dIn.readInt());
+                            }
                             break;
+                            
+                        case 12: // Castle death
+                            System.out.println("Meine Burg ist zerstört");
+                            play.player.isCastleAlive = false;
+                            System.out.println(play.player.isCastleAlive);
+                            System.out.println(play.opponent.isCastleAlive);
+                            play.castle = null;
+                            break;
+                            
                         case 100: // Create Opponent
                             System.out.println("ist beigetreten!");
                             // play.createPlayer();
@@ -89,6 +103,7 @@ public class Server {
                             dOut.writeFloat(play.castle.getY());
                             dOut.flush();
                             break;
+                            
                         case 101: // Setup opponent
                             isOpponentOnMap = true;
                             play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());

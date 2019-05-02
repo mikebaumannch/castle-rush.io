@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 import io.castlerush.screens.Play;
 
 public class Client {
@@ -74,7 +78,13 @@ public class Client {
                             break;
                         case 11:
                             System.out.println("Case 11");
-                            play.castle.setHealth(dIn.readInt());
+                            if (play.castle != null) {
+                                play.castle.setHealth(dIn.readInt());
+                            }
+                            break;
+                        case 12: // Castle death
+                            play.player.isCastleAlive = false;
+                            play.castle = null;
                             break;
                         case 100: // Create Opponent
                             play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());

@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.castlerush.items.Item;
+import io.castlerush.screens.Menu;
 import io.castlerush.screens.Play;
 import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureCastle;
@@ -232,7 +233,9 @@ public class Player extends Sprite implements Serializable {
 
                 }
             } else {
-                System.out.println("TOT, KEIN RESPAWN MEHR");
+                // Game Over
+                //play.getGame().setScreen(new Menu(play.getGame()));
+                System.exit(0);
             }
         }
 
