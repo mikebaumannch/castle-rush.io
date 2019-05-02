@@ -86,8 +86,8 @@ public class Server {
                             System.out.println("ist beigetreten!");
                             // play.createPlayer();
                             play.oppenents.add(play.opponent);
-
                             // Gegner Koordinaten zurückschicken
+                            isOpponentOnMap = true;
                             dOut.writeByte(100);
                             dOut.writeFloat(play.player.getX());
                             dOut.writeFloat(play.player.getY());
@@ -99,6 +99,7 @@ public class Server {
                             isOpponentOnMap = true;
 
                             break;
+                            
                         default:
                             System.out.println("default");
                         }

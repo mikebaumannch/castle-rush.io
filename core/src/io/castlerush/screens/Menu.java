@@ -200,11 +200,27 @@ public class Menu implements Screen {
                 // Variablen auslesen
                 String targetIP = txtIP.getText();
                 String username = txtUsername.getText();
-
+                
                 // Starte Client
+                play = new Play();
                 Client myClient = new Client(myIPAdress, play, username);
+                
                 try {
                     myClient.joinGame(targetIP);
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    if (Client.typeOfPlayer == 1) {
+                        Client.dOut.writeByte(101);
+                        Client.dOut.writeFloat(play.player.getX());
+                        Client.dOut.writeFloat(play.player.getY());
+                        //Client.dOut.writeFloat(castle.getX());
+                        //Client.dOut.writeFloat(castle.getY());
+                        Client.dOut.flush();
+                    } 
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
