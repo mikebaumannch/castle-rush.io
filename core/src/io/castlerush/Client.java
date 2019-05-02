@@ -64,10 +64,22 @@ public class Client {
                             System.out.println("3");
                             play.opponent.walk(3);
                             break;
-                        case 100: // Create Opponent
+                        case 5:
+                            System.out.println("Position");
+                            play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
+                            break;
+
+                        case 10:
+                            play.player.setHealth(dIn.readInt());
+                            break;
+                        case 100: // Set up opponent
                             play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
                             play.opponentCastle.setPosition(dIn.readFloat(), dIn.readFloat());
                             isOpponentOnMap = true;
+                            break;
+                        case 101: // Set opponent position
+                            play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
+                            play.opponent.setHealth(dIn.readInt());
                             break;
                         
                         default:
