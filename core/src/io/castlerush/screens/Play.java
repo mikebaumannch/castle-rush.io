@@ -48,7 +48,7 @@ public class Play implements Screen, Serializable {
      * 
      */
     private static final long serialVersionUID = 1L;
-    
+
     private Game game;
     private OrthogonalTiledMapRenderer renderer;
     private OrthographicCamera camera;
@@ -60,7 +60,7 @@ public class Play implements Screen, Serializable {
     private int selectedItem, mapWidth, mapHeight, tileWidth, tileHeight, timeToCoinGen;
     private float elapsedTime;
     private double distanceBetweenPlayerAndCastle, distanceBetweenPlayerAndOpponent;
-    
+
     public Player player, opponent;
     public List<Player> oppenents = new ArrayList<Player>();
     public StructureCastle castle;
@@ -80,9 +80,9 @@ public class Play implements Screen, Serializable {
     public List<Structure> coins = new ArrayList<Structure>();
 
     public Play(String username) {
-        
+
         this.username = username;
-        
+
         // Initializing map, tiles etc.
         map = new TmxMapLoader().load("maps/maps.tmx");
         mapWidth = map.getProperties().get("width", Integer.class);
@@ -120,9 +120,9 @@ public class Play implements Screen, Serializable {
             au = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
         }
         auDamage[0] = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
-        
+
         auDamage[0] = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
-        
+
         // Set random spawn point for player
         int randomMapX = ThreadLocalRandom.current().nextInt(16, (mapWidth - 3) * 16);
         int randomMapY = ThreadLocalRandom.current().nextInt(16, (mapHeight - 3) * 16);
@@ -159,7 +159,7 @@ public class Play implements Screen, Serializable {
         oppenents.add(opponent);
         // structuresOnMap.add(castleOpponent);
     }
-    
+
     @Override
     public void show() {
 
@@ -299,7 +299,7 @@ public class Play implements Screen, Serializable {
         stage.addActor(buttonExit);
 
     }
-    
+
     // Updates the HUD
     private void updateHUD() {
         gameTitle.setText("Name: " + player.getName() + "\nCoins: " + player.getCoins());
@@ -313,7 +313,6 @@ public class Play implements Screen, Serializable {
             tableUpgrade.setVisible(false);
         }
     }
-
 
     // Erstellt ein Listener für alle Buttons
     private void createButtonListener() {
@@ -385,7 +384,9 @@ public class Play implements Screen, Serializable {
     // Builds the placed structures
     private void drawStructures(List<Structure> structuresOnMap) {
 
-        castle.draw(batch);
+        if (castle != null) {
+            castle.draw(batch);
+        }
         opponentCastle.draw(batch);
 
         for (Structure coin : coins) {
@@ -397,7 +398,7 @@ public class Play implements Screen, Serializable {
             structure.draw(batch);
         }
     }
-    
+
     @Override
     public void render(float delta) {
 
@@ -417,9 +418,11 @@ public class Play implements Screen, Serializable {
 
         updateHUD();
 
-        distanceBetweenPlayerAndCastle = Math.sqrt(Math.pow((player.getX() - castle.getX()), 2)
-                + Math.pow((player.getY() - castle.getY()), 2));
-        
+        if (castle != null) {
+            distanceBetweenPlayerAndCastle = Math.sqrt(Math.pow((player.getX() - castle.getX()), 2)
+                    + Math.pow((player.getY() - castle.getY()), 2));
+        }
+
         distanceBetweenPlayerAndOpponent = Math.sqrt(Math.pow((player.getX() - opponent.getX()), 2)
                 + Math.pow((player.getY() - opponent.getY()), 2));
 
@@ -438,9 +441,8 @@ public class Play implements Screen, Serializable {
         player.draw(batch);
         opponent.draw(batch);
         /*
-        for (Player o : oppenents) {
-            o.draw(batch);
-        }*/
+         * for (Player o : oppenents) { o.draw(batch); }
+         */
 
         batch.end();
 

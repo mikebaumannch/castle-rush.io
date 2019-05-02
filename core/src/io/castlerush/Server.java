@@ -73,8 +73,17 @@ public class Server {
                             play.player.setHealth(dIn.readInt());
                             break;
                         case 11:
-                            System.out.println("Case 11");
-                            play.castle.setHealth(dIn.readInt());
+                            if (play.castle != null) {
+                                System.out.println("Case 11");
+                                play.castle.setHealth(dIn.readInt());
+                            }
+                            break;
+                        case 12:
+
+                            System.out.println("Case 12");
+                            play.castle = null;
+                            play.player.isCastleAlive = false;
+
                             break;
                         case 100: // Create Opponent
                             System.out.println("ist beigetreten!");
@@ -94,12 +103,12 @@ public class Server {
                             play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
                             play.opponentCastle.setPosition(dIn.readFloat(), dIn.readFloat());
                             break;
-                            
+
                         case 102: // Respawn
                             play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
                             play.opponent.setHealth(dIn.readInt());
                             break;
-                            
+
                         default:
                             System.out.println("default");
                         }

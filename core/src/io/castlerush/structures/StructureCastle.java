@@ -13,7 +13,7 @@ public class StructureCastle extends Structure {
         this.setHealth(health);
         this.setLevel(level);
     }
-
+    
     public int getLevel() {
         return level;
     }

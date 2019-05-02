@@ -9,6 +9,8 @@ import java.net.Socket;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -133,7 +135,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                     }
                 }
 
-                if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
+               if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
                     player.walk(2);
                     if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(2);
@@ -203,20 +205,56 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
 
                 ItemWeapon weapon = (ItemWeapon) selectedItem;
 
-                
-                if (Math.sqrt(Math.pow((player.getX() - play.opponentCastle.getX()), 2)
-                        + Math.pow((player.getY() - play.opponentCastle.getY()), 2)) < 80) {
+                if (play.getDistanceBetweenPlayerAndOpponent() < 20) {
+                    play.opponent.setHealth(play.opponent.getHealth() - weapon.getDamage());
+                    play.auDamage[0].play();
 
-                    play.opponentCastle.setHealth(play.opponentCastle.getHealth() - weapon.getDamage());
                     try {
                         if (Server.typeOfPlayer == 0) {
-                            Server.dOut.writeByte(11);
-                            Server.dOut.writeInt(play.opponentCastle.getHealth());
+                            Server.dOut.writeByte(10);
+                            Server.dOut.writeInt(play.opponent.getHealth());
                             Server.dOut.flush();
-                        } else {
-                            Client.dOut.writeByte(11);
-                            Client.dOut.writeInt(play.opponentCastle.getHealth());
+
+                        } else if (Client.typeOfPlayer == 1) {
+                            Client.dOut.writeByte(10);
+                            Client.dOut.writeInt(play.opponent.getHealth());
                             Client.dOut.flush();
+                        }
+                    } catch (IOException e) {
+
+                    }
+
+                }
+                if (Math.sqrt(Math.pow((player.getX() - play.opponentCastle.getX()), 2)
+                        + Math.pow((player.getY() - play.opponentCastle.getY()), 2)) < 80) {
+                    
+                    play.opponentCastle.setHealth(play.opponentCastle.getHealth() - weapon.getDamage());
+
+                    try {
+                        
+                        if(play.opponentCastle.getHealth() <= 0) {
+                            play.opponent.isCastleAlive = false;
+                            play.opponentCastle.set(new Sprite(new Texture("img/transparent.png")));
+                            
+                            if(Server.typeOfPlayer == 0) {
+                                Server.dOut.writeByte(12);
+                                Server.dOut.flush();
+                            }else{
+                                Client.dOut.writeByte(12);
+                                Client.dOut.flush();
+                            }
+                            
+                        }else {
+    
+                            if (Server.typeOfPlayer == 0) {
+                                Server.dOut.writeByte(11);
+                                Server.dOut.writeInt(play.opponentCastle.getHealth());
+                                Server.dOut.flush();
+                            } else {
+                                Client.dOut.writeByte(11);
+                                Client.dOut.writeInt(play.opponentCastle.getHealth());
+                                Client.dOut.flush();
+                            }
                         }
                     } catch (IOException e) {
 
@@ -294,3 +332,5 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
 
     }
 }
+
+
