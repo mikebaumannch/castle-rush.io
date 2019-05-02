@@ -10,7 +10,7 @@ import java.net.Socket;
 import io.castlerush.screens.Play;
 
 public class Client {
-    
+
     private String hostIPAdresse;
     private Play play;
     private Player oppenent;
@@ -20,15 +20,15 @@ public class Client {
     public static int typeOfPlayer;
     public static Socket socket;
     public static DataOutputStream dOut;
-    
+
     public Client(String hostIPAdresse, Play play, String username) {
         this.hostIPAdresse = hostIPAdresse;
         this.username = username;
         this.play = play;
     }
-    
+
     public void joinGame(final String ip) throws IOException {
-        
+
         // Bekomme Informationen des Gegners
         new Thread(new Runnable() {
             @Override
@@ -68,9 +68,11 @@ public class Client {
                             play.oppenents.get(0).walk(3);
                             break;
                         case 100: // Create Opponent
-                            System.out.println("ist beigetreten!");
-                            // play.createPlayer();
+                            float x = dIn.readFloat();
+                            float y = dIn.readFloat();
+                            play.opponent.setPosition(x, y);
                             play.oppenents.add(play.opponent);
+                            isOpponentOnMap = true;
                             break;
                         case 101: // Set Spawnpoint
                             System.out.println("101");

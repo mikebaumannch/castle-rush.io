@@ -156,21 +156,12 @@ public class Play implements Screen, Serializable {
         castle.setBounds(player.getX(), player.getY(), tileWidth * 8, tileHeight * 8);
 
         try {
-            if (Server.typeOfPlayer == 0) {
-                if (Server.isOpponentOnMap) {
-                    Server.dOut.writeByte(101);
-                    Server.dOut.writeFloat(player.getX());
-                    Server.dOut.writeFloat(player.getY());
-                    Server.dOut.writeFloat(castle.getX());
-                    Server.dOut.writeFloat(castle.getY());
-                    Server.dOut.flush();
-                }
-            } else {
+            if (Client.typeOfPlayer == 1) {
                 Client.dOut.writeByte(101);
                 Client.dOut.writeFloat(player.getX());
                 Client.dOut.writeFloat(player.getY());
-                Client.dOut.writeFloat(castle.getX());
-                Client.dOut.writeFloat(castle.getY());
+//                Client.dOut.writeFloat(castle.getX());
+//                Client.dOut.writeFloat(castle.getY());
                 Client.dOut.flush();
             }
         } catch (IOException e) {
