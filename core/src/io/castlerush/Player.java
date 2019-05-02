@@ -212,6 +212,7 @@ public class Player extends Sprite implements Serializable {
 
         if (health <= 0) {
             if (isCastleAlive) {
+
                 play.auDeath.play();
                 health = 100;
                 this.setPosition(play.castle.getX(), play.castle.getY());
@@ -221,18 +222,17 @@ public class Player extends Sprite implements Serializable {
                         Server.dOut.writeFloat(this.getX());
                         Server.dOut.writeFloat(this.getY());
                         Server.dOut.writeInt(this.health);
-                    }
-
-                    else {
+                    } else if (Client.typeOfPlayer == 1) {
                         Client.dOut.writeByte(102);
                         Client.dOut.writeFloat(this.getX());
                         Client.dOut.writeFloat(this.getY());
                         Client.dOut.writeInt(this.health);
                     }
                 } catch (IOException e) {
+
                 }
             } else {
-                System.out.println("Game Over");
+                System.out.println("TOT, KEIN RESPAWN MEHR");
             }
         }
 

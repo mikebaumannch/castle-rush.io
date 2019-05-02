@@ -47,7 +47,6 @@ public class Menu implements Screen {
 
     public Menu(Game game) {
         this.game = game;
-        play = new Play();
     }
 
     @Override
@@ -115,7 +114,7 @@ public class Menu implements Screen {
                 System.out.println(myIPAdress);
 
                 // Starte Server
-                play = new Play();
+                play = new Play(username);
                 Server myServer = new Server(myIPAdress, play, username);
                 myServer.createGame();
 
@@ -203,7 +202,7 @@ public class Menu implements Screen {
                 String username = txtUsername.getText();
                 
                 // Starte Client
-                play = new Play();
+                play = new Play(username);
                 Client myClient = new Client(myIPAdress, play, username);
                 
                 try {

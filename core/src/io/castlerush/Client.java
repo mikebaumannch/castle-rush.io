@@ -81,8 +81,7 @@ public class Client {
                             play.opponentCastle.setPosition(dIn.readFloat(), dIn.readFloat());
                             isOpponentOnMap = true;
                             break;
-                        case 101:
-                            System.out.println("101");
+                        case 101: // Set opponent position
                             play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
                             play.opponent.setHealth(dIn.readInt());
                             break;
