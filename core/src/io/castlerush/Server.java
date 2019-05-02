@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -54,8 +55,6 @@ public class Server {
 
                     if (socket != null) {
                         dOut = new DataOutputStream(socket.getOutputStream());
-                        dOut.writeByte(100);
-                        dOut.flush();
                     }
 
                     InputStream inputStream = socket.getInputStream();
@@ -88,12 +87,19 @@ public class Server {
                             // play.createPlayer();
                             play.oppenents.add(play.opponent);
                             isOpponentOnMap = true;
+                            
+                            dOut.writeByte(100);
+                            dOut.writeFloat(play.player.getX());
+                            dOut.writeFloat(play.player.getY());
+                            dOut.flush();
+                            
                             break;
                         case 101: // Set Spawnpoint
                             System.out.println("101");
                             play.oppenents.get(0).setPosition(dIn.readFloat(), dIn.readFloat());
                             isOpponentOnMap = true;
                             break;
+                            
                         default:
                             System.out.println("default");
                         }

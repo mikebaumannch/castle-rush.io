@@ -106,7 +106,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                     if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(0);
                         Server.dOut.flush();
-                    } else if(Server.typeOfPlayer == 1) {
+                    } else if(Client.typeOfPlayer == 1) {
                         Client.dOut.writeByte(0);
                         Client.dOut.flush();
                     }
@@ -117,7 +117,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                     if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(1);
                         Server.dOut.flush();
-                    } else if(Server.typeOfPlayer == 1) {
+                    } else if(Client.typeOfPlayer == 1) {
                         Client.dOut.writeByte(1);
                         Client.dOut.flush();
                     }
@@ -128,7 +128,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                     if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(2);
                         Server.dOut.flush();
-                    } else if(Server.typeOfPlayer == 1) {
+                    } else if(Client.typeOfPlayer == 1) {
                         Client.dOut.writeByte(2);
                         Client.dOut.flush();
                     }
@@ -139,7 +139,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                     if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(3);
                         Server.dOut.flush();
-                    } else if(Server.typeOfPlayer == 1) {
+                    } else if(Client.typeOfPlayer == 1) {
                         Client.dOut.writeByte(3);
                         Client.dOut.flush();
                     }

@@ -79,28 +79,7 @@ public class Play implements Screen, Serializable {
     public List<Structure> coins = new ArrayList<Structure>();
 
     public Play() {
-    }
-
-    public void respawnPlayer() {
-        if (!player.isCastleAlive) {
-            player = null;
-        } else {
-            player.setPosition(castle.getX(), castle.getY());
-        }
-    }
-
-    public void createPlayer() {
-        Player opponent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
-                true, map, this);
-        opponent.setSize(tileWidth * 2, tileHeight * 2);
-        // StructureCastle castleOpponent = new StructureLoader().castleLvl1;
-        oppenents.add(opponent);
-        // structuresOnMap.add(castleOpponent);
-    }
-
-    @Override
-    public void show() {
-
+        
         // Initializing map, tiles etc.
         map = new TmxMapLoader().load("maps/maps.tmx");
         mapWidth = map.getProperties().get("width", Integer.class);
@@ -135,6 +114,15 @@ public class Play implements Screen, Serializable {
         for (Sound au : auDamage) {
             au = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
         }
+        
+        // Set random spawn point for player
+        int randomMapX = ThreadLocalRandom.current().nextInt(16, (mapWidth - 3) * 16);
+        int randomMapY = ThreadLocalRandom.current().nextInt(16, (mapHeight - 3) * 16);
+
+        // Spawn the player and it's castle
+        player.setX(randomMapX);
+        player.setY(randomMapY);
+        castle.setBounds(player.getX(), player.getY(), tileWidth * 8, tileHeight * 8);
 
         auTrap = Gdx.audio.newSound(Gdx.files.internal("audio/trap.ogg"));
         auKill = Gdx.audio.newSound(Gdx.files.internal("audio/kill.ogg"));
@@ -145,38 +133,27 @@ public class Play implements Screen, Serializable {
         inputMulti.addProcessor(stage);
         inputMulti.addProcessor(player.keyListener);
         Gdx.input.setInputProcessor(inputMulti);
+    }
 
-        // Set random spawn point for player
-        int randomMapX = ThreadLocalRandom.current().nextInt(16, (mapWidth - 3) * 16);
-        int randomMapY = ThreadLocalRandom.current().nextInt(16, (mapHeight - 3) * 16);
-
-        // Spawn the player and it's castle
-        player.setX(randomMapX);
-        player.setY(randomMapY);
-        castle.setBounds(player.getX(), player.getY(), tileWidth * 8, tileHeight * 8);
-
-        try {
-            if (Server.typeOfPlayer == 0) {
-                if (Server.isOpponentOnMap) {
-                    Server.dOut.writeByte(101);
-                    Server.dOut.writeFloat(player.getX());
-                    Server.dOut.writeFloat(player.getY());
-                    Server.dOut.writeFloat(castle.getX());
-                    Server.dOut.writeFloat(castle.getY());
-                    Server.dOut.flush();
-                }
-            } else {
-                Client.dOut.writeByte(101);
-                Client.dOut.writeFloat(player.getX());
-                Client.dOut.writeFloat(player.getY());
-                Client.dOut.writeFloat(castle.getX());
-                Client.dOut.writeFloat(castle.getY());
-                Client.dOut.flush();
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public void respawnPlayer() {
+        if (!player.isCastleAlive) {
+            player = null;
+        } else {
+            player.setPosition(castle.getX(), castle.getY());
         }
+    }
+
+    public void createPlayer() {
+        Player opponent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
+                true, map, this);
+        opponent.setSize(tileWidth * 2, tileHeight * 2);
+        // StructureCastle castleOpponent = new StructureLoader().castleLvl1;
+        oppenents.add(opponent);
+        // structuresOnMap.add(castleOpponent);
+    }
+
+    @Override
+    public void show() {
 
         // Generates the coins on the map
         generateCoins();
@@ -447,9 +424,11 @@ public class Play implements Screen, Serializable {
         drawStructures(structuresOnMap);
 
         player.draw(batch);
+        opponent.draw(batch);
+        /*
         for (Player o : oppenents) {
             o.draw(batch);
-        }
+        }*/
 
         batch.end();
 
