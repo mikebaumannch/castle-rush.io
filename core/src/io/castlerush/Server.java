@@ -27,7 +27,7 @@ public class Server {
     private String username;
     private String remoteIP = "";
     private boolean isOpponentOnMap = false, isConnected = false;
-    public static int typeOfPlayer;
+    public static int typeOfPlayer = -1;
     public static Socket socket;
     public static DataOutputStream dOut;
 
@@ -46,11 +46,10 @@ public class Server {
             public void run() {
 
                 try {
-                    typeOfPlayer = 0;
-                    ServerSocket ss;
                     
-                    ss = new ServerSocket(1337);
+                    ServerSocket ss = new ServerSocket(1337);
                     socket = ss.accept();
+                    
                     dOut = new DataOutputStream(socket.getOutputStream());
                     dOut.writeByte(100);
                     dOut.flush();
@@ -83,6 +82,7 @@ public class Server {
                             System.out.println("ist beigetreten!");
                             // play.createPlayer();
                             play.oppenents.add(play.opponent);
+                            isOpponentOnMap = true;
                             break;
                         case 101: // Set Spawnpoint
                             System.out.println("101");

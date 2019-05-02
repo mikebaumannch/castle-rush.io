@@ -201,7 +201,7 @@ public class Menu implements Screen {
                 String targetIP = txtIP.getText();
                 String username = txtUsername.getText();
 
-                // Starte Server
+                // Starte Client
                 Client myClient = new Client(myIPAdress, play, username);
                 try {
                     myClient.joinGame(targetIP);
