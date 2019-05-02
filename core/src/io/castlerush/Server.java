@@ -72,6 +72,10 @@ public class Server {
                         case 10:
                             play.player.setHealth(dIn.readInt());
                             break;
+                        case 11:
+                            System.out.println("Case 11");
+                            play.castle.setHealth(dIn.readInt());
+                            break;
                         case 100: // Create Opponent
                             System.out.println("ist beigetreten!");
                             // play.createPlayer();

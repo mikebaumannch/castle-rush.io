@@ -119,6 +119,7 @@ public class Play implements Screen, Serializable {
         for (Sound au : auDamage) {
             au = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
         }
+        auDamage[0] = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
         
         auDamage[0] = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
         

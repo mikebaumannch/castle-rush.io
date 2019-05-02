@@ -91,7 +91,6 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 return "COIN";
             }
         }
-
         return "NO";
     }
 
@@ -99,21 +98,17 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
 
         if (keyPressed) {
             try {
-                
-                if(Client.typeOfPlayer == 1) {
+                if (Client.typeOfPlayer == 1) {
                     Client.dOut.writeByte(5);
                     Client.dOut.writeFloat(player.getX());
                     Client.dOut.writeFloat(player.getY());
                     Client.dOut.flush();
-                }
-                else if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap){
+                } else if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                     Server.dOut.writeByte(5);
                     Server.dOut.writeFloat(player.getX());
                     Server.dOut.writeFloat(player.getY());
                     Server.dOut.flush();
                 }
-
-
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT)
                         || Gdx.input.isKeyPressed(Input.Keys.A)) {
 
@@ -211,7 +206,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 if (play.getDistanceBetweenPlayerAndOpponent() < 20) {
                     play.opponent.setHealth(play.opponent.getHealth() - weapon.getDamage());
                     play.auDamage[0].play();
-                    
+
                     try {
                         if (Server.typeOfPlayer == 0) {
                             Server.dOut.writeByte(10);
@@ -221,6 +216,26 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                         } else if (Client.typeOfPlayer == 1) {
                             Client.dOut.writeByte(10);
                             Client.dOut.writeInt(play.opponent.getHealth());
+                            Client.dOut.flush();
+                        }
+                    } catch (IOException e) {
+
+                    }
+
+                }
+                if (Math.sqrt(Math.pow((player.getX() - play.opponentCastle.getX()), 2)
+                        + Math.pow((player.getY() - play.opponentCastle.getY()), 2)) < 80) {
+                    play.opponentCastle
+                            .setHealth(play.opponentCastle.getHealth() - weapon.getDamage());
+
+                    try {
+                        if (Server.typeOfPlayer == 0) {
+                            Server.dOut.writeByte(11);
+                            Server.dOut.writeInt(play.opponentCastle.getHealth());
+                            Server.dOut.flush();
+                        } else {
+                            Client.dOut.writeByte(11);
+                            Client.dOut.writeInt(play.opponentCastle.getHealth());
                             Client.dOut.flush();
                         }
                     } catch (IOException e) {

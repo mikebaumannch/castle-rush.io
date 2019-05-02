@@ -68,11 +68,15 @@ public class Client {
                             System.out.println("Position");
                             play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
                             break;
-
                         case 10:
+                            System.out.println("Schaden: ");
                             play.player.setHealth(dIn.readInt());
                             break;
-                        case 100: // Set up opponent
+                        case 11:
+                            System.out.println("Case 11");
+                            play.castle.setHealth(dIn.readInt());
+                            break;
+                        case 100: // Create Opponent
                             play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
                             play.opponentCastle.setPosition(dIn.readFloat(), dIn.readFloat());
                             isOpponentOnMap = true;
@@ -81,7 +85,6 @@ public class Client {
                             play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
                             play.opponent.setHealth(dIn.readInt());
                             break;
-                        
                         default:
                             System.out.println("default");
                         }

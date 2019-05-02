@@ -216,7 +216,6 @@ public class Player extends Sprite implements Serializable {
                 play.auDeath.play();
                 health = 100;
                 this.setPosition(play.castle.getX(), play.castle.getY());
-
                 try {
                     if (Server.typeOfPlayer == 0) {
                         Server.dOut.writeByte(101);
