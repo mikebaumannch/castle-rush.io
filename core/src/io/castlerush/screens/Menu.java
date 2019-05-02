@@ -115,6 +115,7 @@ public class Menu implements Screen {
                 System.out.println(myIPAdress);
 
                 // Starte Server
+                play = new Play();
                 Server myServer = new Server(myIPAdress, play, username);
                 myServer.createGame();
 
