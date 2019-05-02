@@ -46,16 +46,14 @@ public class Server {
             public void run() {
 
                 try {
-
                     typeOfPlayer = 0;
                     ServerSocket ss;
-                    Socket socket = null;
+                    
+                    ss = new ServerSocket(1337);
+                    socket = ss.accept();
                     dOut = new DataOutputStream(socket.getOutputStream());
                     dOut.writeByte(100);
                     dOut.flush();
-
-                    ss = new ServerSocket(1337);
-                    socket = ss.accept();
                     InputStream inputStream = socket.getInputStream();
                     DataInputStream dIn = new DataInputStream(inputStream);
 

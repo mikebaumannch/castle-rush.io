@@ -25,18 +25,18 @@ public class Player extends Sprite implements Serializable {
     // Player information
     private String name;
     private int coins, health, fallCounter = 0;
-    public boolean isCastleAlive = true, isFalling = false;
+    private int numberOfItems[] = new int[5];
     private Vector2 velocity = new Vector2();
     private float speed = 100, delta;
     private Item inventory[] = new Item[5];
-    private int numberOfItems[] = new int[5];
 
     // Util
     private Play play;
+    private float fallX, fallY;
+    public boolean isCastleAlive = true, isFalling = false;
     public TiledMap map;
     public KeyListener keyListener;
-    float fallX;
-    float fallY;
+
 
     public Player(String name, Sprite sprite, int coins, int health, boolean isCastleAlive,
             TiledMap map, Play play) {
@@ -213,7 +213,7 @@ public class Player extends Sprite implements Serializable {
         keyListener.handleInput();
     }
 
-    void attack() {
+    public void attack() {
     }
 
     public String getName() {
