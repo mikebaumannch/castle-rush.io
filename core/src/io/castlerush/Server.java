@@ -82,6 +82,18 @@ public class Server {
                             System.out.println("3");
                             play.oppenents.get(0).walk(3);
                             break;
+                        case 5:
+                            System.out.println("Position");
+                            play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
+                            break;
+                        case 10:
+                            System.out.println("Schaden: ");
+                            play.player.setHealth(dIn.readInt());
+                            break;
+                        case 11:
+                            System.out.println("Case 11");
+                            play.castle.setHealth(dIn.readInt());
+                            break;
                         case 100: // Create Opponent
                             System.out.println("ist beigetreten!");
                             // play.createPlayer();
@@ -101,6 +113,11 @@ public class Server {
                             play.opponentCastle.setPosition(dIn.readFloat(), dIn.readFloat());
                             isOpponentOnMap = true;
 
+                            break;
+                        case 102:
+                            System.out.println("102");
+                            play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
+                            play.opponent.setHealth(dIn.readInt());
                             break;
                             
                         default:

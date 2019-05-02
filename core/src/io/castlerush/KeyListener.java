@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.castlerush.gui.Shop;
 import io.castlerush.items.Item;
+import io.castlerush.items.ItemWeapon;
 import io.castlerush.screens.Play;
 import io.castlerush.structures.Structure;
 import io.castlerush.structures.StructureLoader;
@@ -90,7 +91,6 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 return "COIN";
             }
         }
-
         return "NO";
     }
 
@@ -98,7 +98,19 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
 
         if (keyPressed) {
             try {
-
+                if(Client.typeOfPlayer == 1) {
+                    Client.dOut.writeByte(5);
+                    Client.dOut.writeFloat(player.getX());
+                    Client.dOut.writeFloat(player.getY());
+                    Client.dOut.flush();
+                }
+                else if(Server.isOpponentOnMap){
+                    Server.dOut.writeByte(5);
+                    Server.dOut.writeFloat(player.getX());
+                    Server.dOut.writeFloat(player.getY());
+                    Server.dOut.flush();
+                }
+                
                 if (Gdx.input.isKeyPressed(Input.Keys.LEFT)
                         || Gdx.input.isKeyPressed(Input.Keys.A)) {
 
@@ -106,7 +118,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                     if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(0);
                         Server.dOut.flush();
-                    } else if(Client.typeOfPlayer == 1) {
+                    } else if (Client.typeOfPlayer == 1) {
                         Client.dOut.writeByte(0);
                         Client.dOut.flush();
                     }
@@ -117,7 +129,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                     if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(1);
                         Server.dOut.flush();
-                    } else if(Client.typeOfPlayer == 1) {
+                    } else if (Client.typeOfPlayer == 1) {
                         Client.dOut.writeByte(1);
                         Client.dOut.flush();
                     }
@@ -128,7 +140,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                     if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(2);
                         Server.dOut.flush();
-                    } else if(Client.typeOfPlayer == 1) {
+                    } else if (Client.typeOfPlayer == 1) {
                         Client.dOut.writeByte(2);
                         Client.dOut.flush();
                     }
@@ -139,7 +151,7 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                     if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(3);
                         Server.dOut.flush();
-                    } else if(Client.typeOfPlayer == 1) {
+                    } else if (Client.typeOfPlayer == 1) {
                         Client.dOut.writeByte(3);
                         Client.dOut.flush();
                     }
@@ -189,10 +201,52 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
         Item selectedItem = inv[play.getSelectedItem()];
 
         if (selectedItem != null) {
-            if (player.getNumberOfItems()[0] > 0) {
-                if (play.getSelectedItem() == 0) {
-                    selectedItem.useItem(player);
+
+            if (play.getSelectedItem() == 0) {
+                selectedItem.useItem(player);
+
+                ItemWeapon weapon = (ItemWeapon) selectedItem;
+
+                // Wenn Distanz von Gegner und Spieler kleiner als 20 ist
+                if (Math.sqrt(Math.pow((player.getX() - play.opponent.getX()), 2)
+                        + Math.pow((player.getY() - play.opponent.getY()), 2)) < 20) {
+                    
+                    play.opponent.setHealth(play.opponent.getHealth() - weapon.getDamage());
+                    play.auDamage[0].play();
+                    try {
+                        if (Server.typeOfPlayer == 0) {
+                            Server.dOut.writeByte(10);
+                            Server.dOut.writeInt(play.opponent.getHealth());
+                            Server.dOut.flush();
+                        } else {
+                            Client.dOut.writeByte(10);
+                            Client.dOut.writeInt(play.opponent.getHealth());
+                            Client.dOut.flush();
+                        }
+                    } catch (IOException e) {
+
+                    }
+
                 }
+                if(Math.sqrt(Math.pow((player.getX() - play.opponentCastle.getX()), 2)
+                        + Math.pow((player.getY() - play.opponentCastle.getY()), 2)) < 80) {
+                    play.opponentCastle.setHealth(play.opponentCastle.getHealth() - weapon.getDamage());
+                    
+                    try {
+                        if (Server.typeOfPlayer == 0) {
+                            Server.dOut.writeByte(11);
+                            Server.dOut.writeInt(play.opponentCastle.getHealth());
+                            Server.dOut.flush();
+                        } else {
+                            Client.dOut.writeByte(11);
+                            Client.dOut.writeInt(play.opponentCastle.getHealth());
+                            Client.dOut.flush();
+                        }
+                    } catch (IOException e) {
+
+                    }
+                }
+
             } else if (player.getNumberOfItems()[1] > 0) {
                 if (play.getSelectedItem() == 1) {
                     selectedItem.useItem(player);

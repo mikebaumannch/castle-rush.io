@@ -1,5 +1,6 @@
 package io.castlerush;
 
+import java.io.IOException;
 import java.io.Serializable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,12 +17,12 @@ import io.castlerush.structures.StructureCastle;
 import io.castlerush.structures.StructureLoader;
 
 public class Player extends Sprite implements Serializable {
-    
+
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    
+
     // Player information
     private String name;
     private int coins, health, fallCounter = 0;
@@ -36,7 +37,6 @@ public class Player extends Sprite implements Serializable {
     public boolean isCastleAlive = true, isFalling = false;
     public TiledMap map;
     public KeyListener keyListener;
-
 
     public Player(String name, Sprite sprite, int coins, int health, boolean isCastleAlive,
             TiledMap map, Play play) {
@@ -187,30 +187,57 @@ public class Player extends Sprite implements Serializable {
         velocity.x -= speed * delta;
 
         // Clamp velocity (Beschleunigung einschränken)
-        if(!isFalling) {
+        if (!isFalling) {
             if (velocity.y > speed) {
                 velocity.y = speed;
             } else if (velocity.y < speed) {
                 velocity.y = -speed;
             }
-    
+
             if (velocity.x > speed) {
                 velocity.x = speed;
             } else if (velocity.x < speed) {
                 velocity.x = -speed;
             }
-        }else {
+        } else {
 
             if (getScaleX() == 0) {
                 fallCounter = 0;
                 isFalling = false;
-            }else {
+            } else {
                 setScale(getScaleX() - delta, getScaleY() - delta);
                 setPosition(fallX, fallY);
             }
         }
 
+        if (health <= 0) {
+            if (isCastleAlive) {
+                play.auDeath.play();
+                health = 100;
+                this.setPosition(play.castle.getX(), play.castle.getY());
+                try {
+                    if (Server.typeOfPlayer == 0) {
+                        Server.dOut.writeByte(101);
+                        Server.dOut.writeFloat(this.getX());
+                        Server.dOut.writeFloat(this.getY());
+                        Server.dOut.writeInt(this.health);
+                    }
+
+                    else {
+                        Client.dOut.writeByte(102);
+                        Client.dOut.writeFloat(this.getX());
+                        Client.dOut.writeFloat(this.getY());
+                        Client.dOut.writeInt(this.health);
+                    }
+                } catch (IOException e) {
+                }
+            } else {
+                System.out.println("Game Over");
+            }
+        }
+
         keyListener.handleInput();
+
     }
 
     public void attack() {
@@ -250,6 +277,10 @@ public class Player extends Sprite implements Serializable {
 
     public int getHealth() {
         return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     public Item[] getInventory() {

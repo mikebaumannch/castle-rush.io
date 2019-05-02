@@ -111,10 +111,13 @@ public class Play implements Screen, Serializable {
         opponent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true,
                 map, this);
         opponent.setSize(tileWidth * 2, tileHeight * 2);
+        opponentCastle = new StructureLoader().castleLvl1;
+        opponentCastle.setSize(tileWidth * 8, tileHeight * 8);
 
         for (Sound au : auDamage) {
             au = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
         }
+        auDamage[0] = Gdx.audio.newSound(Gdx.files.internal("audio/damage0.ogg"));
         
         // Set random spawn point for player
         int randomMapX = ThreadLocalRandom.current().nextInt(16, (mapWidth - 3) * 16);
