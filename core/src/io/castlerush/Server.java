@@ -26,8 +26,8 @@ public class Server {
     private float testX;
     private String username;
     private String remoteIP = "";
-    private boolean isOpponentOnMap = false, isConnected = false;
-    public static int typeOfPlayer;
+    public static boolean isOpponentOnMap = false;
+    public static int typeOfPlayer = -1;
     public static Socket socket;
     public static DataOutputStream dOut;
 
@@ -47,15 +47,17 @@ public class Server {
 
                 try {
 
-                    typeOfPlayer = 0;
-                    ServerSocket ss;
-                    Socket socket = null;
-                    dOut = new DataOutputStream(socket.getOutputStream());
-                    dOut.writeByte(100);
-                    dOut.flush();
+                    ServerSocket ss = new ServerSocket(1337);
 
-                    ss = new ServerSocket(1337);
                     socket = ss.accept();
+                    System.out.println(socket.getInetAddress());
+
+                    if (socket != null) {
+                        dOut = new DataOutputStream(socket.getOutputStream());
+                        dOut.writeByte(100);
+                        dOut.flush();
+                    }
+
                     InputStream inputStream = socket.getInputStream();
                     DataInputStream dIn = new DataInputStream(inputStream);
 
@@ -89,6 +91,7 @@ public class Server {
                         case 101: // Set Spawnpoint
                             System.out.println("101");
                             play.oppenents.get(0).setPosition(dIn.readFloat(), dIn.readFloat());
+                            isOpponentOnMap = true;
                             break;
                         default:
                             System.out.println("default");
