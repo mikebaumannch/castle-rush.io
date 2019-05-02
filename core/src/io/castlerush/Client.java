@@ -65,9 +65,8 @@ public class Client {
                             play.opponent.walk(3);
                             break;
                         case 100: // Create Opponent
-                            float x = dIn.readFloat();
-                            float y = dIn.readFloat();
-                            play.opponent.setPosition(x, y);
+                            play.opponent.setPosition(dIn.readFloat(), dIn.readFloat());
+                            play.opponentCastle.setPosition(dIn.readFloat(), dIn.readFloat());
                             isOpponentOnMap = true;
                             break;
                         

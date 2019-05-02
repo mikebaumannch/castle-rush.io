@@ -115,6 +115,7 @@ public class Menu implements Screen {
                 System.out.println(myIPAdress);
 
                 // Starte Server
+                play = new Play();
                 Server myServer = new Server(myIPAdress, play, username);
                 myServer.createGame();
 
@@ -217,8 +218,8 @@ public class Menu implements Screen {
                         Client.dOut.writeByte(101);
                         Client.dOut.writeFloat(play.player.getX());
                         Client.dOut.writeFloat(play.player.getY());
-                        //Client.dOut.writeFloat(castle.getX());
-                        //Client.dOut.writeFloat(castle.getY());
+                        Client.dOut.writeFloat(play.castle.getX());
+                        Client.dOut.writeFloat(play.castle.getY());
                         Client.dOut.flush();
                     } 
                 } catch (IOException e) {

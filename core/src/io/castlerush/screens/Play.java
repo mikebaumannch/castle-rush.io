@@ -64,6 +64,7 @@ public class Play implements Screen, Serializable {
     public Player player, opponent;
     public List<Player> oppenents = new ArrayList<Player>();
     public StructureCastle castle;
+    public StructureCastle opponentCastle;
     public Sound[] auDamage = new Sound[4];
     public Sound auDeath, auKill, auLost, auTrap;
     public Batch batch;
@@ -378,6 +379,7 @@ public class Play implements Screen, Serializable {
     private void drawStructures(List<Structure> structuresOnMap) {
 
         castle.draw(batch);
+        opponentCastle.draw(batch);
 
         for (Structure coin : coins) {
             coin.draw(batch);
