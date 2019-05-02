@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class StructureTrap extends Structure {
     
-    int damage;
+    private int damage;
 
     public StructureTrap(String name, Sprite tex, int damage) {
         super(name, tex);

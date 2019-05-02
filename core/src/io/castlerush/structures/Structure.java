@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Structure extends Sprite {
     
     private String name;
-    Sprite tex;
+    private Sprite tex;
     
     public Structure(String name, Sprite tex) {
         super(tex);

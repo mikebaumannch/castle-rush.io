@@ -37,13 +37,11 @@ public class Menu implements Screen {
     private Play play;
     private Game game;
     private Stage stage;
-    private TextButton button;
-    private TextButtonStyle textButtonStyle;
     private BitmapFont font;
     private Skin mySkin;
     private TextField txtUsername;
-    private TextButton buttonExit;
-    private TextButton buttonJoinGame;
+    private TextButton buttonExit, buttonJoinGame, button;
+    private TextButtonStyle textButtonStyle;
     private Dialog dialog;
     private String myIPAdress;
 
@@ -203,7 +201,7 @@ public class Menu implements Screen {
                 String targetIP = txtIP.getText();
                 String username = txtUsername.getText();
 
-                // Starte Server
+                // Starte Client
                 Client myClient = new Client(myIPAdress, play, username);
                 try {
                     myClient.joinGame(targetIP);

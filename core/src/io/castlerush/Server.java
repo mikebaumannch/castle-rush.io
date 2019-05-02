@@ -87,6 +87,7 @@ public class Server {
                             System.out.println("ist beigetreten!");
                             // play.createPlayer();
                             play.oppenents.add(play.opponent);
+                            isOpponentOnMap = true;
                             break;
                         case 101: // Set Spawnpoint
                             System.out.println("101");

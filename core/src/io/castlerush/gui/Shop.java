@@ -26,11 +26,9 @@ public class Shop {
 
     // GUI ELEMENTS
     private static Dialog dialog;
-    
     private static Label title, nameInformation, priceInformation, wallLabel, wallPrice,
             archeryLabel, archeryPrice, trapLabel, trapPrice, swordLabel, swordPrice,
             slingshotLabel, slingshotdPrice;
-    
     private static TextButton wallButton, archeryButton, trapButton, swordButton, slingshotButton;
 
     // UTIL

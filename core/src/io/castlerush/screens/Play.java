@@ -48,56 +48,37 @@ public class Play implements Screen, Serializable {
      * 
      */
     private static final long serialVersionUID = 1L;
-
+    
     private Game game;
-
-    // PLAYER
-    public Player player;
-    public Player opponent;
+    private OrthogonalTiledMapRenderer renderer;
+    private OrthographicCamera camera;
+    private float screenWidth, screenHeight;
+    private Stage stage;
+    private Skin mySkin;
+    private Label gameTitle, heartTitle, timeToCoinGenTitle;
+    private Label[] lblNumberOfItems = new Label[5];
+    private int selectedItem, mapWidth, mapHeight, tileWidth, tileHeight, timeToCoinGen;
+    private float elapsedTime;
+    private double distanceBetweenPlayerAndCastle;
+    
+    public Player player, opponent;
     public List<Player> oppenents = new ArrayList<Player>();
     public StructureCastle castle;
     public Sound[] auDamage = new Sound[4];
     public Sound auDeath, auKill, auLost, auTrap;
-
-    // RENDERER
     public Batch batch;
-    private OrthogonalTiledMapRenderer renderer;
-    private OrthographicCamera camera;
-    private float screenWidth;
-    private float screenHeight;
-
-    // HUD & GUI
     public String username;
-    private Stage stage;
-    private Skin mySkin;
     public Table tableInventory, tableUpgrade;
-    private Label gameTitle, heartTitle, timeToCoinGenTitle;
-    private Label[] lblNumberOfItems = new Label[5];
     public TextButton buttonShop, buttonExit, buttonBuy, buttonUpgrade;
     public Image[] slots = new Image[5];
     public Image selectField;
-    private int selectedItem;
     public boolean shopIsOpen = false;
     public InputMultiplexer inputMulti = new InputMultiplexer();
-
-    // MAP
     public TiledMap map;
-    private int mapWidth;
-    private int mapHeight;
-    private int tileWidth;
-    private int tileHeight;
-
-    // STRUCTURES
     public List<Structure> structuresOnMap = new ArrayList<Structure>();
     public List<Structure> coins = new ArrayList<Structure>();
 
-    // UTILS
-    private float elapsedTime;
-    private int timeToCoinGen;
-    private double distanceBetweenPlayerAndCastle;
-
     public Play() {
-
     }
 
     public void respawnPlayer() {
@@ -333,6 +314,21 @@ public class Play implements Screen, Serializable {
         stage.addActor(buttonExit);
 
     }
+    
+    // Updates the HUD
+    private void updateHUD() {
+        gameTitle.setText("Name: " + player.getName() + "\nCoins: " + player.getCoins());
+        heartTitle.setText(player.getHealth());
+        timeToCoinGenTitle.setText("Time To New Coins: " + timeToCoinGen);
+
+        if (distanceBetweenPlayerAndCastle < 200) {
+            // Show upgrade
+            tableUpgrade.setVisible(true);
+        } else {
+            tableUpgrade.setVisible(false);
+        }
+    }
+
 
     // Erstellt ein Listener für alle Buttons
     private void createButtonListener() {
@@ -375,6 +371,47 @@ public class Play implements Screen, Serializable {
         });
     }
 
+    // Randomly generates coin
+    private void generateCoins() {
+
+        // Clears all coins from map
+        coins.clear();
+
+        // Initializing new coins
+        for (int i = 0; i < 100; i++) {
+            coins.add(new StructureLoader().coin);
+        }
+
+        // Sets random spawn point for each coin
+        for (Structure coin : coins) {
+
+            coin.setSize(8, 8);
+
+            int randomMapX = ThreadLocalRandom.current().nextInt(16, (mapWidth - 3) * 16);
+            int randomMapY = ThreadLocalRandom.current().nextInt(16, (mapHeight - 3) * 16);
+
+            coin.setPosition(randomMapX, randomMapY);
+        }
+
+        player.earnCoins();
+
+    }
+
+    // Builds the placed structures
+    private void drawStructures(List<Structure> structuresOnMap) {
+
+        castle.draw(batch);
+
+        for (Structure coin : coins) {
+            coin.draw(batch);
+        }
+
+        for (Structure structure : structuresOnMap) {
+
+            structure.draw(batch);
+        }
+    }
+    
     @Override
     public void render(float delta) {
 
@@ -418,61 +455,6 @@ public class Play implements Screen, Serializable {
 
         stage.act();
         stage.draw();
-    }
-
-    // Updates the HUD
-    private void updateHUD() {
-        gameTitle.setText("Name: " + player.getName() + "\nCoins: " + player.getCoins());
-        heartTitle.setText(player.getHealth());
-        timeToCoinGenTitle.setText("Time To New Coins: " + timeToCoinGen);
-
-        if (distanceBetweenPlayerAndCastle < 200) {
-            // Show upgrade
-            tableUpgrade.setVisible(true);
-        } else {
-            tableUpgrade.setVisible(false);
-        }
-    }
-
-    // Randomly generates coin
-    private void generateCoins() {
-
-        // Clears all coins from map
-        coins.clear();
-
-        // Initializing new coins
-        for (int i = 0; i < 100; i++) {
-            coins.add(new StructureLoader().coin);
-        }
-
-        // Sets random spawn point for each coin
-        for (Structure coin : coins) {
-
-            coin.setSize(8, 8);
-
-            int randomMapX = ThreadLocalRandom.current().nextInt(16, (mapWidth - 3) * 16);
-            int randomMapY = ThreadLocalRandom.current().nextInt(16, (mapHeight - 3) * 16);
-
-            coin.setPosition(randomMapX, randomMapY);
-        }
-
-        player.earnCoins();
-
-    }
-
-    // Builds the placed structures
-    private void drawStructures(List<Structure> structuresOnMap) {
-
-        castle.draw(batch);
-
-        for (Structure coin : coins) {
-            coin.draw(batch);
-        }
-
-        for (Structure structure : structuresOnMap) {
-
-            structure.draw(batch);
-        }
     }
 
     @Override

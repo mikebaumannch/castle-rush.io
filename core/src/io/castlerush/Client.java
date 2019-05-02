@@ -36,8 +36,8 @@ public class Client {
 
                 try {
 
-                    typeOfPlayer = 0;
-                    Socket socket = new Socket(remoteIP, 1337);
+                    typeOfPlayer = 1;
+                    socket = new Socket(ip, 1337);
                     dOut = new DataOutputStream(socket.getOutputStream());
                     dOut.writeByte(100);
                     dOut.flush();
