@@ -33,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
+import io.castlerush.Client;
 import io.castlerush.Player;
 import io.castlerush.Server;
 import io.castlerush.gui.Shop;
@@ -108,7 +109,8 @@ public class Play implements Screen, Serializable {
     }
 
     public void createPlayer() {
-        Player opponent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100, true, map, this);
+        Player opponent = new Player(username, (new Sprite(new Texture("img/player.png"))), 0, 100,
+                true, map, this);
         opponent.setSize(tileWidth * 2, tileHeight * 2);
         // StructureCastle castleOpponent = new StructureLoader().castleLvl1;
         oppenents.add(opponent);
@@ -172,19 +174,27 @@ public class Play implements Screen, Serializable {
         player.setY(randomMapY);
         castle.setBounds(player.getX(), player.getY(), tileWidth * 8, tileHeight * 8);
 
-        if (Server.typeOfPlayer == 1) {
-            try {
-                DataOutputStream dOut = new DataOutputStream(Server.socket.getOutputStream());
-                Server.dOut.writeByte(101);
-                Server.dOut.writeFloat(player.getX());
-                Server.dOut.writeFloat(player.getY());
-                Server.dOut.writeFloat(castle.getX());
-                Server.dOut.writeFloat(castle.getY());
-                Server.dOut.flush();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+        try {
+            if (Server.typeOfPlayer == 0) {
+                if (Server.isOpponentOnMap) {
+                    Server.dOut.writeByte(101);
+                    Server.dOut.writeFloat(player.getX());
+                    Server.dOut.writeFloat(player.getY());
+                    Server.dOut.writeFloat(castle.getX());
+                    Server.dOut.writeFloat(castle.getY());
+                    Server.dOut.flush();
+                }
+            } else {
+                Client.dOut.writeByte(101);
+                Client.dOut.writeFloat(player.getX());
+                Client.dOut.writeFloat(player.getY());
+                Client.dOut.writeFloat(castle.getX());
+                Client.dOut.writeFloat(castle.getY());
+                Client.dOut.flush();
             }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         // Generates the coins on the map

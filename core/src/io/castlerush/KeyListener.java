@@ -103,10 +103,10 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                         || Gdx.input.isKeyPressed(Input.Keys.A)) {
 
                     player.walk(0);
-                    if (Server.typeOfPlayer == 0) {
+                    if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(0);
                         Server.dOut.flush();
-                    } else {
+                    } else if(Server.typeOfPlayer == 1) {
                         Client.dOut.writeByte(0);
                         Client.dOut.flush();
                     }
@@ -114,20 +114,20 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)
                         || Gdx.input.isKeyPressed(Input.Keys.D)) {
                     player.walk(1);
-                    if (Server.typeOfPlayer == 0) {
+                    if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(1);
                         Server.dOut.flush();
-                    } else {
+                    } else if(Server.typeOfPlayer == 1) {
                         Client.dOut.writeByte(1);
                         Client.dOut.flush();
                     }
                 }
                 if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
                     player.walk(2);
-                    if (Server.typeOfPlayer == 0) {
+                    if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(2);
                         Server.dOut.flush();
-                    } else {
+                    } else if(Server.typeOfPlayer == 1) {
                         Client.dOut.writeByte(2);
                         Client.dOut.flush();
                     }
@@ -135,10 +135,10 @@ public class KeyListener extends ClickListener implements InputProcessor, Serial
                 if (Gdx.input.isKeyPressed(Input.Keys.DOWN)
                         || Gdx.input.isKeyPressed(Input.Keys.S)) {
                     player.walk(3);
-                    if (Server.typeOfPlayer == 0) {
+                    if (Server.typeOfPlayer == 0 & Server.isOpponentOnMap) {
                         Server.dOut.writeByte(3);
                         Server.dOut.flush();
-                    } else {
+                    } else if(Server.typeOfPlayer == 1) {
                         Client.dOut.writeByte(3);
                         Client.dOut.flush();
                     }
